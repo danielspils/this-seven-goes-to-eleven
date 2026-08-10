@@ -59,10 +59,8 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 #hue-knob:focus-visible .k-hit { stroke: #ff3b30; stroke-width: 2; }
 /* The rotor turns with the value; the short transition smooths key steps
    without lagging a drag. */
-#knob-rotor {
-  transform-box: view-box; transform-origin: 52px 52px;
-  transition: transform .07s linear;
-}
+/* Rotation is set on the transform attribute in knob.js — deliberately
+   untransitioned; see the note there. */
 .knob .k-ribs line { stroke: rgba(255,255,255,.34); }
 .knob .k-mark { filter: drop-shadow(0 0 3px currentColor); }
 

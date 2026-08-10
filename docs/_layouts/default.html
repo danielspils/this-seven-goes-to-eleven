@@ -7,8 +7,8 @@
   <meta name="description" content="{{ page.description | default: site.description }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-  <script defer src="{{ '/assets/js/knob.js' | relative_url }}"></script>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <script defer src="{{ '/assets/js/knob.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </head>
 <body>
   <!-- The header is the instrument: black panel, brushed-aluminium strip,
