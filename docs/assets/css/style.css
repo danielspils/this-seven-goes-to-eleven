@@ -20,19 +20,21 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
 /* Header, straight off the panel: black face, brushed-aluminium strip, and
    the red felt that sits above the keybed as the bottom edge. */
-.site-head { margin: 0 0 3rem; }
+/* The header is a panel sitting on the page, not a full-bleed band: inset,
+   rounded at the top, shallow enough that the controls read as one row. */
+.site-head { max-width: 78rem; margin: 1rem auto 3rem; padding: 0 1rem; }
 .site-head .panel {
   background: #0b0b0c;
-  padding: 2.2rem 1.5rem 2rem;
+  border-radius: 10px 10px 0 0;
+  padding: .9rem 1.4rem;
 }
 .site-head .panel-inner {
-  display: flex; align-items: center; gap: 2rem;
-  max-width: 46rem; margin: 0 auto;
+  display: flex; align-items: center; gap: 1.6rem;
 }
 .wordmark {
   flex: 1; min-width: 0; white-space: nowrap;
   color: #fff; text-decoration: none;
-  font-size: clamp(1.25rem, 3.6vw, 2.6rem); font-weight: 500; font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 2.3rem); font-weight: 500; font-style: italic;
   letter-spacing: -.01em;
 }
 /* The Crumar script, approximated with a system italic script. Hue comes
@@ -50,7 +52,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 /* Panel controls: the knob sits left of the headline, the two preset
    buttons right of it, both at the app's own proportions. */
 .site-head .panel-inner { gap: 1.4rem; }
-.knob { flex: none; width: 72px; height: 72px; }
+.knob { flex: none; width: 58px; height: 58px; }
 #hue-knob { cursor: grab; }
 #hue-knob:active { cursor: grabbing; }
 #hue-knob:focus { outline: none; }
@@ -59,7 +61,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    without lagging a drag. */
 #knob-rotor { transform-origin: 52px 52px; transition: transform .07s linear; }
 
-.panel-buttons { flex: none; width: 116px; height: auto; }
+.panel-buttons { flex: none; width: 104px; height: auto; }
 .panel-buttons .lbl {
   fill: #e8e8ea; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
   font-weight: 700; font-style: italic; font-size: 13px; letter-spacing: .06em;
@@ -84,6 +86,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
 .alum {
   border-bottom: 4px solid var(--felt);
+  border-radius: 0 0 3px 3px;
   background:
     repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.035) 1px 3px),
     linear-gradient(180deg, #d3d3d7 0%, #b9b9bf 55%, #a2a2a9 100%);
@@ -92,7 +95,6 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 /* Strip contents sit on the same column as the page copy below. */
 .alum-inner {
   display: flex; align-items: baseline; gap: 1rem;
-  max-width: 46rem; margin: 0 auto;
   color: #26262a; font-size: .95rem;
 }
 .alum .tagline { flex: 1; }
