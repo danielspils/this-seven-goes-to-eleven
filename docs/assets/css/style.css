@@ -25,20 +25,41 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   background: #0b0b0c;
   padding: 2.2rem 1.5rem 2rem;
 }
+.site-head .panel-inner {
+  display: flex; align-items: center; gap: 2rem;
+  max-width: 46rem; margin: 0 auto;
+}
 .wordmark {
-  display: block; max-width: 46rem; margin: 0 auto;
+  flex: 1; min-width: 0;
   color: #fff; text-decoration: none;
   font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 500; font-style: italic;
   letter-spacing: -.01em;
 }
-/* The Crumar script, approximated with a system italic script and the amber
-   glow of a lit knob. */
-.seven {
-  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
-  font-style: italic; font-weight: 700;
-  font-size: 1.25em; color: #ffc12e; padding: 0 .12em;
-  text-shadow: 0 0 6px rgba(255, 176, 32, .85), 0 0 18px rgba(255, 120, 0, .5);
+/* Self-hosted so it renders the same everywhere (Yellowtail, SIL OFL) — a
+   fat brush script with the pronounced S swoop of the Crumar logo. */
+@font-face {
+  font-family: 'Yellowtail';
+  src: url('../fonts/yellowtail.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
 }
+.seven {
+  font-family: 'Yellowtail', "Snell Roundhand", "Brush Script MT", cursive;
+  font-style: normal; font-weight: 400;
+  font-size: 1.15em; color: #ffcf3f; padding: 0 .1em;
+  /* Neon: tight yellow core, orange mid, wide red halo. */
+  text-shadow:
+    0 0 4px rgba(255, 214, 92, .95),
+    0 0 12px rgba(255, 150, 20, .8),
+    0 0 30px rgba(220, 60, 10, .55);
+}
+
+/* Panel artwork cropped to the bank + preset row. Purely decorative, so it
+   drops out when there isn't room for it. */
+.panel-art {
+  flex: none; width: 215px; overflow: hidden; border-radius: 3px;
+}
+.panel-art img { display: block; height: 64px; width: auto; max-width: none; margin-left: -200px; }
+@media (max-width: 62rem) { .panel-art { display: none; } }
 .alum {
   border-bottom: 4px solid var(--felt);
   background:
