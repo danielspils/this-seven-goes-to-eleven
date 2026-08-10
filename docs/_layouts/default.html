@@ -10,9 +10,16 @@
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
+  <!-- The header is the instrument: black panel, brushed-aluminium strip,
+       red felt along the bottom edge. -->
   <header class="site-head">
-    <a class="wordmark" href="{{ '/' | relative_url }}">This Seven Goes to Eleven</a>
-    <nav><a href="{{ '/notes/' | relative_url }}">Notes</a></nav>
+    <div class="panel">
+      <a class="wordmark" href="{{ '/' | relative_url }}">This <span class="seven">Seven</span> Goes to Eleven</a>
+    </div>
+    <div class="alum">
+      <span class="tagline">a companion app for the Crumar Seven</span>
+      <nav><a href="{{ '/notes/' | relative_url }}">Notes</a></nav>
+    </div>
   </header>
   <main>{{ content }}</main>
   <footer class="site-foot">
