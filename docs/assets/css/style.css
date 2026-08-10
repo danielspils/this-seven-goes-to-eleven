@@ -56,9 +56,9 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 /* Panel artwork cropped to the bank + preset row. Purely decorative, so it
    drops out when there isn't room for it. */
 .panel-art {
-  flex: none; width: 215px; overflow: hidden; border-radius: 3px;
+  flex: none; width: 176px; overflow: hidden; border-radius: 3px;
 }
-.panel-art img { display: block; height: 64px; width: auto; max-width: none; margin-left: -200px; }
+.panel-art img { display: block; height: 56px; width: 576px; max-width: none; margin-left: -176px; }
 @media (max-width: 62rem) { .panel-art { display: none; } }
 .alum {
   border-bottom: 4px solid var(--felt);
