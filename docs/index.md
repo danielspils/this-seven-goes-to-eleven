@@ -37,8 +37,12 @@ computer, and organizes them into setlists you can take on the road.
 <div class="soon" markdown="1">
 ## Coming
 
-Editing FX and parameters from the software, loading patches back onto the
-Seven, and packaged downloads for macOS 12+ and Windows 10+. Being built in
-public — the [source is on GitHub](https://github.com/danielspils/crumar-seven-editor),
+<ul class="features">
+  <li>Edit FX and parameters from the software</li>
+  <li>Load patches from the software back onto the Seven</li>
+  <li>Packaged downloads for macOS 12+ and Windows 10+</li>
+</ul>
+
+Being built in public — the [source is on GitHub](https://github.com/danielspils/crumar-seven-editor),
 and progress shows up in [Notes]({{ '/notes/' | relative_url }}).
 </div>
