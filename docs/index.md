@@ -21,7 +21,7 @@ organizes them into setlists you can take on the road.
 ## What TSGTE does today
 
 <ul class="features">
-  <li>Connects via USB-B to USB-C cable</li>
+  <li>Connect via USB-B to USB-C cable</li>
   <li>Back up all 32 presets over USB</li>
   <li>Organize patches into setlists for different shows</li>
   <li>Custom names for patches and setlists</li>
