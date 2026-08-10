@@ -2,9 +2,9 @@
 layout: default
 ---
 
-I started playing shows in the '90s in Anchorage, my hometown, then moved to
-Seattle — home for more than 40 years now — where I discovered the classic
-keyboards. Instruments I'd only heard of but never seen in the flesh: the
+I started playing in bands in the '90s—first in my hometown of Anchorage and
+then in Seattle, my home now of more than 40 years. It's in Seattle that I
+discovered classic keyboards. Instruments I'd only heard of but never seen in the flesh: the
 Fender Rhodes, Hammond B3, Wurlitzer, Pianet, Clav. I ended up owning and
 maintaining a fleet of Rhodes, B3s, Leslies, and analog synths, gigging around
 town and eventually around the country with Maktub and many other bands.

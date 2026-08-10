@@ -1,14 +1,14 @@
-/* This Seven Goes to Eleven — the instrument's own palette: black panel,
-   brushed-aluminium rule, the red felt above the keybed. Deliberately
-   unrelated to jx-3p.com; the two sites share no assets. */
+/* This Seven Goes to Eleven — white page, with the instrument's red felt as
+   the one strong accent. Deliberately unrelated to jx-3p.com; the two sites
+   share no assets. */
 :root {
-  --bg: #17171a;
-  --raised: #1e1e22;
-  --line: #2f2f36;
-  --text: #ececef;
-  --muted: #a0a0a8;
+  --bg: #ffffff;
+  --raised: #f7f7f8;
+  --line: #e3e3e7;
+  --text: #1b1b1f;
+  --muted: #5f5f68;
   --felt: #b8362b;
-  --amber: #ffb020;
+  --amber: #a83428;   /* links: the felt red, dark enough to read on white */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
