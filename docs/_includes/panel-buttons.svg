@@ -1,0 +1,30 @@
+<!-- Preset buttons at the app's scale, wired as navigation. -->
+<svg class="panel-buttons" viewBox="0 0 130 116" role="group">
+  <defs><linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
+  <a href="{{ '/notes/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="27" y="14">NOTES</text>
+    <rect class="btn-bezel" x="0" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="4" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="4,58 50,58 46,62 8,62"/>
+    <polygon class="f-l" points="4,58 8,62 8,106 4,110"/>
+    <polygon class="f-r" points="50,58 50,110 46,106 46,62"/>
+    <polygon class="f-b" points="4,110 8,106 46,106 50,110"/>
+    <rect class="plateau" x="8" y="62" width="38" height="44"/>
+    <path class="edge" d="M4 110 L50 110 L50 26"/>
+    <circle class="led" cx="27" cy="42" r="5"/>
+    <rect class="hit" x="0" y="2" width="54" height="112" fill="transparent"/>
+  </a>
+  <a href="{{ '/contact/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="103" y="14">CONTACT</text>
+    <rect class="btn-bezel" x="76" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="80" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="80,58 126,58 122,62 84,62"/>
+    <polygon class="f-l" points="80,58 84,62 84,106 80,110"/>
+    <polygon class="f-r" points="126,58 126,110 122,106 122,62"/>
+    <polygon class="f-b" points="80,110 84,106 122,106 126,110"/>
+    <rect class="plateau" x="84" y="62" width="38" height="44"/>
+    <path class="edge" d="M80 110 L126 110 L126 26"/>
+    <circle class="led" cx="103" cy="42" r="5"/>
+    <rect class="hit" x="76" y="2" width="54" height="112" fill="transparent"/>
+  </a>
+</svg>

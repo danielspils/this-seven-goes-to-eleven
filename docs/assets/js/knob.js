@@ -20,8 +20,11 @@
   let hue = Number(localStorage.getItem(KEY));
   if (!Number.isFinite(hue)) hue = 40;
 
+  const rotor = document.getElementById('knob-rotor');
+
   function apply() {
     const root = document.documentElement.style;
+    if (rotor) rotor.setAttribute('transform', `rotate(${hue} 52 52)`);
     root.setProperty('--seven-hue', String(Math.round(hue)));
     // The knob lights in the colour it is setting — the instrument's own idiom.
     root.setProperty('--knob-glow', `hsl(${hue} 100% 55% / .30)`);

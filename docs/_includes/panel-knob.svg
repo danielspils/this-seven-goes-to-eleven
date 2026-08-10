@@ -1,0 +1,28 @@
+<!-- Logo-colour knob. The rotor group carries the flutes and turns with the
+     value, so the knob visibly rotates as you drag it. -->
+<svg class="knob" viewBox="0 0 104 104" role="group">
+  <defs>
+    <radialGradient id="kb" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#e8e8ee" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#9a9aa4" stop-opacity="0.24"/>
+    </radialGradient>
+    <radialGradient id="kt" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#b9b9c2" stop-opacity="0.32"/>
+    </radialGradient>
+  </defs>
+  <g id="hue-knob" tabindex="0" role="slider" aria-label="Logo colour"
+     aria-valuemin="0" aria-valuemax="360" aria-valuenow="40">
+    <circle class="k-hit" cx="52" cy="52" r="42" fill="transparent"/>
+    <circle cx="52" cy="52" r="27" fill="var(--knob-glow, transparent)"/>
+    <g id="knob-rotor">
+      <circle cx="52" cy="52" r="28" fill="url(#kb)" stroke="rgba(255,255,255,.3)" stroke-width="1.2"/>
+      <g class="k-ribs" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-linecap="round"></g>
+      <line class="k-mark" x1="52" y1="30" x2="52" y2="38" stroke="var(--knob-bore, #e4e4ec)" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <circle cx="52" cy="52" r="21" fill="none" stroke="rgba(255,255,255,.16)"/>
+    <circle cx="52" cy="52" r="13.5" fill="url(#kt)" stroke="rgba(255,255,255,.32)"/>
+    <circle cx="52" cy="52" r="6.5" fill="var(--knob-bore, rgba(228,228,236,.3))" stroke="rgba(255,255,255,.14)"/>
+  </g>
+</svg>
