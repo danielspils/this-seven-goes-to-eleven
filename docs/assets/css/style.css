@@ -35,31 +35,43 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 500; font-style: italic;
   letter-spacing: -.01em;
 }
-/* Self-hosted so it renders the same everywhere (Yellowtail, SIL OFL) — a
-   fat brush script with the pronounced S swoop of the Crumar logo. */
-@font-face {
-  font-family: 'Yellowtail';
-  src: url('../fonts/yellowtail.woff2') format('woff2');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
+/* The Crumar script, approximated with a system italic script. Hue comes
+   from the header knob (--seven-hue), so turning it colours the logo. */
 .seven {
-  font-family: 'Yellowtail', "Snell Roundhand", "Brush Script MT", cursive;
-  font-style: normal; font-weight: 400;
-  font-size: 1.15em; color: #ffcf3f; padding: 0 .1em;
-  /* Neon: tight yellow core, orange mid, wide red halo. */
+  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
+  font-style: italic; font-weight: 700;
+  font-size: 1.25em; padding: 0 .12em;
+  color: hsl(var(--seven-hue, 40) 100% 62%);
   text-shadow:
-    0 0 4px rgba(255, 214, 92, .95),
-    0 0 12px rgba(255, 150, 20, .8),
-    0 0 30px rgba(220, 60, 10, .55);
+    0 0 6px hsl(var(--seven-hue, 40) 100% 55% / .85),
+    0 0 18px hsl(var(--seven-hue, 40) 100% 45% / .5);
 }
 
-/* Panel artwork cropped to the bank + preset row. Purely decorative, so it
-   drops out when there isn't room for it. */
-.panel-art {
-  flex: none; width: 176px; overflow: hidden; border-radius: 3px;
+/* Panel controls: a knob that colours the logo, two preset buttons that
+   navigate. Same construction as the app's panel — bezel, face, raised cap. */
+.controls { flex: none; width: 300px; height: auto; }
+.controls .lbl {
+  fill: #e8e8ea; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
+  font-weight: 700; font-style: italic; font-size: 12px; letter-spacing: .06em;
+  text-anchor: middle;
 }
-.panel-art img { display: block; height: 56px; width: 576px; max-width: none; margin-left: -176px; }
-@media (max-width: 62rem) { .panel-art { display: none; } }
+.controls .btn-bezel { fill: #1a1a1c; }
+.controls .btn-face { fill: url(#bf); stroke: #75757c; stroke-width: 1.5; rx: 3; }
+.controls .f-t { fill: rgba(255,255,255,.2); }
+.controls .f-l { fill: rgba(255,255,255,.04); }
+.controls .f-r { fill: rgba(0,0,0,.3); }
+.controls .f-b { fill: rgba(0,0,0,.45); }
+.controls .led { fill: #7d2b26; stroke: #1a1a1c; stroke-width: .5; }
+.controls .panel-btn:hover .led { fill: #ff3b30; }
+.controls .panel-btn:hover .btn-face { fill: #2b2b2e; }
+.controls .panel-btn { cursor: pointer; }
+.controls .hit { cursor: pointer; }
+#hue-knob { cursor: grab; }
+#hue-knob:active { cursor: grabbing; }
+#hue-knob:focus { outline: none; }
+#hue-knob:focus-visible circle.k-hit { stroke: #ff3b30; stroke-width: 2; }
+@media (max-width: 46rem) { .controls { width: 220px; } }
+
 .alum {
   border-bottom: 4px solid var(--felt);
   background:
@@ -82,6 +94,23 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
   padding: .9rem 1.1rem; margin: 2.5rem 0 0; color: var(--muted);
 }
+
+/* Contact form (Web3Forms — no backend of our own). */
+.contact-form { display: flex; flex-direction: column; gap: .4rem; max-width: 34rem; }
+.contact-form label { font-size: .9rem; color: var(--muted); margin-top: .6rem; }
+.contact-form input[type=email], .contact-form textarea {
+  font: inherit; font-size: 1rem; padding: .55rem .7rem;
+  border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--text);
+}
+.contact-form textarea { resize: vertical; }
+.contact-form button {
+  align-self: flex-start; margin-top: 1rem;
+  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+  padding: .55rem 1.4rem; border: none; border-radius: 4px;
+  background: var(--felt); color: #fff;
+}
+.contact-form button:hover { filter: brightness(1.08); }
+.contact-form .hp { position: absolute; left: -9999px; }
 
 .post-list { list-style: none; margin: 0; }
 .post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }

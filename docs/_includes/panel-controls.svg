@@ -1,0 +1,55 @@
+<!-- Three controls lifted from the instrument's panel: a knob that colours
+     the logo, and two preset buttons that navigate. Drawn here rather than
+     cropped from the app's panel so they can be sized and wired directly. -->
+<svg class="controls" viewBox="0 0 470 104" role="group" aria-label="Panel controls">
+  <defs>
+    <radialGradient id="kb" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#e8e8ee" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#9a9aa4" stop-opacity="0.24"/>
+    </radialGradient>
+    <radialGradient id="kt" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#b9b9c2" stop-opacity="0.32"/>
+    </radialGradient>
+    <linearGradient id="bf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Knob: drag or arrow-key it to change the logo's colour. -->
+  <g id="hue-knob" tabindex="0" role="slider" aria-label="Logo colour"
+     aria-valuemin="0" aria-valuemax="360" aria-valuenow="45">
+    <circle class="k-hit" cx="52" cy="52" r="40" fill="transparent"/>
+    <circle cx="52" cy="52" r="27" fill="var(--knob-glow, transparent)"/>
+    <circle cx="52" cy="52" r="28" fill="url(#kb)" stroke="rgba(255,255,255,.3)" stroke-width="1.2"/>
+    <g class="k-ribs" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-linecap="round"></g>
+    <circle cx="52" cy="52" r="21" fill="none" stroke="rgba(255,255,255,.16)"/>
+    <circle cx="52" cy="52" r="13.5" fill="url(#kt)" stroke="rgba(255,255,255,.32)"/>
+    <circle class="k-bore" cx="52" cy="52" r="6.5" fill="var(--knob-bore, rgba(228,228,236,.3))" stroke="rgba(255,255,255,.14)"/>
+  </g>
+
+  <a href="{{ '/notes/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="300" y="18">NOTES</text>
+    <rect class="btn-bezel" x="273" y="26" width="54" height="66" rx="3"/>
+    <rect class="btn-face" x="277" y="30" width="46" height="58"/>
+    <polygon class="f-t" points="277,58 323,58 319,62 281,62"/>
+    <polygon class="f-l" points="277,58 281,62 281,84 277,88"/>
+    <polygon class="f-r" points="323,58 323,88 319,84 319,62"/>
+    <polygon class="f-b" points="277,88 281,84 319,84 323,88"/>
+    <circle class="led" cx="300" cy="44" r="4.5"/>
+    <rect class="hit" x="273" y="10" width="54" height="82" fill="transparent"/>
+  </a>
+
+  <a href="{{ '/contact/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="395" y="18">CONTACT</text>
+    <rect class="btn-bezel" x="368" y="26" width="54" height="66" rx="3"/>
+    <rect class="btn-face" x="372" y="30" width="46" height="58"/>
+    <polygon class="f-t" points="372,58 418,58 414,62 376,62"/>
+    <polygon class="f-l" points="372,58 376,62 376,84 372,88"/>
+    <polygon class="f-r" points="418,58 418,88 414,84 414,62"/>
+    <polygon class="f-b" points="372,88 376,84 414,84 418,88"/>
+    <circle class="led" cx="395" cy="44" r="4.5"/>
+    <rect class="hit" x="368" y="10" width="54" height="82" fill="transparent"/>
+  </a>
+</svg>

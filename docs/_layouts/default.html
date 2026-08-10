@@ -8,6 +8,7 @@
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <script defer src="{{ '/assets/js/knob.js' | relative_url }}"></script>
 </head>
 <body>
   <!-- The header is the instrument: black panel, brushed-aluminium strip,
@@ -16,14 +17,12 @@
     <div class="panel">
       <div class="panel-inner">
       <a class="wordmark" href="{{ '/' | relative_url }}">This <span class="seven">Seven</span> Goes to Eleven</a>
-      <!-- The app's own panel artwork, cropped to the bank and preset row. -->
-      <div class="panel-art" aria-hidden="true"><img src="{{ '/assets/panel.svg' | relative_url }}" width="576" height="56" alt=""></div>
+      {% include panel-controls.svg %}
       </div>
     </div>
     <div class="alum">
       <div class="alum-inner">
         <span class="tagline">a companion app for the Crumar Seven</span>
-        <nav><a href="{{ '/notes/' | relative_url }}">Notes</a></nav>
       </div>
     </div>
   </header>
