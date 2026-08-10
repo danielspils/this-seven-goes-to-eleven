@@ -9,16 +9,16 @@ Fender Rhodes, Hammond B3, Wurlitzer, Pianet, Clav. I ended up owning and
 maintaining a fleet of Rhodes, B3s, Leslies, and analog synths, gigging around
 town and eventually around the country with Maktub and many other bands.
 
-Fast forward to 2024, when I was asked to play a few shows with The Long
-Winters. I had to rebuild a rig. The Crumar Seven drew me in with its look and
-form factor — and the stellar Rhodes and Wurly sounds covered most of what I
-needed.
+In 2024 I was asked to play a few shows with The Long Winters. The only
+problem: I had sold my B3, Rhodes, and other related classic keyboards. I had
+to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
+and the stellar Rhodes and Wurly sounds covered most of what I needed.
 
 But saving patches and connecting the Seven to a computer was a royal pain.
-That wireless transmitter? 🤦‍♂️ So many hours lost trying to connect.
+That wireless transmitter? 🤦‍♂️
 
-So I set out (with my buddy Claude) to build software for the Seven that makes
-sense to me and is easy to use.
+So I set out to build software for the Seven that made sense to me and is easy
+to use.
 
 *This Seven Goes to Eleven* talks to your Crumar over a plain USB cable. It
 backs up all 32 presets in under a minute, keeps them as files on your
