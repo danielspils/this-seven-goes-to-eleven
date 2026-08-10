@@ -2,13 +2,6 @@
 layout: default
 ---
 
-I started playing in bands in the '90s—first in my hometown of Anchorage and
-then in Seattle, my home now of more than 40 years. It's in Seattle that I
-discovered classic keyboards. Instruments I'd only heard of but never seen in the flesh: the
-Fender Rhodes, Hammond B3, Wurlitzer, Pianet, Clav. I ended up owning and
-maintaining a fleet of Rhodes, B3s, Leslies, and analog synths, gigging around
-town and eventually around the country with Maktub and many other bands.
-
 In 2024 I was asked to play a few shows with The Long Winters. The only
 problem: I had sold my B3, Rhodes, and other related classic keyboards. I had
 to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
