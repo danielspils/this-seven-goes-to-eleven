@@ -24,7 +24,7 @@ organizes them into setlists you can take on the road.
   <li>Connect via USB-B to USB-C cable</li>
   <li>Back up all 32 presets over USB</li>
   <li>Organize patches into setlists for different shows</li>
-  <li>Custom names for patches and setlists</li>
+  <li>Create custom patch and setlist names</li>
   <li>See which sounds and expansions your Seven has installed</li>
   <li>Dark / light mode</li>
 </ul>
