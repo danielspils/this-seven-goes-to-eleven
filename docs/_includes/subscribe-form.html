@@ -1,11 +1,5 @@
-<!-- Notes email-subscribe form (Buttondown). The account slug below must
-     match the Buttondown newsletter's username — a NEW list, separate from
-     jp-patches. Without JS this posts to Buttondown's hosted page. -->
-<form class="notes-subscribe" action="https://buttondown.com/api/emails/embed-subscribe/BUTTONDOWN_SLUG" method="post" target="_blank">
-  <div class="notes-subscribe-head">Get Notes by email. Unsubscribe anytime.</div>
-  <p class="notes-subscribe-sub">Occasional posts about the software and the Crumar Seven.</p>
-  <div class="notes-subscribe-row">
-    <input type="email" name="email" required placeholder="you@example.com" aria-label="Email address">
-    <button type="submit">Subscribe</button>
-  </div>
-</form>
+<!-- No mailing list for this site: Buttondown's free plan allows one
+     newsletter per account and jp-patches holds it. Updates reach people two
+     other ways — this feed, and an in-app pointer to Notes. -->
+<p class="follow">Follow along by <a href="{{ '/feed.xml' | relative_url }}">RSS</a>,
+or watch <a href="https://github.com/danielspils/crumar-seven-editor">the repo</a>.</p>

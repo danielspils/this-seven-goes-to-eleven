@@ -56,50 +56,11 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .alum nav a { color: #26262a; text-decoration: none; font-weight: 600; }
 .alum nav a:hover { color: #000; }
 
-/* Subscribe form — Notes index and the foot of each post. */
-.notes-subscribe {
+/* Follow line (no mailing list — see _includes/subscribe-form.html). */
+.follow {
   background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
-  padding: 1.1rem 1.2rem; margin: 2.5rem 0 0;
+  padding: .9rem 1.1rem; margin: 2.5rem 0 0; color: var(--muted);
 }
-.notes-subscribe-head { font-weight: 700; margin-bottom: .2rem; }
-.notes-subscribe-sub { color: var(--muted); font-size: .95rem; margin: 0 0 .8rem; }
-.notes-subscribe-row { display: flex; gap: .5rem; flex-wrap: wrap; }
-.notes-subscribe input {
-  flex: 1; min-width: 12rem; font: inherit; font-size: 1rem;
-  padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 4px;
-  background: #fff; color: var(--text);
-}
-.notes-subscribe button {
-  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
-  padding: .5rem 1.1rem; border: none; border-radius: 4px;
-  background: var(--felt); color: #fff;
-}
-.notes-subscribe button:hover { filter: brightness(1.08); }
-
-h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1.4rem; }
-h2 {
-  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); margin: 3rem 0 1rem;
-}
-p { margin: 0 0 1.15rem; }
-a { color: var(--amber); }
-ul { margin: 0 0 1.15rem 1.1rem; }
-li { margin: .3rem 0; }
-em { color: var(--text); }
-
-.lede { font-size: 1.18rem; color: var(--text); }
-.muted { color: var(--muted); }
-
-/* Feature list: rules rather than bullets, like slots on a panel. */
-.features { list-style: none; margin: 0 0 1.5rem; }
-.features li { padding: .6rem 0; border-bottom: 1px solid var(--line); }
-.features li:first-child { border-top: 1px solid var(--line); }
-
-.soon {
-  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
-  padding: 1rem 1.2rem; margin: 1.5rem 0;
-}
-.soon h2 { margin-top: 0; }
 
 .post-list { list-style: none; margin: 0; }
 .post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
