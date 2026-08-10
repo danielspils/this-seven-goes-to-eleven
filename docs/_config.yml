@@ -1,0 +1,22 @@
+# Jekyll config for thissevengoestoeleven.com (GitHub Pages source: /docs).
+#
+# No `theme:` key on purpose — _layouts/default.html and assets/css/style.css
+# own the look entirely, with no default theme CSS leaking in.
+
+title: This Seven Goes to Eleven
+tagline: Backup, setlist, and patch software for the Crumar Seven
+description: Free open-source software for the Crumar Seven stage piano. Back up all 32 presets over USB, name them, and organize them into setlists for the road.
+url: "https://thissevengoestoeleven.com"
+
+# Both Pages-native: sitemap.xml for search engines, feed.xml for RSS readers
+# (and for post-to-email automation later, the way jx-3p.com does it).
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+defaults:
+  - scope: { path: "", type: "posts" }
+    values: { layout: "post" }
+
+exclude:
+  - README.md

@@ -1,0 +1,71 @@
+/* This Seven Goes to Eleven — the instrument's own palette: black panel,
+   brushed-aluminium rule, the red felt above the keybed. Deliberately
+   unrelated to jx-3p.com; the two sites share no assets. */
+:root {
+  --bg: #17171a;
+  --raised: #1e1e22;
+  --line: #2f2f36;
+  --text: #ececef;
+  --muted: #a0a0a8;
+  --felt: #b8362b;
+  --amber: #ffb020;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+/* Head: the aluminium divider with its felt edge, straight off the panel. */
+.site-head {
+  display: flex; align-items: baseline; gap: 1.5rem; flex-wrap: wrap;
+  max-width: 46rem; margin: 0 auto 3rem; padding: 1.6rem 1.5rem 1.4rem;
+  border-bottom: 3px solid var(--felt);
+}
+.wordmark {
+  font-weight: 700; font-size: 1.05rem; letter-spacing: .02em;
+  color: var(--text); text-decoration: none;
+}
+.site-head nav { margin-left: auto; }
+.site-head nav a { color: var(--muted); text-decoration: none; }
+.site-head nav a:hover { color: var(--text); }
+
+h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1.4rem; }
+h2 {
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin: 3rem 0 1rem;
+}
+p { margin: 0 0 1.15rem; }
+a { color: var(--amber); }
+ul { margin: 0 0 1.15rem 1.1rem; }
+li { margin: .3rem 0; }
+em { color: var(--text); }
+
+.lede { font-size: 1.18rem; color: var(--text); }
+.muted { color: var(--muted); }
+
+/* Feature list: rules rather than bullets, like slots on a panel. */
+.features { list-style: none; margin: 0 0 1.5rem; }
+.features li { padding: .6rem 0; border-bottom: 1px solid var(--line); }
+.features li:first-child { border-top: 1px solid var(--line); }
+
+.soon {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: 1rem 1.2rem; margin: 1.5rem 0;
+}
+.soon h2 { margin-top: 0; }
+
+.post-list { list-style: none; margin: 0; }
+.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.post-list time { display: block; color: var(--muted); font-size: .9rem; }
+.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
+
+.site-foot {
+  max-width: 46rem; margin: 0 auto; padding: 1.5rem;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
+}
+.site-foot .fine { font-size: .82rem; opacity: .8; margin-top: .4rem; }
+
+@media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
