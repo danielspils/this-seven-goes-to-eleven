@@ -18,7 +18,7 @@ to me and was easy to use.
 all 32 presets in under a minute, keeps them as files on your computer, and
 organizes them into setlists you can take on the road.
 
-## What it does today
+## What TSGTE does today
 
 <ul class="features">
   <li>Back up all 32 presets over USB</li>
