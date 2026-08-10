@@ -26,10 +26,11 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .site-head .panel {
   background: #0b0b0c;
   border-radius: 10px 10px 0 0;
-  padding: .9rem 1.4rem;
+  padding: .9rem 0;
 }
 .site-head .panel-inner {
-  display: flex; align-items: center; gap: 1.6rem;
+  display: flex; align-items: center; gap: 1.2rem;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
 }
 .wordmark {
   flex: 1; min-width: 0; white-space: nowrap;
@@ -51,7 +52,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
 /* Panel controls: the knob sits left of the headline, the two preset
    buttons right of it, both at the app's own proportions. */
-.site-head .panel-inner { gap: 1.4rem; }
+
 .knob { flex: none; width: 66px; height: 66px; }
 #hue-knob { cursor: grab; }
 #hue-knob:active { cursor: grabbing; }
@@ -96,11 +97,12 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   background:
     repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.035) 1px 3px),
     linear-gradient(180deg, #d3d3d7 0%, #b9b9bf 55%, #a2a2a9 100%);
-  padding: .45rem 1.5rem;
+  padding: .45rem 0;
 }
 /* Strip contents sit on the same column as the page copy below. */
 .alum-inner {
   display: flex; align-items: baseline; gap: 1rem;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
   color: #26262a; font-size: .95rem;
 }
 .alum .tagline { flex: 1; }
