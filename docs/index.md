@@ -5,17 +5,18 @@ layout: default
 In 2024 I was asked to play a few shows with The Long Winters. The only
 problem: I had sold my B3, Rhodes, and other related classic keyboards. I had
 to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
-and the stellar Rhodes and Wurly sounds covered most of what I needed.
+and the stellar Rhodes and Wurly sounds covered my piano needs. Plus, it was
+enjoyable to play.
 
 But saving patches and connecting the Seven to a computer was a royal pain.
 That wireless transmitter? 🤦‍♂️
 
-So I set out to build software for the Seven that made sense to me and is easy
-to use.
+So in August of 2026 I set out to build software for the Seven that made sense
+to me and was easy to use.
 
-*This Seven Goes to Eleven* talks to your Crumar over a plain USB cable. It
-backs up all 32 presets in under a minute, keeps them as files on your
-computer, and organizes them into setlists you can take on the road.
+*This Seven Goes to Eleven* talks to your Crumar over a USB cable. It backs up
+all 32 presets in under a minute, keeps them as files on your computer, and
+organizes them into setlists you can take on the road.
 
 ## What it does today
 
