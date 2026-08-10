@@ -82,8 +82,11 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
 @media (max-width: 46rem) {
-  .knob { width: 54px; height: 54px; }
-  .panel-buttons { width: 78px; }
+  .knob { width: 48px; height: 48px; }
+  /* Preset buttons don't survive a phone screen; the strip carries the
+     navigation instead. */
+  .panel-buttons { display: none; }
+  .alum-nav { display: flex; }
 }
 
 .alum {
@@ -100,8 +103,38 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   color: #26262a; font-size: .95rem;
 }
 .alum .tagline { flex: 1; }
+.alum-nav { display: none; gap: 1.1rem; }
+.alum-nav a { color: #26262a; text-decoration: none; font-weight: 600; }
+.alum-nav a:hover { color: #000; }
 .alum nav a { color: #26262a; text-decoration: none; font-weight: 600; }
 .alum nav a:hover { color: #000; }
+
+/* Page typography. (This block was lost in an earlier edit — the page was
+   rendering with browser defaults.) */
+h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1.4rem; }
+h2 {
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin: 2.6rem 0 .9rem;
+}
+p { margin: 0 0 1.15rem; }
+a { color: var(--felt); }
+main ul { margin: 0 0 1.15rem 1.1rem; }
+main li { margin: .3rem 0; }
+.lede { font-size: 1.18rem; }
+.muted { color: var(--muted); }
+
+/* Feature lists: rules instead of bullets, indented so they sit under the
+   heading they belong to. */
+.features { list-style: none; margin: 0 0 1.5rem; padding-left: 1.25rem; }
+.features li { padding: .55rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+.features li:first-child { border-top: 1px solid var(--line); }
+
+.soon {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .4rem 1.2rem 1.2rem; margin: 2rem 0 0;
+}
+.soon h2 { margin-top: 1.2rem; }
+.soon p { padding-left: 1.25rem; margin: 1.1rem 0 0; }
 
 /* Follow line (no mailing list — see _includes/subscribe-form.html). */
 .follow {
