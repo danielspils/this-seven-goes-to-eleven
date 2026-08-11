@@ -17,8 +17,10 @@
     }
   }
 
-  let hue = Number(localStorage.getItem(KEY));
-  if (!Number.isFinite(hue)) hue = 40;
+  const stored = sessionStorage.getItem(KEY);
+  let hue = stored === null ? Math.floor(Math.random() * 360) : Number(stored);
+  if (!Number.isFinite(hue)) hue = Math.floor(Math.random() * 360);
+  let touched = stored !== null;
 
   const rotor = document.getElementById('knob-rotor');
 
@@ -30,14 +32,14 @@
     root.setProperty('--knob-glow', `hsl(${hue} 100% 55% / .30)`);
     root.setProperty('--knob-bore', `hsl(${hue} 100% 72%)`);
     knob.setAttribute('aria-valuenow', String(Math.round(hue)));
-    localStorage.setItem(KEY, String(Math.round(hue)));
+    if (touched) sessionStorage.setItem(KEY, String(Math.round(hue)));
   }
   apply();
 
   // Vertical drag reads as turning, the way a plugin knob does.
   let dragging = false, lastY = 0;
   knob.addEventListener('pointerdown', (e) => {
-    dragging = true; lastY = e.clientY; knob.setPointerCapture(e.pointerId); e.preventDefault();
+    dragging = true; touched = true; lastY = e.clientY; knob.setPointerCapture(e.pointerId); e.preventDefault();
   });
   knob.addEventListener('pointermove', (e) => {
     if (!dragging) return;
@@ -53,6 +55,7 @@
       : e.key === 'ArrowDown' || e.key === 'ArrowLeft' ? -8 : 0;
     if (!step) return;
     e.preventDefault();
+    touched = true;
     hue = (hue + step + 360) % 360;
     apply();
   });

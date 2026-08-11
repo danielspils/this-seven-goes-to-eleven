@@ -1,0 +1,71 @@
+name: Download report
+
+# Daily check for NEW downloads of the app, emailed only when there's
+# something to say. Mirrors the JP Patches job, with one difference: the app
+# lives in a SEPARATE repository, so the script reads releases from
+# danielspils/crumar-seven-editor while the metrics page lives here.
+#
+# GitHub exposes only a cumulative per-asset counter, so the last reported
+# totals are stored in .github/download-stats.json and the report is the delta.
+#
+# Preview any time:  node scripts/download-report.mjs --dry-run
+#
+# SETUP STILL NEEDED before this can email:
+#   Settings → Secrets and variables → Actions
+#     MAIL_USERNAME  the sending Gmail address
+#     MAIL_PASSWORD  a Gmail App Password (not the account password)
+#   Until then the job runs harmlessly: with no releases there is nothing to
+#   send, and the email step is skipped.
+
+on:
+  schedule:
+    # 07:12 UTC ≈ just after midnight Pacific, so each report covers a
+    # finished local day. The :12 dodges top-of-hour cron congestion.
+    - cron: '12 7 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write     # to commit the snapshot and metrics data
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the report
+        id: calc
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/download-report.mjs
+
+      - name: Email the report
+        if: steps.calc.outputs.send == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: This Seven Goes to Eleven <${{ secrets.MAIL_USERNAME }}>
+          to: danielspils@gmail.com
+          subject: "TSGTE — new downloads"
+          # Both body and html_body => multipart/alternative.
+          body: ${{ steps.calc.outputs.body }}
+          html_body: ${{ steps.calc.outputs.html }}
+
+      # Refreshed every run: the page shouldn't go stale on days with no
+      # downloads (and therefore no email).
+      - name: Build metrics data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/build-metrics-data.mjs
+
+      - name: Commit snapshot + metrics data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/download-stats.json docs/metrics/data.json
+          git diff --staged --quiet || git commit -m "Metrics: daily refresh [skip ci]"
+          git push
