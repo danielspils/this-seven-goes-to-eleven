@@ -8,8 +8,8 @@ to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
 and the stellar Rhodes and Wurly sounds covered most of my piano needs. Plus,
 it was enjoyable to play.
 
-But saving patches and connecting the Seven to a computer was a royal pain.
-That wireless transmitter? 🤦‍♂️
+But backing up patches, editing the deeper settings, and connecting to the
+browser-based app was a royal pain. That wireless Wi-Fi Dongle?! 🤦‍♂️
 
 So in August of 2026 I set out to build software for the Seven that made sense
 to me and was easy to use.
