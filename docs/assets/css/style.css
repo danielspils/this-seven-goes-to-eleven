@@ -207,6 +207,43 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 .post-list time { display: block; color: var(--muted); font-size: .9rem; }
 .post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
 
+.site-foot { margin-top: 4rem; }
+.foot-strip {
+  height: 4px; background: var(--felt);
+}
+.foot-inner {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: .5rem;
+  max-width: 46rem; margin: 0 auto; padding: 1.4rem 1.5rem .4rem;
+  color: var(--muted); font-size: .9rem; text-align: center;
+}
+.foot-dot { color: var(--line); }
+.foot-ig {
+  display: inline-flex; align-items: center; color: var(--muted);
+  margin-left: .2rem;
+}
+.foot-ig:hover { color: var(--felt); }
+.foot-fine {
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 2.5rem;
+  color: var(--text-dim); font-size: .82rem; text-align: center;
+}
+
+@media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
+
+/* Metrics tiles. */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
+.stat {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+  padding: .9rem 1rem; display: flex; flex-direction: column; gap: .2rem;
+}
+.stat .lbl { font-size: .85rem; color: var(--muted); }
+.stat .val { font-size: 1.7rem; font-weight: 600; }
+
+.post-list { list-style: none; margin: 0; }
+.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.post-list time { display: block; color: var(--muted); font-size: .9rem; }
+.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
+
 .site-foot {
   max-width: 46rem; margin: 0 auto; padding: 1.5rem;
   border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
