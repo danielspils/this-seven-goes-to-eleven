@@ -40,6 +40,13 @@ organizes them into setlists you can take on the road.
     </button>
     <figcaption>The library, and a sampled patch</figcaption>
   </figure>
+  <figure class="shot">
+    <button type="button" class="shot-open" aria-label="Enlarge screenshot">
+      <img src="{{ '/assets/img/app-setlist.png' | relative_url }}" width="1147" height="687" loading="lazy"
+           alt="A setlist's eight slots, with one patch being renamed in place.">
+    </button>
+    <figcaption>A setlist, renaming a slot</figcaption>
+  </figure>
 </div>
 
 ## T7GT11 today:
