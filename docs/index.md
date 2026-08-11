@@ -26,7 +26,7 @@ organizes them into setlists you can take on the road.
   <figcaption>Bank 1 as of the last backup, with FX1 open. Click to enlarge.</figcaption>
 </figure>
 
-## What TSGTE does today
+## What T7GT11 does today
 
 <ul class="features">
   <li>Connect via USB-B to USB-C cable</li>

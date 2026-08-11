@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           from: This Seven Goes to Eleven <${{ secrets.MAIL_USERNAME }}>
           to: danielspils@gmail.com
-          subject: "TSGTE — new downloads"
+          subject: "T7GT11 — new downloads"
           # Both body and html_body => multipart/alternative.
           body: ${{ steps.calc.outputs.body }}
           html_body: ${{ steps.calc.outputs.html }}
