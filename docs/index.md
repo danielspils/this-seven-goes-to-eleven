@@ -26,7 +26,7 @@ organizes them into setlists you can take on the road.
   <figcaption>Bank 1 as of the last backup, with FX1 open. Click to enlarge.</figcaption>
 </figure>
 
-## What T7GT11 does today
+## T7GT11 today:
 
 <ul class="features">
   <li>Connect via USB-B to USB-C cable</li>
@@ -38,7 +38,7 @@ organizes them into setlists you can take on the road.
 </ul>
 
 <div class="soon" markdown="1">
-## Coming
+## Coming soon:
 
 <ul class="features">
   <li>Edit FX and parameters from the software</li>
