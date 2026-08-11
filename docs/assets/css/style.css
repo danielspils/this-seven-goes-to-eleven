@@ -86,9 +86,9 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 @media (max-width: 46rem) {
   .knob { width: 60px; height: 60px; }
   /* Preset buttons don't survive a phone screen; the strip carries the
-     navigation instead. */
+     navigation instead — see .alum-nav's own media query, which must come
+     AFTER the base rule that hides it or the cascade discards it. */
   .panel-buttons { display: none; }
-  .alum-nav { display: flex; }
 }
 
 .alum {
@@ -109,6 +109,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .alum-nav { display: none; gap: 1.1rem; }
 .alum-nav a { color: #26262a; text-decoration: none; font-weight: 600; }
 .alum-nav a:hover { color: #000; }
+/* Phone: the preset buttons are gone, so the strip carries the navigation.
+   This block sits after the base rule above deliberately — an earlier
+   media query lost to it on specificity and the nav never appeared. */
+@media (max-width: 46rem) {
+  .alum-nav { display: flex; }
+  /* The tagline wraps to two lines at phone width; centre the links against
+     the block rather than leaving them stranded on the first line. */
+  .alum-inner { align-items: center; font-size: .9rem; }
+}
 .alum nav a { color: #26262a; text-decoration: none; font-weight: 600; }
 .alum nav a:hover { color: #000; }
 
