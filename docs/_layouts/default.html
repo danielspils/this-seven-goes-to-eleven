@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.tagline }}{% endif %}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
+  {% if page.robots %}<meta name="robots" content="{{ page.robots }}">{% endif %}
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
@@ -34,7 +35,8 @@
   <main>{{ content }}</main>
   <footer class="site-foot">
     <p>Free and open source ·
-      <a href="https://github.com/danielspils/crumar-seven-editor">Source on GitHub</a></p>
+      <a href="https://github.com/danielspils/crumar-seven-editor">Source on GitHub</a> ·
+      <a href="{{ '/metrics/' | relative_url }}">Metrics</a></p>
     <p class="fine">Not affiliated with or endorsed by Crumar or GSi. “Crumar” and “Seven” are their marks.</p>
   </footer>
 </body>

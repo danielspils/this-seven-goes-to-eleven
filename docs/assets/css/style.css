@@ -162,6 +162,15 @@ main li { margin: .3rem 0; }
 .contact-form button:hover { filter: brightness(1.08); }
 .contact-form .hp { position: absolute; left: -9999px; }
 
+/* Metrics tiles. */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
+.stat {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+  padding: .9rem 1rem; display: flex; flex-direction: column; gap: .2rem;
+}
+.stat .lbl { font-size: .85rem; color: var(--muted); }
+.stat .val { font-size: 1.7rem; font-weight: 600; }
+
 .post-list { list-style: none; margin: 0; }
 .post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
 .post-list time { display: block; color: var(--muted); font-size: .9rem; }
