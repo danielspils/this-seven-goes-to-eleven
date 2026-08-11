@@ -65,10 +65,10 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .knob .k-ribs line { stroke: rgba(255,255,255,.34); }
 .knob .k-mark { filter: drop-shadow(0 0 3px currentColor); }
 
-.panel-buttons { flex: none; width: 92px; height: auto; }
+.panel-buttons { flex: none; width: 116px; height: auto; }
 .panel-buttons .lbl {
   fill: #e8e8ea; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
-  font-weight: 700; font-style: italic; font-size: 12px; letter-spacing: .05em;
+  font-weight: 700; font-style: italic; font-size: 15px; letter-spacing: .05em;
   text-anchor: middle;
 }
 .panel-buttons .btn-bezel { fill: #1a1a1c; }
