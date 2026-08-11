@@ -5,8 +5,8 @@ layout: default
 In 2024 I was asked to play a few shows with The Long Winters. The only
 problem: I had sold my B3, Rhodes, and other related classic keyboards. I had
 to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
-and the stellar Rhodes and Wurly sounds covered my piano needs. Plus, it was
-enjoyable to play.
+and the stellar Rhodes and Wurly sounds covered most of my piano needs. Plus,
+it was enjoyable to play.
 
 But saving patches and connecting the Seven to a computer was a royal pain.
 That wireless transmitter? 🤦‍♂️
