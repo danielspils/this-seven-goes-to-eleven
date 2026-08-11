@@ -162,6 +162,22 @@ main li { margin: .3rem 0; }
 .contact-form button:hover { filter: brightness(1.08); }
 .contact-form .hp { position: absolute; left: -9999px; }
 
+/* Screenshot with click-to-enlarge. The button wrapper keeps it keyboard
+   reachable; the dialog is native, so Escape and backdrop clicks come free. */
+.shot { margin: 2rem 0; }
+.shot-open {
+  display: block; width: 100%; padding: 0; border: 1px solid var(--line);
+  border-radius: 8px; overflow: hidden; background: none; cursor: zoom-in;
+}
+.shot-open img { display: block; width: 100%; height: auto; }
+.shot figcaption { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+dialog.shot-modal {
+  width: min(96vw, 1600px); padding: 0; border: none; border-radius: 8px;
+  background: none;
+}
+dialog.shot-modal::backdrop { background: rgba(0, 0, 0, .72); }
+dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius: 8px; cursor: zoom-out; }
+
 /* Metrics tiles. */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
 .stat {

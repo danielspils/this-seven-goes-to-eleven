@@ -18,6 +18,14 @@ to me and was easy to use.
 all 32 presets in under a minute, keeps them as files on your computer, and
 organizes them into setlists you can take on the road.
 
+<figure class="shot">
+  <button type="button" class="shot-open" aria-label="Enlarge screenshot">
+    <img src="{{ '/assets/img/app.png' | relative_url }}" width="1147" height="687"
+         alt="The app showing Bank 1 on the instrument, a patch's sound engine parameters, and the effects chain.">
+  </button>
+  <figcaption>Bank 1 as of the last backup, with FX1 open. Click to enlarge.</figcaption>
+</figure>
+
 ## What TSGTE does today
 
 <ul class="features">
