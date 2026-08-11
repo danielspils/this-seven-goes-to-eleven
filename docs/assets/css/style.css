@@ -53,7 +53,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 /* Panel controls: the knob sits left of the headline, the two preset
    buttons right of it, both at the app's own proportions. */
 
-.knob { flex: none; width: 66px; height: 66px; }
+.knob { flex: none; width: 82px; height: 82px; }
 #hue-knob { cursor: grab; }
 #hue-knob:active { cursor: grabbing; }
 #hue-knob:focus { outline: none; }
@@ -84,7 +84,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
 @media (max-width: 46rem) {
-  .knob { width: 48px; height: 48px; }
+  .knob { width: 60px; height: 60px; }
   /* Preset buttons don't survive a phone screen; the strip carries the
      navigation instead. */
   .panel-buttons { display: none; }
