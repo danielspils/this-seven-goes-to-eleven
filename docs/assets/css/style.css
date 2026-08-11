@@ -164,7 +164,10 @@ main li { margin: .3rem 0; }
 
 /* Screenshot with click-to-enlarge. The button wrapper keeps it keyboard
    reachable; the dialog is native, so Escape and backdrop clicks come free. */
-.shot { margin: 2rem 0; }
+/* Gallery: one column on a phone, two side by side with room. */
+.shots { display: grid; gap: 1rem; margin: 2rem 0; }
+@media (min-width: 40rem) { .shots { grid-template-columns: 1fr 1fr; } }
+.shot { margin: 0; }
 .shot-open {
   display: block; width: 100%; padding: 0; border: 1px solid var(--line);
   border-radius: 8px; overflow: hidden; background: none; cursor: zoom-in;
