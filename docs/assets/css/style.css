@@ -65,7 +65,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .knob .k-ribs line { stroke: rgba(255,255,255,.34); }
 .knob .k-mark { filter: drop-shadow(0 0 3px currentColor); }
 
-.panel-buttons { flex: none; width: 116px; height: auto; }
+.panel-buttons { flex: none; width: 236px; height: auto; }
 .panel-buttons .lbl {
   fill: #e8e8ea; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
   font-weight: 700; font-style: italic; font-size: 15px; letter-spacing: .05em;
@@ -81,6 +81,22 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
 .panel-buttons .led { fill: #7d2b26; stroke: #1a1a1c; stroke-width: .5; }
 .panel-buttons .panel-btn { cursor: pointer; }
+/* DOWNLOAD legend and bracket: the instrument's own CLAVI TABS treatment —
+   same yellow, same hairline, turning down toward the pair it labels. */
+.panel-buttons .lbl-alt {
+  fill: #d9c24a; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
+  font-weight: 700; font-style: italic; font-size: 13px;
+  letter-spacing: .06em; text-anchor: middle;
+}
+.panel-buttons .clavi-line { stroke: #d9c24a; stroke-width: 1; fill: none; }
+.panel-buttons .cap {
+  fill: #8d8d97; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: .04em; text-anchor: middle;
+}
+/* Nothing to download yet: dark LED, no pointer. is-live lights it. */
+.panel-buttons .is-soon { cursor: default; }
+.panel-buttons .is-soon .led { fill: #4a2320; }
+.panel-buttons .is-live .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
 @media (max-width: 46rem) {
@@ -261,32 +277,3 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
 
-/* Downloads: the Seven's preset buttons again, this time as the way out of
-   the page. Same bezel, cap, plateau and LED as the header pair — one
-   hardware vocabulary, used wherever the site asks for a press. */
-.downloads { margin: 2.2rem 0 2.6rem; text-align: center; }
-.downloads-title {
-  font-size: 1rem; font-weight: 800; letter-spacing: .06em;
-  text-transform: uppercase; margin: 0 0 .2rem;
-}
-.download-buttons { width: 100%; max-width: 22rem; height: auto; }
-.download-buttons .lbl {
-  fill: var(--text); font-weight: 800; font-size: 13px;
-  letter-spacing: .06em; text-anchor: middle;
-}
-.download-buttons .cap {
-  fill: var(--muted, #6b665c); font-size: 11px; font-weight: 600; text-anchor: middle;
-}
-.download-buttons .btn-bezel { fill: #1a1a1c; }
-.download-buttons .btn-face { fill: url(#dlf); stroke: #75757c; stroke-width: 1.5; rx: 3; }
-.download-buttons .f-t { fill: rgba(255,255,255,.2); }
-.download-buttons .f-l { fill: rgba(255,255,255,.04); }
-.download-buttons .f-r { fill: rgba(0,0,0,.3); }
-.download-buttons .f-b { fill: rgba(0,0,0,.45); }
-.download-buttons .plateau { fill: rgba(255,255,255,.035); }
-.download-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
-/* Dark LED while there is nothing to download; lit once a build exists. */
-.download-buttons .led { fill: #4a2320; stroke: #1a1a1c; stroke-width: .5; }
-.download-buttons .is-live { cursor: pointer; }
-.download-buttons .is-live .led { fill: #ff3b30; }
-.download-buttons .is-live:hover .btn-face { fill: #2b2b2e; }
