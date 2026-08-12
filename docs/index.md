@@ -12,7 +12,7 @@ form. Italian design with a classic keyboard aesthetic — and actual legs
 (instead of the dreaded X stand!). The stellar Rhodes, Wurly, and Clav sounds
 covered much of my piano needs.
 
-But backing up patches, editing the deeper settings, and connecting to the
+However, backing up patches, editing the deeper settings, and connecting to the
 browser-based app proved to be a royal pain. The Wi-Fi dongle was hard to
 connect, and no sooner had I got it working than I’d forgotten how by the next
 time I needed it. But mostly I wanted software that made sense to me and was a
