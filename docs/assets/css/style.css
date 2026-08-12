@@ -35,7 +35,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .wordmark {
   flex: 1; min-width: 0; white-space: nowrap;
   color: #fff; text-decoration: none;
-  font-size: clamp(1.15rem, 3vw, 2.3rem); font-weight: 500; font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 2rem); font-weight: 500; font-style: italic;
   letter-spacing: -.01em;
 }
 /* The Crumar script, approximated with a system italic script. Hue comes
@@ -95,6 +95,10 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 }
 /* Nothing to download yet: dark LED, no pointer. is-live lights it. */
 .panel-buttons .is-soon { cursor: default; }
+/* MAC and PC are part of the DOWNLOAD group, so they carry its colour —
+   the same relationship the panel's CLAVI TABS legends have with their
+   bracket. */
+.panel-buttons .is-soon .lbl { fill: #d9c24a; }
 .panel-buttons .is-soon .led { fill: #4a2320; }
 .panel-buttons .is-live .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
