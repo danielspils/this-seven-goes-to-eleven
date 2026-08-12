@@ -49,13 +49,6 @@ organizes them into setlists you can take on the road.
   </figure>
 </div>
 
-<!-- Downloads, drawn as the instrument's own preset buttons. Inert until
-     there are builds to link to (see _includes/download-buttons.svg). -->
-<div class="downloads">
-  <h2 class="downloads-title">Download desktop app for &hellip;</h2>
-  {% include download-buttons.svg %}
-</div>
-
 ## T7GT11 today:
 
 <ul class="features">
