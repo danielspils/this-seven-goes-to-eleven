@@ -10,7 +10,7 @@ It was time to build a new keyboard rig from the ground up. The [Crumar
 Seven](https://www.crumar.it/?a=showproduct&b=36) drew me in with its style and
 form. Italian design with a classic keyboard aesthetic — and actual legs
 (instead of the dreaded X stand!). The stellar Rhodes, Wurly, and Clav sounds
-covered much of my piano needs.
+covered much of my needs.
 
 However, backing up patches, editing the deeper settings, and connecting to the
 browser-based app proved to be a royal pain. The Wi-Fi dongle was hard to
