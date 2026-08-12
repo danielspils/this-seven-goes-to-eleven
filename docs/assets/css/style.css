@@ -260,3 +260,24 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 .site-foot .fine { font-size: .82rem; opacity: .8; margin-top: .4rem; }
 
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
+
+/* Download buttons. Panel hardware, not web buttons: the black cap and felt
+   edge of the header, sized to sit under the screenshots. While there is
+   nothing to download they are inert and say so — a button that looks live
+   and goes nowhere is worse than one that admits it is waiting. */
+.downloads {
+  display: flex; gap: .9rem; flex-wrap: wrap;
+  margin: 2rem 0 2.4rem;
+}
+.dl {
+  flex: 1 1 15rem; display: block; padding: .7rem 1.1rem;
+  background: linear-gradient(180deg, #26262a, #131316);
+  border: 1px solid #000; border-bottom: 3px solid var(--felt);
+  border-radius: 6px; color: #f2f2f4; text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09);
+}
+.dl strong { display: block; font-size: 1rem; font-weight: 700; }
+.dl small { display: block; font-size: .82rem; opacity: .62; padding-top: .12rem; }
+.dl.is-soon { opacity: .78; cursor: default; }
+a.dl:hover { background: linear-gradient(180deg, #303036, #17171b); }
+@media (max-width: 34rem) { .dl { flex-basis: 100%; } }
