@@ -56,6 +56,8 @@ organizes them into setlists you can take on the road.
 <ul class="features">
   <li>Connect via USB-B to USB-C cable</li>
   <li>Back up all 32 presets over USB</li>
+  <li>Edit FX and parameters from the software</li>
+  <li>Load patches from the software back onto the Seven</li>
   <li>Organize patches into setlists for different shows</li>
   <li>Create custom patch and setlist names</li>
   <li>See which sounds and expansions your Seven has installed</li>
@@ -66,8 +68,6 @@ organizes them into setlists you can take on the road.
 ## Coming soon:
 
 <ul class="features">
-  <li>Edit FX and parameters from the software</li>
-  <li>Load patches from the software back onto the Seven</li>
   <li>Packaged downloads for macOS 12+ and Windows 10+</li>
 </ul>
 
