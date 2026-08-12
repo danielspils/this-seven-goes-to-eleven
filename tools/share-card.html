@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Share card source. Rendered to a PNG by tools/render-share.js; not part of
+     the published site. Built from the site's OWN header and the app's own
+     panel artwork, so the picture people see in a link preview is the thing
+     they will actually open, not an approximation of it. -->
+<style>
+/* This Seven Goes to Eleven — white page, with the instrument's red felt as
+   the one strong accent. Deliberately unrelated to jx-3p.com; the two sites
+   share no assets. */
+:root {
+  --bg: #ffffff;
+  --raised: #f7f7f8;
+  --line: #e3e3e7;
+  --text: #1b1b1f;
+  --muted: #5f5f68;
+  --felt: #b8362b;
+  --amber: #a83428;   /* links: the felt red, dark enough to read on white */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+/* Header, straight off the panel: black face, brushed-aluminium strip, and
+   the red felt that sits above the keybed as the bottom edge. */
+/* The header is a panel sitting on the page, not a full-bleed band: inset,
+   rounded at the top, shallow enough that the controls read as one row. */
+.site-head { max-width: 78rem; margin: 1rem auto 3rem; padding: 0 1rem; }
+.site-head .panel {
+  background: #0b0b0c;
+  border-radius: 10px 10px 0 0;
+  padding: .9rem 0;
+}
+.site-head .panel-inner {
+  display: flex; align-items: center; gap: 1.2rem;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+}
+.wordmark {
+  flex: 1; min-width: 0; white-space: nowrap;
+  color: #fff; text-decoration: none;
+  font-size: clamp(1.15rem, 3vw, 2.3rem); font-weight: 500; font-style: italic;
+  letter-spacing: -.01em;
+}
+/* The Crumar script, approximated with a system italic script. Hue comes
+   from the header knob (--seven-hue), so turning it colours the logo. */
+.seven {
+  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
+  font-style: italic; font-weight: 700;
+  font-size: 1.25em; padding: 0 .12em;
+  color: hsl(var(--seven-hue, 40) 100% 62%);
+  text-shadow:
+    0 0 6px hsl(var(--seven-hue, 40) 100% 55% / .85),
+    0 0 18px hsl(var(--seven-hue, 40) 100% 45% / .5);
+}
+
+/* Panel controls: the knob sits left of the headline, the two preset
+   buttons right of it, both at the app's own proportions. */
+
+.knob { flex: none; width: 82px; height: 82px; }
+#hue-knob { cursor: grab; }
+#hue-knob:active { cursor: grabbing; }
+#hue-knob:focus { outline: none; }
+#hue-knob:focus-visible .k-hit { stroke: #ff3b30; stroke-width: 2; }
+/* The rotor turns with the value; the short transition smooths key steps
+   without lagging a drag. */
+/* Rotation is set on the transform attribute in knob.js — deliberately
+   untransitioned; see the note there. */
+.knob .k-ribs line { stroke: rgba(255,255,255,.34); }
+.knob .k-mark { filter: drop-shadow(0 0 3px currentColor); }
+
+.panel-buttons { flex: none; width: 116px; height: auto; }
+.panel-buttons .lbl {
+  fill: #e8e8ea; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
+  font-weight: 700; font-style: italic; font-size: 15px; letter-spacing: .05em;
+  text-anchor: middle;
+}
+.panel-buttons .btn-bezel { fill: #1a1a1c; }
+.panel-buttons .btn-face { fill: url(#bf); stroke: #75757c; stroke-width: 1.5; rx: 3; }
+.panel-buttons .f-t { fill: rgba(255,255,255,.2); }
+.panel-buttons .f-l { fill: rgba(255,255,255,.04); }
+.panel-buttons .f-r { fill: rgba(0,0,0,.3); }
+.panel-buttons .f-b { fill: rgba(0,0,0,.45); }
+.panel-buttons .plateau { fill: rgba(255,255,255,.035); }
+.panel-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
+.panel-buttons .led { fill: #7d2b26; stroke: #1a1a1c; stroke-width: .5; }
+.panel-buttons .panel-btn { cursor: pointer; }
+.panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
+.panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
+@media (max-width: 46rem) {
+  .knob { width: 60px; height: 60px; }
+  /* Preset buttons don't survive a phone screen; the strip carries the
+     navigation instead — see .alum-nav's own media query, which must come
+     AFTER the base rule that hides it or the cascade discards it. */
+  .panel-buttons { display: none; }
+}
+
+.alum {
+  border-bottom: 4px solid var(--felt);
+  border-radius: 0 0 3px 3px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.035) 1px 3px),
+    linear-gradient(180deg, #d3d3d7 0%, #b9b9bf 55%, #a2a2a9 100%);
+  padding: .45rem 0;
+}
+/* Strip contents sit on the same column as the page copy below. */
+.alum-inner {
+  display: flex; align-items: baseline; gap: 1rem;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+  color: #26262a; font-size: .95rem;
+}
+.alum .tagline { flex: 1; }
+.alum-nav { display: none; gap: 1.1rem; }
+.alum-nav a { color: #26262a; text-decoration: none; font-weight: 600; }
+.alum-nav a:hover { color: #000; }
+/* Phone: the preset buttons are gone, so the strip carries the navigation.
+   This block sits after the base rule above deliberately — an earlier
+   media query lost to it on specificity and the nav never appeared. */
+@media (max-width: 46rem) {
+  .alum-nav { display: flex; }
+  /* The tagline wraps to two lines at phone width; centre the links against
+     the block rather than leaving them stranded on the first line. */
+  .alum-inner { align-items: center; font-size: .9rem; }
+}
+.alum nav a { color: #26262a; text-decoration: none; font-weight: 600; }
+.alum nav a:hover { color: #000; }
+
+/* Page typography. (This block was lost in an earlier edit — the page was
+   rendering with browser defaults.) */
+h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1.4rem; }
+h2 {
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin: 2.6rem 0 .9rem;
+}
+p { margin: 0 0 1.15rem; }
+a { color: var(--felt); }
+main ul { margin: 0 0 1.15rem 1.1rem; }
+main li { margin: .3rem 0; }
+.lede { font-size: 1.18rem; }
+.muted { color: var(--muted); }
+
+/* Feature lists: rules instead of bullets, indented so they sit under the
+   heading they belong to. */
+.features { list-style: none; margin: 0 0 1.5rem; padding-left: 1.25rem; }
+.features li { padding: .55rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+.features li:first-child { border-top: 1px solid var(--line); }
+
+.soon {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .4rem 1.2rem 1.2rem; margin: 2rem 0 0;
+}
+.soon h2 { margin-top: 1.2rem; }
+.soon p { padding-left: 1.25rem; margin: 1.1rem 0 0; }
+
+/* Follow line (no mailing list — see _includes/subscribe-form.html). */
+.follow {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .9rem 1.1rem; margin: 2.5rem 0 0; color: var(--muted);
+}
+
+/* Contact form (Web3Forms — no backend of our own). */
+.contact-form { display: flex; flex-direction: column; gap: .4rem; max-width: 34rem; }
+.contact-form label { font-size: .9rem; color: var(--muted); margin-top: .6rem; }
+.contact-form input[type=email], .contact-form textarea {
+  font: inherit; font-size: 1rem; padding: .55rem .7rem;
+  border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--text);
+}
+.contact-form textarea { resize: vertical; }
+.contact-form button {
+  align-self: flex-start; margin-top: 1rem;
+  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+  padding: .55rem 1.4rem; border: none; border-radius: 4px;
+  background: var(--felt); color: #fff;
+}
+.contact-form button:hover { filter: brightness(1.08); }
+.contact-form .hp { position: absolute; left: -9999px; }
+
+/* Screenshot with click-to-enlarge. The button wrapper keeps it keyboard
+   reachable; the dialog is native, so Escape and backdrop clicks come free. */
+/* Gallery: one column on a phone, two side by side with room. */
+.shots { display: grid; gap: 1rem; margin: 2rem 0; }
+@media (min-width: 40rem) { .shots { grid-template-columns: 1fr 1fr; } }
+.shot { margin: 0; }
+.shot-open {
+  display: block; width: 100%; padding: 0; border: 1px solid var(--line);
+  border-radius: 8px; overflow: hidden; background: none; cursor: zoom-in;
+}
+.shot-open img { display: block; width: 100%; height: auto; }
+.shot figcaption { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+dialog.shot-modal {
+  width: min(96vw, 1600px); padding: 0; border: none; border-radius: 8px;
+  background: none; position: relative; overflow: visible;
+}
+dialog.shot-modal::backdrop { background: rgba(0, 0, 0, .72); }
+dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius: 8px; cursor: zoom-out; }
+.shot-caption { color: #e8e8ea; text-align: center; font-size: .9rem; margin: .6rem 0 0; }
+/* Arrows sit over the image edges — visible on both light and dark shots. */
+.shot-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.6rem; height: 3.4rem; border: none; border-radius: 6px;
+  background: rgba(0, 0, 0, .55); color: #fff; font-size: 1.9rem; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.shot-nav:hover { background: rgba(0, 0, 0, .8); }
+.shot-nav.prev { left: .5rem; }
+.shot-nav.next { right: .5rem; }
+@media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
+
+/* Metrics tiles. */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
+.stat {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+  padding: .9rem 1rem; display: flex; flex-direction: column; gap: .2rem;
+}
+.stat .lbl { font-size: .85rem; color: var(--muted); }
+.stat .val { font-size: 1.7rem; font-weight: 600; }
+
+.post-list { list-style: none; margin: 0; }
+.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.post-list time { display: block; color: var(--muted); font-size: .9rem; }
+.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
+
+.site-foot { margin-top: 4rem; }
+.foot-strip {
+  height: 4px; background: var(--felt);
+}
+.foot-inner {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: .5rem;
+  max-width: 46rem; margin: 0 auto; padding: 1.4rem 1.5rem .4rem;
+  color: var(--muted); font-size: .9rem; text-align: center;
+}
+.foot-dot { color: var(--line); }
+.foot-ig {
+  display: inline-flex; align-items: center; color: var(--muted);
+  margin-left: .2rem;
+}
+.foot-ig:hover { color: var(--felt); }
+.foot-fine {
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 2.5rem;
+  color: var(--text-dim); font-size: .82rem; text-align: center;
+}
+
+@media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
+
+/* Metrics tiles. */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
+.stat {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+  padding: .9rem 1rem; display: flex; flex-direction: column; gap: .2rem;
+}
+.stat .lbl { font-size: .85rem; color: var(--muted); }
+.stat .val { font-size: 1.7rem; font-weight: 600; }
+
+.post-list { list-style: none; margin: 0; }
+.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.post-list time { display: block; color: var(--muted); font-size: .9rem; }
+.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
+
+.site-foot {
+  max-width: 46rem; margin: 0 auto; padding: 1.5rem;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
+}
+.site-foot .fine { font-size: .82rem; opacity: .8; margin-top: .4rem; }
+
+@media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
+
+html, body { margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidden; background: #fff; }
+.site-head { margin: 0; }
+.card-strip { background: #101012; padding: 6px 0 0; }
+.card-strip svg { display: block; width: 100%; height: auto; }
+.card-line {
+  padding: 28px 44px 0;
+  font: 700 54px/1.12 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.02em; color: #16161a;
+}
+</style>
+</head>
+<body>
+  <header class="site-head">
+    <div class="panel"><div class="panel-inner">
+      <!-- Logo-colour knob. The rotor group carries the flutes and turns with the
+     value, so the knob visibly rotates as you drag it. -->
+<svg class="knob" viewBox="0 0 104 104" role="group">
+  <defs>
+    <radialGradient id="kb" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#e8e8ee" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#9a9aa4" stop-opacity="0.24"/>
+    </radialGradient>
+    <radialGradient id="kt" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#b9b9c2" stop-opacity="0.32"/>
+    </radialGradient>
+  </defs>
+  <g id="hue-knob" tabindex="0" role="slider" aria-label="Logo colour"
+     aria-valuemin="0" aria-valuemax="360" aria-valuenow="40">
+    <circle class="k-hit" cx="52" cy="52" r="42" fill="transparent"/>
+    <circle cx="52" cy="52" r="27" fill="var(--knob-glow, transparent)"/>
+    <g id="knob-rotor">
+      <circle cx="52" cy="52" r="28" fill="url(#kb)" stroke="rgba(255,255,255,.3)" stroke-width="1.2"/>
+      <g class="k-ribs" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-linecap="round"></g>
+      <line class="k-mark" x1="52" y1="30" x2="52" y2="38" stroke="var(--knob-bore, #e4e4ec)" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <circle cx="52" cy="52" r="21" fill="none" stroke="rgba(255,255,255,.16)"/>
+    <circle cx="52" cy="52" r="13.5" fill="url(#kt)" stroke="rgba(255,255,255,.32)"/>
+    <circle cx="52" cy="52" r="6.5" fill="var(--knob-bore, rgba(228,228,236,.3))" stroke="rgba(255,255,255,.14)"/>
+  </g>
+</svg>
+
+      <span class="wordmark">This <span class="seven">Seven</span> Goes to Eleven</span>
+      <!-- Preset buttons at the app's geometry, wired as navigation. Spaced
+     to suit the label size; the viewBox is wider than the buttons so the
+     longer label has room. -->
+<svg class="panel-buttons" viewBox="0 0 186 116" role="group">
+  <defs><linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
+  <a href="{{ '/notes/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="41" y="14">NOTES</text>
+    <rect class="btn-bezel" x="14" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="18" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="18,58 64,58 60,62 22,62"/>
+    <polygon class="f-l" points="18,58 22,62 22,106 18,110"/>
+    <polygon class="f-r" points="64,58 64,110 60,106 60,62"/>
+    <polygon class="f-b" points="18,110 22,106 60,106 64,110"/>
+    <rect class="plateau" x="22" y="62" width="38" height="44"/>
+    <path class="edge" d="M18 110 L64 110 L64 26"/>
+    <circle class="led" cx="41" cy="42" r="5"/>
+    <rect class="hit" x="14" y="2" width="54" height="112" fill="transparent"/>
+  </a>
+  <a href="{{ '/contact/' | relative_url }}" class="panel-btn">
+    <text class="lbl" x="137" y="14">CONTACT</text>
+    <rect class="btn-bezel" x="110" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="114" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="114,58 160,58 156,62 118,62"/>
+    <polygon class="f-l" points="114,58 118,62 118,106 114,110"/>
+    <polygon class="f-r" points="160,58 160,110 156,106 156,62"/>
+    <polygon class="f-b" points="114,110 118,106 156,106 160,110"/>
+    <rect class="plateau" x="118" y="62" width="38" height="44"/>
+    <path class="edge" d="M114 110 L160 110 L160 26"/>
+    <circle class="led" cx="137" cy="42" r="5"/>
+    <rect class="hit" x="110" y="2" width="54" height="112" fill="transparent"/>
+  </a>
+</svg>
+
+    </div></div>
+    <div class="alum"><div class="alum-inner">
+      <span class="tagline">a companion app for the Crumar Seven</span>
+    </div></div>
+  </header>
+  <div class="card-strip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2160 210" width="2160" height="210" role="img" aria-label="Crumar Seven front panel" class="seven-panel readonly">
+  <title>Crumar Seven front panel</title>
+
+  <style>
+    /* Self-hosted panel font (no CDN; the app works offline). Path is relative
+       to this file so the SVG renders correctly opened standalone in a browser.
+       When inlined into the app DOM, preload.js strips this block and the app
+       supplies the same face via a data: URI instead (the relative path would
+       resolve against src/ there). */
+    .panel-bg  { fill: #2b2b2d; }
+    /* Knob state is driven by custom properties: class selectors can't reach
+       inside a use-element shadow tree, but custom properties inherit through
+       it — the app restyles a knob (lit/unlit) by setting these vars on the
+       knob group. */
+    svg {
+      --k-glow-fill: transparent;
+      --k-skirt-stroke: rgba(255,255,255,0.28);
+      --k-rib-stroke: rgba(255,255,255,0.20);
+      --k-mid-stroke: rgba(255,255,255,0.16);
+      --k-top-stroke: rgba(255,255,255,0.32);
+      --k-bore-fill: rgba(228,228,236,0.30); --k-bore-stroke: rgba(255,255,255,0.14);
+    }
+    /* Knob material lives as inline style attributes on the #knob-glass def
+       elements — class rules cannot match use-element shadow clones, but
+       style attributes clone with the element and their var() references
+       resolve through the use site, which is how the lit state tints a knob.
+       (No angle brackets in these comments: SVG style content is markup.) */
+    use.knob-glass { pointer-events: none; }
+    /* Ring circles are geometry only — unstroked at rest. The app strokes them
+       for hover/focus states. Deliberate departure from the instrument, which
+       rings every knob (docs/DESIGN.md: fidelity traded for a legible focus
+       state). */
+    .knob-ring { fill: none; stroke: none; stroke-width: 3; }
+    /* Shared button component: FX1/FX2 SELECT, transpose, CLAVI TABS all use
+       .btn so they stay consistent (presets add .btn-face on top). */
+    .btn       { fill: url(#btn-grad); stroke: #75757c; stroke-width: 1.5; rx: 3; }
+    /* Selected = the button's two tones swap (face goes near-black, inset goes
+       lighter) and the LED lights. The hardware's preset buttons are plain
+       black plastic with an LED — the face never illuminates — so this subtle
+       inversion renders the real button more faithfully than a lit-face fill
+       would. Geometry/bezel/border identical in both states; only the two
+       fills swap. The BANK button never takes .on (a bank is always current;
+       its LEDs carry which one). */
+    .btn.on    { fill: url(#btn-grad-on); }
+    .btn-face.on ~ .btn-inset { fill: #232325; }
+    /* Preset/bank button layers: recessed bezel, narrow raised face (lighter
+       stroke on lower/outer edges only), inset LED panel in the top third.
+       Decorative layers pass clicks through to the .btn face beneath. */
+    .btn-face  { stroke: none; }
+    .btn-bezel { fill: #1a1a1c; pointer-events: none; }
+    .btn-edge  { fill: none; stroke: #6e6e75; stroke-width: 1.4; pointer-events: none; }
+    .btn-inset { fill: #141416; pointer-events: none; transition: fill .15s; }
+    /* Silkscreen legends: heavier, narrower, all caps, italic — bundled
+       Archivo Narrow (true italic). Tracking slightly reduced from the plain
+       face so condensed+bold doesn't crowd. Panel strip only. */
+    .lbl       { fill: #e8e8ea; font-family: 'Archivo Narrow', 'Archivo', Helvetica, Arial, sans-serif; font-weight: bold; font-style: italic; font-size: 13px; letter-spacing: .05em; text-anchor: middle; }
+    .lbl-sm    { fill: #c8c8cc; font-family: 'Archivo Narrow', 'Archivo', Helvetica, Arial, sans-serif; font-weight: bold; font-style: italic; font-size: 10px; letter-spacing: .04em; text-anchor: middle; }
+    .lbl-fx    { fill: #e8e8ea; font-family: 'Archivo', Helvetica, Arial, sans-serif; font-size: 26px; font-weight: 600; font-style: italic; letter-spacing: .08em; text-anchor: middle; }
+    .lbl-alt   { fill: #d9c24a; font-family: 'Archivo Narrow', 'Archivo', Helvetica, Arial, sans-serif; font-weight: bold; font-style: italic; font-size: 14px; letter-spacing: .03em; text-anchor: middle; }
+    .lbl-alt-lg { font-size: 16px; }
+    .transpose-sym { font-size: 17px; }
+    .lbl-fxled { font-size: 8.5px; }
+    /* Size overrides, matched against the reference photo: BANK is one of the
+       largest legends on the instrument; preset numbers/labels sit between it
+       and the small captions. */
+    .lbl-lg     { font-size: 18px; }
+    .lbl-sect   { font-size: 16px; }
+    .lbl-preset { font-size: 15px; }
+    .lbl-num    { font-size: 12px; }
+    .lbl-bank-num { font-size: 14px; fill: #e8e8ea; }
+    .clavi-line { stroke: #d9c24a; stroke-width: 1; fill: none; }
+    /* Clavi tabs only act on the modeled Clavi engine (pno_zd6); the app dims
+       the whole group when any other sound is selected. */
+    #clavi-group { transition: opacity .2s; }
+    #clavi-group.inactive { opacity: .55; }
+    .lbl-cyan  { fill: #4fc3d9; }
+    .lbl-red   { fill: #d9534f; }
+    .lbl-blue  { fill: #5b8fd9; }
+    .lbl-green { fill: #4fb96a; }
+    /* The coloured legends (RATE, LEVEL) are tracked noticeably wider than
+       the white ones on the instrument. */
+    .lbl-wide  { letter-spacing: .18em; }
+    .led       { fill: #7d2b26; stroke: #1a1a1c; stroke-width: .5; }
+    .led.on    { fill: #ff3b30; }
+    .led.amber { fill: #7d6524; }
+    .led.amber.on { fill: #ffb020; }
+    .transpose-border { fill: none; stroke: #6d6d72; stroke-width: 1; }
+    .kbd-icon  { fill: none; stroke: #6d6d72; stroke-width: 1; }
+    /* Transpose icon: the silkscreen reverses a keyboard's tones — naturals
+       print dark, accidentals light. Named by key, not by colour. */
+    .kbd-natural    { fill: #141416; }
+    .kbd-accidental { fill: #d4d4d8; }
+    .kbd-ground     { fill: #d4d4d8; }
+    /* Transparent full-button hit targets (preset/bank), drawn last and sized
+       to the bezel. Cursor set here; the app re-enables pointer events. */
+    /* Raised cap bevel: the top two-thirds of a button sticks out with
+       pyramid-slanted sides. Four shaded trapezoids around a plateau. */
+    .btn-facet-t { fill: rgba(255,255,255,0.20); pointer-events: none; }
+    .btn-facet-l { fill: rgba(255,255,255,0.04); pointer-events: none; }
+    .btn-facet-r { fill: rgba(0,0,0,0.30); pointer-events: none; }
+    .btn-facet-b { fill: rgba(0,0,0,0.45); pointer-events: none; }
+    .btn-plateau { fill: rgba(255,255,255,0.035); pointer-events: none; }
+    .btn-hit   { fill: transparent; cursor: pointer; }
+    /* CSS text-anchor overrides presentation attributes; honor authored
+       text-anchor="start" (LED labels, bank numerals) over class defaults. */
+    text[text-anchor="start"] { text-anchor: start; }
+    text[text-anchor="end"] { text-anchor: end; }
+    .readonly .btn { cursor: default; pointer-events: none; }
+  </style>
+  <defs>
+    <!-- Chrome edge trim: vertical silver banding, bright at the top bevel,
+         dark toward the bottom — reads as the polished metal frame around
+         the real front panel. -->
+    <linearGradient id="btn-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e2e32"/>
+      <stop offset="0.12" stop-color="#28282b"/>
+      <stop offset="0.8" stop-color="#1e1e21"/>
+      <stop offset="1" stop-color="#18181b"/>
+    </linearGradient>
+    <linearGradient id="btn-grad-on" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1c1f"/>
+      <stop offset="0.85" stop-color="#101013"/>
+      <stop offset="1" stop-color="#0c0c0e"/>
+    </linearGradient>
+    <linearGradient id="chrome-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f4f7"/>
+      <stop offset="0.18" stop-color="#b9b9c1"/>
+      <stop offset="0.45" stop-color="#84848c"/>
+      <stop offset="0.62" stop-color="#d5d5db"/>
+      <stop offset="0.85" stop-color="#77777f"/>
+      <stop offset="1" stop-color="#4c4c53"/>
+    </linearGradient>
+    <radialGradient id="kg-body" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#e8e8ee" stop-opacity="0.16"/>
+      <stop offset="0.85" stop-color="#cfcfd8" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#9a9aa4" stop-opacity="0.24"/>
+    </radialGradient>
+    <radialGradient id="kg-top" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="0.7" stop-color="#e6e6ec" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#b9b9c2" stop-opacity="0.32"/>
+    </radialGradient>
+    <!-- The real Seven knob: clear translucent plastic, a fluted skirt with
+         a raised clear cylinder on top, lit from beneath by an LED. Endless
+         encoders — no pointer line; only the glow carries state. -->
+    <g id="pwr-icon" style="stroke: #97979d; stroke-width: 1.7; stroke-linecap: round; fill: none">
+      <path d="M -3.4 -4.4 A 5.6 5.6 0 1 0 3.4 -4.4"/>
+      <line x1="0" y1="-7" x2="0" y2="-1.2"/>
+    </g>
+    <g id="knob-glass">
+      <circle class="k-glow" r="34.71" style="fill: var(--k-glow-fill, transparent)"/>
+      <circle class="k-skirt" r="36.0" style="fill: url(#kg-body); stroke: var(--k-skirt-stroke, rgba(255,255,255,0.28)); stroke-width: 1.4"/>
+      <g class="k-ribs" style="stroke: var(--k-rib-stroke, rgba(255,255,255,0.20)); stroke-width: 1.9; stroke-linecap: round"><line x1="0.00" y1="-29.31" x2="0.00" y2="-35.10"/><line x1="6.09" y1="-28.67" x2="7.30" y2="-34.33"/><line x1="11.92" y1="-26.78" x2="14.28" y2="-32.07"/><line x1="17.23" y1="-23.71" x2="20.63" y2="-28.40"/><line x1="21.78" y1="-19.61" x2="26.08" y2="-23.49"/><line x1="25.38" y1="-14.66" x2="30.40" y2="-17.55"/><line x1="27.88" y1="-9.06" x2="33.38" y2="-10.85"/><line x1="29.15" y1="-3.06" x2="34.91" y2="-3.67"/><line x1="29.15" y1="3.06" x2="34.91" y2="3.67"/><line x1="27.88" y1="9.06" x2="33.38" y2="10.85"/><line x1="25.38" y1="14.65" x2="30.40" y2="17.55"/><line x1="21.78" y1="19.61" x2="26.08" y2="23.49"/><line x1="17.23" y1="23.71" x2="20.63" y2="28.40"/><line x1="11.92" y1="26.78" x2="14.28" y2="32.07"/><line x1="6.09" y1="28.67" x2="7.30" y2="34.33"/><line x1="0.00" y1="29.31" x2="0.00" y2="35.10"/><line x1="-6.09" y1="28.67" x2="-7.30" y2="34.33"/><line x1="-11.92" y1="26.78" x2="-14.28" y2="32.07"/><line x1="-17.23" y1="23.71" x2="-20.63" y2="28.40"/><line x1="-21.78" y1="19.61" x2="-26.08" y2="23.49"/><line x1="-25.38" y1="14.66" x2="-30.40" y2="17.55"/><line x1="-27.88" y1="9.06" x2="-33.38" y2="10.85"/><line x1="-29.15" y1="3.06" x2="-34.91" y2="3.67"/><line x1="-29.15" y1="-3.06" x2="-34.91" y2="-3.67"/><line x1="-27.88" y1="-9.06" x2="-33.38" y2="-10.85"/><line x1="-25.38" y1="-14.66" x2="-30.40" y2="-17.55"/><line x1="-21.78" y1="-19.61" x2="-26.08" y2="-23.49"/><line x1="-17.23" y1="-23.71" x2="-20.63" y2="-28.40"/><line x1="-11.92" y1="-26.78" x2="-14.28" y2="-32.07"/><line x1="-6.09" y1="-28.67" x2="-7.30" y2="-34.33"/></g>
+      <circle class="k-mid" r="27.0" style="fill: none; stroke: var(--k-mid-stroke, rgba(255,255,255,0.16)); stroke-width: 1.2"/>
+      <circle class="k-top" r="17.36" style="fill: url(#kg-top); stroke: var(--k-top-stroke, rgba(255,255,255,0.32)); stroke-width: 1.3"/>
+      <circle class="k-bore" r="8.36" style="fill: var(--k-bore-fill, rgba(228,228,236,0.30)); stroke: var(--k-bore-stroke, rgba(255,255,255,0.14)); stroke-width: 1.2"/>
+    </g>
+  </defs>
+
+  <rect class="panel-bg" x="0" y="0" width="2160" height="210" rx="6"/>
+  <!-- Chrome frame: stroke sits fully inside the artwork, a hairline dark
+       seam between metal and panel face keeps the edge crisp. -->
+  <rect x="3" y="3" width="2154" height="204" rx="5" fill="none" stroke="url(#chrome-edge)" stroke-width="6"/>
+  <rect x="6.5" y="6.5" width="2147" height="197" rx="4" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="1"/>
+
+  <g id="sec-volume">
+    <text class="lbl lbl-sect" x="72" y="46">VOLUME</text>
+    <g id="knob-volume">
+      <use class="knob-glass" href="#knob-glass" x="72" y="105"/>
+      <circle class="knob-ring" cx="72" cy="105" r="39"/>
+      <circle class="knob-hit" cx="72" cy="105" r="44" fill="transparent" role="button" aria-label="Toggle Master Volume / EQ section"/>
+    </g>
+    <!-- Silkscreened legend, not an indicator light. Local Off state is shown
+         by the volume knob turning BLUE (slow push ≥100ms toggles it); that cue
+         belongs on the knob when device wiring lands — SysEx visibility of
+         Local Off is unknown (docs/PROJECT-SCOPE.md). -->
+    <rect x="38" y="168" width="68" height="17" rx="2" fill="#8e2f8e"/>
+    <text class="lbl-sm" x="72" y="181" fill="#ffffff">LOCAL OFF</text>
+  </g>
+
+  <g id="sec-reverb">
+    <text class="lbl lbl-sect" x="196" y="46">REVERB</text>
+    <g id="knob-reverb">
+      <use class="knob-glass" href="#knob-glass" x="196" y="105"/>
+      <circle class="knob-ring" cx="196" cy="105" r="39"/>
+      <use href="#pwr-icon" x="224" y="153"/>
+      <circle class="knob-hit" cx="196" cy="105" r="44" fill="transparent" role="button" aria-label="Toggle Reverb section"/>
+    </g>
+    <circle class="led on" id="led-rev-level" cx="244" cy="42" r="5"/>
+    <text class="lbl-sm" x="260" y="46" text-anchor="start">LEVEL</text>
+    <circle class="led" id="led-rev-decay" cx="244" cy="58" r="5"/>
+    <text class="lbl-sm" x="260" y="62" text-anchor="start">DECAY</text>
+  </g>
+
+  <g id="sec-eq">
+    <g id="knob-bass-mid">
+      <use class="knob-glass" href="#knob-glass" x="380" y="105"/>
+      <circle class="knob-ring" cx="380" cy="105" r="39"/>
+      <use href="#pwr-icon" x="408" y="153"/>
+      <circle class="knob-hit" cx="380" cy="105" r="44" fill="transparent" role="button" aria-label="Toggle Master Volume / EQ section"/>
+    </g>
+    <text class="lbl-sm" x="424" y="46" text-anchor="end">BASS</text>
+    <text class="lbl-sm" x="424" y="62" text-anchor="end">MIDDLE</text>
+    <circle class="led on" id="led-eq-top" cx="440" cy="42" r="5"/>
+    <circle class="led"    id="led-eq-bot" cx="440" cy="58" r="5"/>
+
+    <g id="knob-treble-midf">
+      <use class="knob-glass" href="#knob-glass" x="500" y="105"/>
+      <circle class="knob-ring" cx="500" cy="105" r="39"/>
+      <use href="#pwr-icon" x="528" y="153"/>
+      <circle class="knob-hit" cx="500" cy="105" r="44" fill="transparent" role="button" aria-label="Toggle Master Volume / EQ section"/>
+    </g>
+    <text class="lbl-sm" x="456" y="46" text-anchor="start">TREBLE</text>
+    <text class="lbl-sm" x="456" y="62" text-anchor="start">MID FREQ</text>
+  </g>
+
+
+  <g id="sec-clavi-tabs">
+    <!-- Transpose: flat/sharp flank the switch; a single U-shaped line (open at
+         the top) runs from below the flat, under the button with a small gap,
+         up to below the sharp. Separate from the amber Clavi grouping line.
+         LED lights while transposition is active; transposition resets to zero
+         at power-on, so it renders unlit. -->
+    <path class="transpose-border" d="M580 79 V99 H611 M627 99 H658 V79"/>
+    <rect class="kbd-ground" x="606.5" y="21" width="25" height="24"/>
+    <rect class="kbd-natural" x="607.5" y="22" width="7" height="22"/>
+    <rect class="kbd-natural" x="615.5" y="22" width="7" height="22"/>
+    <rect class="kbd-natural" x="623.5" y="22" width="7" height="22"/>
+    <rect class="kbd-accidental" x="613" y="22" width="4" height="14"/>
+    <rect class="kbd-accidental" x="621" y="22" width="4" height="14"/>
+    <rect class="kbd-icon" x="606.5" y="21" width="25" height="24"/>
+    <text class="lbl-sm transpose-sym" x="580" y="76">♭</text>
+    <text class="lbl-sm transpose-sym" x="658" y="76">♯</text>
+    <rect class="btn-bezel" x="593" y="56" width="52" height="26" rx="3"/>
+    <rect class="btn btn-face" id="btn-transpose" x="596" y="59" width="46" height="20"/>
+    <polygon class="btn-facet-t" points="596,65 642,65 639,68 599,68"/>
+    <polygon class="btn-facet-l" points="596,65 599,68 599,76 596,79"/>
+    <polygon class="btn-facet-r" points="642,65 642,79 639,76 639,68"/>
+    <polygon class="btn-facet-b" points="596,79 599,76 639,76 642,79"/>
+    <rect class="btn-plateau" x="599" y="68" width="40" height="8"/>
+    <path class="btn-edge" d="M596 79 L642 79 L642 59"/>
+    <circle class="led" id="led-transpose" cx="619" cy="99" r="4"/>
+  </g>
+
+  <g id="sec-bank">
+    <text class="lbl lbl-lg" x="713" y="34">BANK</text>
+    <!-- Always unselected: a bank is always current, so there is no selection
+         for the button itself to indicate — the bank LEDs carry that. -->
+    <rect class="btn-bezel" x="686" y="56" width="54" height="92" rx="3"/>
+    <rect class="btn btn-face" id="btn-bank" x="690" y="60" width="46" height="84"/>
+    <polygon class="btn-facet-t" points="690,92 736,92 732,96 694,96"/>
+    <polygon class="btn-facet-l" points="690,92 694,96 694,140 690,144"/>
+    <polygon class="btn-facet-r" points="736,92 736,144 732,140 732,96"/>
+    <polygon class="btn-facet-b" points="690,144 694,140 732,140 736,144"/>
+    <rect class="btn-plateau" x="694" y="96" width="38" height="44"/>
+    <path class="btn-edge" d="M690 144 L736 144 L736 60"/>
+    <rect class="btn-hit" data-hit="bank" x="686" y="56" width="54" height="92" role="button" aria-label="Cycle preset bank"/>
+    <path d="M781 51 L781 44 L835 44" fill="none" stroke="#c8c8cc" stroke-width="1"/>
+    <circle class="led amber on" id="led-bank-1" cx="781" cy="64" r="5"/>
+    <text class="lbl-sm lbl-bank-num" x="801" y="69" text-anchor="start">1</text>
+    <circle class="led amber"    id="led-bank-2" cx="781" cy="88" r="5"/>
+    <text class="lbl-sm lbl-bank-num" x="801" y="93" text-anchor="start">2</text>
+    <circle class="led amber"    id="led-bank-3" cx="781" cy="112" r="5"/>
+    <text class="lbl-sm lbl-bank-num" x="801" y="117" text-anchor="start">3</text>
+    <circle class="led amber"    id="led-bank-4" cx="781" cy="136" r="5"/>
+    <text class="lbl-sm lbl-bank-num" x="801" y="141" text-anchor="start">4</text>
+  </g>
+
+  <g id="sec-presets">
+    <g id="preset-1">
+      <text class="lbl-sm lbl-num" x="859" y="30">1</text>
+      <text class="lbl lbl-preset" x="859" y="48">TINES</text>
+      <rect class="btn-bezel" x="832" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face on" x="836" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="836,92 882,92 878,96 840,96"/>
+      <polygon class="btn-facet-l" points="836,92 840,96 840,140 836,144"/>
+      <polygon class="btn-facet-r" points="882,92 882,144 878,140 878,96"/>
+      <polygon class="btn-facet-b" points="836,144 840,140 878,140 882,144"/>
+      <rect class="btn-plateau" x="840" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M836 144 L882 144 L882 60"/>
+      <circle class="led on" id="led-preset-1" cx="859" cy="76" r="5"/>
+      <rect class="btn-hit" x="832" y="56" width="54" height="92" role="button" aria-label="Select preset 1 (Tines)"/>
+    </g>
+    <g id="preset-2">
+      <text class="lbl-sm lbl-num" x="920" y="30">2</text>
+      <text class="lbl lbl-preset" x="920" y="48">REEDS</text>
+      <rect class="btn-bezel" x="893" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="897" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="897,92 943,92 939,96 901,96"/>
+      <polygon class="btn-facet-l" points="897,92 901,96 901,140 897,144"/>
+      <polygon class="btn-facet-r" points="943,92 943,144 939,140 939,96"/>
+      <polygon class="btn-facet-b" points="897,144 901,140 939,140 943,144"/>
+      <rect class="btn-plateau" x="901" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M897 144 L943 144 L943 60"/>
+      <circle class="led" id="led-preset-2" cx="920" cy="76" r="5"/>
+      <rect class="btn-hit" x="893" y="56" width="54" height="92" role="button" aria-label="Select preset 2 (Reeds)"/>
+    </g>
+    <g id="preset-3">
+      <text class="lbl-sm lbl-num" x="981" y="30">3</text>
+      <text class="lbl lbl-preset" x="981" y="48">EGRAND</text>
+      <rect class="btn-bezel" x="954" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="958" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="958,92 1004,92 1000,96 962,96"/>
+      <polygon class="btn-facet-l" points="958,92 962,96 962,140 958,144"/>
+      <polygon class="btn-facet-r" points="1004,92 1004,144 1000,140 1000,96"/>
+      <polygon class="btn-facet-b" points="958,144 962,140 1000,140 1004,144"/>
+      <rect class="btn-plateau" x="962" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M958 144 L1004 144 L1004 60"/>
+      <circle class="led" id="led-preset-3" cx="981" cy="76" r="5"/>
+      <rect class="btn-hit" x="954" y="56" width="54" height="92" role="button" aria-label="Select preset 3 (EGrand)"/>
+    </g>
+    <g id="preset-4">
+      <text class="lbl-sm lbl-num" x="1042" y="30">4</text>
+      <text class="lbl lbl-preset" x="1042" y="48">CLAVI</text>
+      <rect class="btn-bezel" x="1015" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="1019" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="1019,92 1065,92 1061,96 1023,96"/>
+      <polygon class="btn-facet-l" points="1019,92 1023,96 1023,140 1019,144"/>
+      <polygon class="btn-facet-r" points="1065,92 1065,144 1061,140 1061,96"/>
+      <polygon class="btn-facet-b" points="1019,144 1023,140 1061,140 1065,144"/>
+      <rect class="btn-plateau" x="1023" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M1019 144 L1065 144 L1065 60"/>
+      <circle class="led" id="led-preset-4" cx="1042" cy="76" r="5"/>
+      <rect class="btn-hit" x="1015" y="56" width="54" height="92" role="button" aria-label="Select preset 4 (Clavi)"/>
+    </g>
+    <g id="preset-5">
+      <text class="lbl-sm lbl-num" x="1103" y="30">5</text>
+      <text class="lbl lbl-preset" x="1103" y="48">DX EP</text>
+      <rect class="btn-bezel" x="1076" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="1080" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="1080,92 1126,92 1122,96 1084,96"/>
+      <polygon class="btn-facet-l" points="1080,92 1084,96 1084,140 1080,144"/>
+      <polygon class="btn-facet-r" points="1126,92 1126,144 1122,140 1122,96"/>
+      <polygon class="btn-facet-b" points="1080,144 1084,140 1122,140 1126,144"/>
+      <rect class="btn-plateau" x="1084" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M1080 144 L1126 144 L1126 60"/>
+      <circle class="led" id="led-preset-5" cx="1103" cy="76" r="5"/>
+      <rect class="btn-hit" x="1076" y="56" width="54" height="92" role="button" aria-label="Select preset 5 (DX EP)"/>
+    </g>
+    <g id="preset-6">
+      <text class="lbl-sm lbl-num" x="1164" y="30">6</text>
+      <text class="lbl lbl-preset" x="1164" y="48">MKS EP</text>
+      <rect class="btn-bezel" x="1137" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="1141" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="1141,92 1187,92 1183,96 1145,96"/>
+      <polygon class="btn-facet-l" points="1141,92 1145,96 1145,140 1141,144"/>
+      <polygon class="btn-facet-r" points="1187,92 1187,144 1183,140 1183,96"/>
+      <polygon class="btn-facet-b" points="1141,144 1145,140 1183,140 1187,144"/>
+      <rect class="btn-plateau" x="1145" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M1141 144 L1187 144 L1187 60"/>
+      <circle class="led" id="led-preset-6" cx="1164" cy="76" r="5"/>
+      <rect class="btn-hit" x="1137" y="56" width="54" height="92" role="button" aria-label="Select preset 6 (MKS EP)"/>
+    </g>
+    <g id="preset-7">
+      <text class="lbl-sm lbl-num" x="1225" y="30">7</text>
+      <text class="lbl lbl-preset" x="1225" y="48">VIBES</text>
+      <rect class="btn-bezel" x="1198" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="1202" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="1202,92 1248,92 1244,96 1206,96"/>
+      <polygon class="btn-facet-l" points="1202,92 1206,96 1206,140 1202,144"/>
+      <polygon class="btn-facet-r" points="1248,92 1248,144 1244,140 1244,96"/>
+      <polygon class="btn-facet-b" points="1202,144 1206,140 1244,140 1248,144"/>
+      <rect class="btn-plateau" x="1206" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M1202 144 L1248 144 L1248 60"/>
+      <circle class="led" id="led-preset-7" cx="1225" cy="76" r="5"/>
+      <rect class="btn-hit" x="1198" y="56" width="54" height="92" role="button" aria-label="Select preset 7 (Vibes)"/>
+    </g>
+    <g id="preset-8">
+      <text class="lbl-sm lbl-num" x="1286" y="30">8</text>
+      <text class="lbl lbl-preset" x="1286" y="48">GRAND</text>
+      <rect class="btn-bezel" x="1259" y="56" width="54" height="92" rx="3"/>
+      <rect class="btn btn-face" x="1263" y="60" width="46" height="84"/>
+      <polygon class="btn-facet-t" points="1263,92 1309,92 1305,96 1267,96"/>
+      <polygon class="btn-facet-l" points="1263,92 1267,96 1267,140 1263,144"/>
+      <polygon class="btn-facet-r" points="1309,92 1309,144 1305,140 1305,96"/>
+      <polygon class="btn-facet-b" points="1263,144 1267,140 1305,140 1309,144"/>
+      <rect class="btn-plateau" x="1267" y="96" width="38" height="44"/>
+      <path class="btn-edge" d="M1263 144 L1309 144 L1309 60"/>
+      <circle class="led" id="led-preset-8" cx="1286" cy="76" r="5"/>
+      <rect class="btn-hit" x="1259" y="56" width="54" height="92" role="button" aria-label="Select preset 8 (Grand)"/>
+    </g>
+  </g>
+
+  <g id="clavi-group">
+    <rect class="btn-bezel" x="593" y="112" width="52" height="26" rx="3"/>
+    <rect class="btn btn-face" x="596" y="115" width="46" height="20"/>
+    <polygon class="btn-facet-t" points="596,121 642,121 639,124 599,124"/>
+    <polygon class="btn-facet-l" points="596,121 599,124 599,132 596,135"/>
+    <polygon class="btn-facet-r" points="642,121 642,135 639,132 639,124"/>
+    <polygon class="btn-facet-b" points="596,135 599,132 639,132 642,135"/>
+    <rect class="btn-plateau" x="599" y="124" width="40" height="8"/>
+    <path class="btn-edge" d="M596 135 L642 135 L642 115"/>
+    <text class="lbl-alt lbl-alt-lg" x="673" y="177">CLAVI TABS</text>
+    <path id="clavi-group-line" class="clavi-line" d="M619 138 V169 Q619 172 622 172 H628 M718 172 H1200"/>
+    <text class="lbl-alt" x="859" y="168">BRILLIANT</text>
+    <text class="lbl-alt" x="920" y="168">TREBLE</text>
+    <text class="lbl-alt" x="981" y="168">MEDIUM</text>
+    <text class="lbl-alt" x="1042" y="168">SOFT</text>
+    <text class="lbl-alt" x="1103" y="168">C / D</text>
+    <text class="lbl-alt" x="1164" y="168">A / B</text>
+  </g>
+
+
+  <g id="sec-fx1">
+    <rect x="1347" y="21" width="265" height="159" rx="6" fill="none" stroke="#46464a" stroke-width="1"/>
+    <text class="lbl-sm" x="1396" y="62">SELECT</text>
+    <rect class="btn-bezel" x="1369" y="76" width="52" height="26" rx="3"/>
+    <rect class="btn btn-face" id="btn-fx1-select" x="1372" y="79" width="46" height="20"/>
+    <polygon class="btn-facet-t" points="1372,85 1418,85 1415,88 1375,88"/>
+    <polygon class="btn-facet-l" points="1372,85 1375,88 1375,96 1372,99"/>
+    <polygon class="btn-facet-r" points="1418,85 1418,99 1415,96 1415,88"/>
+    <polygon class="btn-facet-b" points="1372,99 1375,96 1415,96 1418,99"/>
+    <rect class="btn-plateau" x="1375" y="88" width="40" height="8"/>
+    <path class="btn-edge" d="M1372 99 L1418 99 L1418 79"/>
+    <circle class="led on" id="led-fx1-0" cx="1437" cy="72" r="4.5"/>
+    <text class="lbl-sm" x="1456" y="76" text-anchor="start">TREM</text>
+    <circle class="led" id="led-fx1-1" cx="1437" cy="94" r="4.5"/>
+    <text class="lbl-sm" x="1456" y="98" text-anchor="start">PAN</text>
+    <circle class="led" id="led-fx1-2" cx="1437" cy="116" r="4.5"/>
+    <text class="lbl-sm" x="1456" y="120" text-anchor="start">A-WHA</text>
+    <circle class="led" id="led-fx1-3" cx="1437" cy="138" r="4.5"/>
+    <text class="lbl-sm" x="1456" y="142" text-anchor="start">P-WHA</text>
+    <text class="lbl-fx" x="1395" y="152" transform="translate(0,152) scale(1,1.18) translate(0,-152)">FX1</text>
+    <g id="knob-fx1">
+      <use class="knob-glass" href="#knob-glass" x="1548" y="110"/>
+      <circle class="knob-ring" cx="1548" cy="110" r="39"/>
+      <use href="#pwr-icon" x="1576" y="158"/>
+      <circle class="knob-hit" cx="1548" cy="110" r="44" fill="transparent" role="button" aria-label="Toggle FX1 section"/>
+    </g>
+    <text class="lbl lbl-sect lbl-green" x="1548" y="50">DEPTH</text>
+    <text class="lbl lbl-sect lbl-cyan lbl-wide" x="1548" y="66">RATE</text>
+  </g>
+
+  <g id="sec-amp">
+    <text class="lbl" x="1676" y="58">AMP / DRIVE</text>
+    <g id="knob-amp-drive">
+      <use class="knob-glass" href="#knob-glass" x="1676" y="110"/>
+      <circle class="knob-ring" cx="1676" cy="110" r="39"/>
+      <use href="#pwr-icon" x="1704" y="158"/>
+      <circle class="knob-hit" cx="1676" cy="110" r="44" fill="transparent" role="button" aria-label="Toggle Amp Simulator section"/>
+    </g>
+  </g>
+
+  <g id="sec-fx2">
+    <rect x="1740" y="21" width="250" height="159" rx="6" fill="none" stroke="#46464a" stroke-width="1"/>
+    <text class="lbl-sm" x="1774" y="62">SELECT</text>
+    <rect class="btn-bezel" x="1747" y="76" width="52" height="26" rx="3"/>
+    <rect class="btn btn-face" id="btn-fx2-select" x="1750" y="79" width="46" height="20"/>
+    <polygon class="btn-facet-t" points="1750,85 1796,85 1793,88 1753,88"/>
+    <polygon class="btn-facet-l" points="1750,85 1753,88 1753,96 1750,99"/>
+    <polygon class="btn-facet-r" points="1796,85 1796,99 1793,96 1793,88"/>
+    <polygon class="btn-facet-b" points="1750,99 1753,96 1793,96 1796,99"/>
+    <rect class="btn-plateau" x="1753" y="88" width="40" height="8"/>
+    <path class="btn-edge" d="M1750 99 L1796 99 L1796 79"/>
+    <circle class="led on" id="led-fx2-0" cx="1815" cy="72" r="4.5"/>
+    <text class="lbl-sm lbl-fxled" x="1834" y="76" text-anchor="start">CHORUS</text>
+    <circle class="led" id="led-fx2-1" cx="1815" cy="94" r="4.5"/>
+    <text class="lbl-sm lbl-fxled" x="1834" y="98" text-anchor="start">PHASER</text>
+    <circle class="led" id="led-fx2-2" cx="1815" cy="116" r="4.5"/>
+    <text class="lbl-sm lbl-fxled" x="1834" y="120" text-anchor="start">FLANGER</text>
+    <circle class="led" id="led-fx2-3" cx="1815" cy="138" r="4.5"/>
+    <text class="lbl-sm lbl-fxled" x="1834" y="142" text-anchor="start">DELAY</text>
+    <text class="lbl-fx" x="1773" y="152" transform="translate(0,152) scale(1,1.18) translate(0,-152)">FX2</text>
+    <g id="knob-fx2">
+      <use class="knob-glass" href="#knob-glass" x="1926" y="110"/>
+      <circle class="knob-ring" cx="1926" cy="110" r="39"/>
+      <use href="#pwr-icon" x="1954" y="158"/>
+      <circle class="knob-hit" cx="1926" cy="110" r="44" fill="transparent" role="button" aria-label="Toggle FX2 section"/>
+    </g>
+    <text class="lbl lbl-sect lbl-green" x="1926" y="50">DEPTH</text>
+    <text class="lbl lbl-sect lbl-cyan lbl-wide" x="1926" y="66">RATE</text>
+  </g>
+
+  <g id="sec-pad">
+    <!-- Hardware layout: PAD over LEVEL stacked tight above the knob (PAD in
+         panel white, LEVEL in red), BLEND tucked right below it. -->
+    <text class="lbl lbl-sect" x="2060" y="48">PAD</text>
+    <text class="lbl lbl-sect lbl-red lbl-wide" x="2060" y="66">LEVEL</text>
+    <g id="knob-pad">
+      <use class="knob-glass" href="#knob-glass" x="2060" y="110"/>
+      <circle class="knob-ring" cx="2060" cy="110" r="39"/>
+      <use href="#pwr-icon" x="2088" y="158"/>
+      <circle class="knob-hit" cx="2060" cy="110" r="44" fill="transparent" role="button" aria-label="Toggle Synth Pad section"/>
+    </g>
+    <circle class="led" id="led-pad-sw" cx="2060" cy="152" r="5"/>
+    <text class="lbl-sm lbl-blue" x="2060" y="170">BLEND</text>
+  </g>
+</svg>
+</div>
+  <div class="card-line">Patch editor, librarian, and setlist software for the mighty Crumar Seven!</div>
+</body>
+</html>
