@@ -6,9 +6,15 @@
      The viewBox starts above zero to make room for that legend without moving
      the buttons: all four caps stay on one line, as they do on the panel.
 
-     MAC and PC are inert while there is nothing to download — dark LED, and
-     the caption says so. To go live, wrap a group in <a> and add is-live. -->
-<svg class="panel-buttons" viewBox="0 -30 378 152" role="group">
+     The two pairs are spaced apart from each other — downloads and navigation
+     are different errands, and on the instrument related controls sit together
+     with air around the group.
+
+     MAC and PC are inert while there is nothing to download: dark LED, no
+     pointer. The dark LED is the message — on the instrument an unlit preset
+     is one that is not active, so the panel says it without a caption. To go
+     live, wrap a group in <a> and swap is-soon for is-live. -->
+<svg class="panel-buttons" viewBox="0 -30 424 148" role="group">
   <defs><linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
 
   <!-- DOWNLOAD legend and its bracket, turning down toward the two buttons. -->
@@ -41,33 +47,31 @@
     <circle class="led" cx="137" cy="42" r="5"/>
   </g>
 
-  <text class="cap" x="89" y="128">(coming soon)</text>
-
   <a href="{{ '/notes/' | relative_url }}" class="panel-btn">
-    <text class="lbl" x="233" y="14">NOTES</text>
-    <rect class="btn-bezel" x="206" y="22" width="54" height="92" rx="3"/>
-    <rect class="btn-face" x="210" y="26" width="46" height="84"/>
-    <polygon class="f-t" points="210,58 256,58 252,62 214,62"/>
-    <polygon class="f-l" points="210,58 214,62 214,106 210,110"/>
-    <polygon class="f-r" points="256,58 256,110 252,106 252,62"/>
-    <polygon class="f-b" points="210,110 214,106 252,106 256,110"/>
-    <rect class="plateau" x="214" y="62" width="38" height="44"/>
-    <path class="edge" d="M210 110 L256 110 L256 26"/>
-    <circle class="led" cx="233" cy="42" r="5"/>
-    <rect class="hit" x="206" y="2" width="54" height="112" fill="transparent"/>
+    <text class="lbl" x="273" y="14">NOTES</text>
+    <rect class="btn-bezel" x="246" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="250" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="250,58 296,58 292,62 254,62"/>
+    <polygon class="f-l" points="250,58 254,62 254,106 250,110"/>
+    <polygon class="f-r" points="296,58 296,110 292,106 292,62"/>
+    <polygon class="f-b" points="250,110 254,106 292,106 296,110"/>
+    <rect class="plateau" x="254" y="62" width="38" height="44"/>
+    <path class="edge" d="M250 110 L296 110 L296 26"/>
+    <circle class="led" cx="273" cy="42" r="5"/>
+    <rect class="hit" x="246" y="2" width="54" height="112" fill="transparent"/>
   </a>
 
   <a href="{{ '/contact/' | relative_url }}" class="panel-btn">
-    <text class="lbl" x="329" y="14">CONTACT</text>
-    <rect class="btn-bezel" x="302" y="22" width="54" height="92" rx="3"/>
-    <rect class="btn-face" x="306" y="26" width="46" height="84"/>
-    <polygon class="f-t" points="306,58 352,58 348,62 310,62"/>
-    <polygon class="f-l" points="306,58 310,62 310,106 306,110"/>
-    <polygon class="f-r" points="352,58 352,110 348,106 348,62"/>
-    <polygon class="f-b" points="306,110 310,106 348,106 352,110"/>
-    <rect class="plateau" x="310" y="62" width="38" height="44"/>
-    <path class="edge" d="M306 110 L352 110 L352 26"/>
-    <circle class="led" cx="329" cy="42" r="5"/>
-    <rect class="hit" x="302" y="2" width="54" height="112" fill="transparent"/>
+    <text class="lbl" x="369" y="14">CONTACT</text>
+    <rect class="btn-bezel" x="342" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="346" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="346,58 392,58 388,62 350,62"/>
+    <polygon class="f-l" points="346,58 350,62 350,106 346,110"/>
+    <polygon class="f-r" points="392,58 392,110 388,106 388,62"/>
+    <polygon class="f-b" points="346,110 350,106 388,106 392,110"/>
+    <rect class="plateau" x="350" y="62" width="38" height="44"/>
+    <path class="edge" d="M346 110 L392 110 L392 26"/>
+    <circle class="led" cx="369" cy="42" r="5"/>
+    <rect class="hit" x="342" y="2" width="54" height="112" fill="transparent"/>
   </a>
 </svg>
