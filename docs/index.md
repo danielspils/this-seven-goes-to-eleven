@@ -3,16 +3,18 @@ layout: default
 ---
 
 In 2024 I was asked to play a few shows with The Long Winters. The only
-problem: I had sold my B3, Rhodes, and other related classic keyboards. I had
-to rebuild a rig. The Crumar Seven drew me in with its look and form factor —
-and the stellar Rhodes and Wurly sounds covered most of my piano needs. Plus,
-it was enjoyable to play.
+problem: I had sold my B3, Rhodes, and other related classic keyboards.
+
+I had to rebuild my keyboard rig from the ground up. The [Crumar
+Seven](https://www.crumar.it/?a=showproduct&b=36) drew me in with its look and
+form factor — and the stellar Rhodes and Wurly sounds covered most of my piano
+needs.
 
 But backing up patches, editing the deeper settings, and connecting to the
-browser-based app was a royal pain. That wireless Wi-Fi Dongle?! 🤦‍♂️
-
-So in August of 2026 I set out to build software for the Seven that made sense
-to me and was easy to use.
+browser-based app was a royal pain. Although I love the idea of the wireless
+Wi-Fi dongle, it was hard to connect and I wanted a reliable wired connection.
+But mostly I desired software that made sense to me and was easy to use. About
+a week ago I began talking to Claude and that has resulted in this software.
 
 *This Seven Goes to Eleven* talks to your Crumar over a USB cable. It backs up
 all 32 presets in under a minute, keeps them as files on your computer, and
