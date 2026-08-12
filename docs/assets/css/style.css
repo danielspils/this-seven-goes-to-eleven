@@ -261,23 +261,32 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
 
-/* Download buttons. Panel hardware, not web buttons: the black cap and felt
-   edge of the header, sized to sit under the screenshots. While there is
-   nothing to download they are inert and say so — a button that looks live
-   and goes nowhere is worse than one that admits it is waiting. */
-.downloads {
-  display: flex; gap: .9rem; flex-wrap: wrap;
-  margin: 2rem 0 2.4rem;
+/* Downloads: the Seven's preset buttons again, this time as the way out of
+   the page. Same bezel, cap, plateau and LED as the header pair — one
+   hardware vocabulary, used wherever the site asks for a press. */
+.downloads { margin: 2.2rem 0 2.6rem; text-align: center; }
+.downloads-title {
+  font-size: 1rem; font-weight: 800; letter-spacing: .06em;
+  text-transform: uppercase; margin: 0 0 .2rem;
 }
-.dl {
-  flex: 1 1 15rem; display: block; padding: .7rem 1.1rem;
-  background: linear-gradient(180deg, #26262a, #131316);
-  border: 1px solid #000; border-bottom: 3px solid var(--felt);
-  border-radius: 6px; color: #f2f2f4; text-decoration: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09);
+.download-buttons { width: 100%; max-width: 22rem; height: auto; }
+.download-buttons .lbl {
+  fill: var(--text); font-weight: 800; font-size: 13px;
+  letter-spacing: .06em; text-anchor: middle;
 }
-.dl strong { display: block; font-size: 1rem; font-weight: 700; }
-.dl small { display: block; font-size: .82rem; opacity: .62; padding-top: .12rem; }
-.dl.is-soon { opacity: .78; cursor: default; }
-a.dl:hover { background: linear-gradient(180deg, #303036, #17171b); }
-@media (max-width: 34rem) { .dl { flex-basis: 100%; } }
+.download-buttons .cap {
+  fill: var(--muted, #6b665c); font-size: 11px; font-weight: 600; text-anchor: middle;
+}
+.download-buttons .btn-bezel { fill: #1a1a1c; }
+.download-buttons .btn-face { fill: url(#dlf); stroke: #75757c; stroke-width: 1.5; rx: 3; }
+.download-buttons .f-t { fill: rgba(255,255,255,.2); }
+.download-buttons .f-l { fill: rgba(255,255,255,.04); }
+.download-buttons .f-r { fill: rgba(0,0,0,.3); }
+.download-buttons .f-b { fill: rgba(0,0,0,.45); }
+.download-buttons .plateau { fill: rgba(255,255,255,.035); }
+.download-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
+/* Dark LED while there is nothing to download; lit once a build exists. */
+.download-buttons .led { fill: #4a2320; stroke: #1a1a1c; stroke-width: .5; }
+.download-buttons .is-live { cursor: pointer; }
+.download-buttons .is-live .led { fill: #ff3b30; }
+.download-buttons .is-live:hover .btn-face { fill: #2b2b2e; }
