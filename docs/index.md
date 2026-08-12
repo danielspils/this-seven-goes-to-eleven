@@ -2,19 +2,22 @@
 layout: default
 ---
 
-In 2024 I was asked to play a few shows with The Long Winters. The only
-problem: I had sold my B3, Rhodes, and other related classic keyboards.
+In 2024 I was asked to play a few shows with The Long Winters in Seattle. The
+only problem: I’d sold my B3, Rhodes, and other classic keyboards I used in my
+old band Maktub years ago.
 
-I had to rebuild my keyboard rig from the ground up. The [Crumar
-Seven](https://www.crumar.it/?a=showproduct&b=36) drew me in with its look and
-form factor — and the stellar Rhodes and Wurly sounds covered most of my piano
-needs.
+It was time to build a new keyboard rig from the ground up. The [Crumar
+Seven](https://www.crumar.it/?a=showproduct&b=36) drew me in with its style and
+form. Italian design with a classic keyboard aesthetic — and actual legs
+(instead of the dreaded X stand!). The stellar Rhodes, Wurly, and Clav sounds
+covered much of my piano needs.
 
 But backing up patches, editing the deeper settings, and connecting to the
-browser-based app was a royal pain. Although I love the idea of the wireless
-Wi-Fi dongle, it was hard to connect and I wanted a reliable wired connection.
-But mostly I desired software that made sense to me and was easy to use. About
-a week ago I began talking to Claude and that has resulted in this software.
+browser-based app proved to be a royal pain. The Wi-Fi dongle was hard to
+connect, and no sooner had I got it working than I’d forgotten how by the next
+time I needed it. But mostly I wanted software that made sense to me and was a
+pleasure to use. About a week ago I began talking to Claude about my dream
+software for the Crumar Seven. Ecco: This Seven Goes to Eleven!
 
 *This Seven Goes to Eleven* talks to your Crumar over a USB cable. It backs up
 all 32 presets in under a minute, keeps them as files on your computer, and
