@@ -49,18 +49,11 @@ organizes them into setlists you can take on the road.
   </figure>
 </div>
 
-<!-- Placeholder downloads: they say plainly that there is nothing to download
-     yet rather than linking somewhere that 404s. When the builds exist these
-     become links and lose the .is-soon class. -->
+<!-- Downloads, drawn as the instrument's own preset buttons. Inert until
+     there are builds to link to (see _includes/download-buttons.svg). -->
 <div class="downloads">
-  <span class="dl is-soon" aria-disabled="true">
-    <strong>Download for macOS</strong>
-    <small>Not yet — building in public</small>
-  </span>
-  <span class="dl is-soon" aria-disabled="true">
-    <strong>Download for Windows</strong>
-    <small>Not yet — building in public</small>
-  </span>
+  <h2 class="downloads-title">Download desktop app for &hellip;</h2>
+  {% include download-buttons.svg %}
 </div>
 
 ## T7GT11 today:
