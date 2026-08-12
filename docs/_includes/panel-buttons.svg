@@ -19,7 +19,7 @@
 
   <!-- DOWNLOAD legend and its bracket, turning down toward the two buttons. -->
   <text class="lbl-alt" x="89" y="-24">DOWNLOAD</text>
-  <path class="clavi-line" d="M41 2V-10H137V2"/>
+  <path class="clavi-line" d="M41 -4V-14H137V-4"/>
 
   <g class="panel-btn is-soon">
     <text class="lbl" x="41" y="14">MAC</text>
