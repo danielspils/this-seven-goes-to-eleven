@@ -17,8 +17,9 @@
 // the rest of it is drawn.
 //
 // Why a generator: the old favicon.ico was a PNG with an .ico name, which
-// Safari refuses (it wants a real ICO container). Getting that right by hand
-// once is how it silently rots the next time.
+// Safari refuses (it wants a real ICO container) — and the first fix put PNG
+// images INSIDE the container, which WebKit also refuses. Both are invisible
+// in Chrome. Encoding this by hand once is how it silently rots the next time.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -137,7 +138,49 @@ function png(size, px) {
   ]);
 }
 
-// --- ICO (a real container, with PNG payloads) -------------------------------
+// --- ICO (a real container, with classic BMP payloads) ----------------------
+//
+// The entries are BMP/DIB, NOT PNG. An ICO may legally hold PNG images and
+// Chrome reads them happily — but WebKit's ICO decoder does not, so Safari
+// showed no icon at all while Chrome showed it perfectly. This is the second
+// Safari-only trap in the same file; the first was serving a PNG named .ico.
+//
+// A DIB icon is stored upside down, with a doubled height in the header: the
+// colour rows, then a 1-bit AND mask. 32-bit entries carry their own alpha, so
+// the mask is only a courtesy to old decoders — but it must still be there and
+// correctly sized, or the image is read as garbage.
+
+function bmp(size, px) {
+  const header = Buffer.alloc(40);
+  header.writeUInt32LE(40, 0);
+  header.writeInt32LE(size, 4);
+  header.writeInt32LE(size * 2, 8); // colour rows + mask rows
+  header.writeUInt16LE(1, 12);      // planes
+  header.writeUInt16LE(32, 14);     // bits per pixel
+  header.writeUInt32LE(0, 16);      // BI_RGB, uncompressed
+
+  const xor = Buffer.alloc(size * size * 4);
+  const maskStride = Math.ceil(size / 32) * 4;
+  const and = Buffer.alloc(maskStride * size);
+  for (let y = 0; y < size; y++) {
+    const src = y * size * 4;
+    const dst = (size - 1 - y) * size * 4; // bottom-up
+    for (let x = 0; x < size; x++) {
+      const s = src + x * 4;
+      const d = dst + x * 4;
+      xor[d] = px[s + 2];     // B
+      xor[d + 1] = px[s + 1]; // G
+      xor[d + 2] = px[s];     // R
+      xor[d + 3] = px[s + 3]; // A
+      if (px[s + 3] === 0) {
+        const row = (size - 1 - y) * maskStride;
+        and[row + (x >> 3)] |= 0x80 >> (x & 7);
+      }
+    }
+  }
+  header.writeUInt32LE(xor.length + and.length, 20);
+  return Buffer.concat([header, xor, and]);
+}
 
 function ico(entries) {
   const dir = Buffer.alloc(6 + entries.length * 16);
@@ -188,7 +231,7 @@ const write = (file, data) => {
 };
 
 const sizes = [16, 32, 48];
-const icoEntries = sizes.map((size) => ({ size, data: png(size, draw(size)) }));
+const icoEntries = sizes.map((size) => ({ size, data: bmp(size, draw(size)) }));
 
 write(OUT_ICO, ico(icoEntries));
 write(path.join(OUT_IMG, 'favicon-32.png'), png(32, draw(32)));

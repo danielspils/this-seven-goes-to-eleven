@@ -8,6 +8,14 @@ tagline: Backup, setlist, and patch software for the Crumar Seven
 description: Free open-source software for the Crumar Seven stage piano. Back up all 32 presets over USB, name them, and organize them into setlists for the road.
 url: "https://thissevengoestoeleven.com"
 
+# The download links, in ONE place. Empty means there is nothing to download
+# yet, and both the panel buttons and the phone nav say so the same way — an
+# unlit LED on the panel, a dimmed word on the strip. Paste a release URL here
+# and both light up together; there is no second switch to forget.
+downloads:
+  mac: ""
+  pc: ""
+
 # Both Pages-native: sitemap.xml for search engines, feed.xml for RSS readers
 # (and for post-to-email automation later, the way jx-3p.com does it).
 plugins:

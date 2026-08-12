@@ -132,13 +132,23 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 }
 .alum .tagline { flex: 1; }
 .alum-nav { display: none; gap: 1.1rem; }
-.alum-nav a { color: #26262a; text-decoration: none; font-weight: 600; }
+.alum-nav a, .alum-nav .is-soon {
+  display: inline-flex; align-items: center; gap: .25rem;
+  color: #26262a; text-decoration: none; font-weight: 600; white-space: nowrap;
+}
 .alum-nav a:hover { color: #000; }
+/* Nothing to download yet: dimmed and inert, which is the strip's version of
+   the panel's unlit LED. Both are driven by site.downloads. */
+.alum-nav .is-soon { opacity: .45; cursor: default; }
+/* The download mark takes the link's own colour rather than white — the strip
+   is brushed aluminium, and white on it is invisible. */
+.alum-nav .dl-ico { width: .85em; height: .85em; flex: none; }
 /* Phone: the preset buttons are gone, so the strip carries the navigation.
    This block sits after the base rule above deliberately — an earlier
    media query lost to it on specificity and the nav never appeared. */
 @media (max-width: 46rem) {
-  .alum-nav { display: flex; }
+  /* Four items now, not two: let them wrap rather than squeeze the tagline. */
+  .alum-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55rem .8rem; }
   /* The tagline wraps to two lines at phone width; centre the links against
      the block rather than leaving them stranded on the first line. */
   .alum-inner { align-items: center; font-size: .9rem; }
