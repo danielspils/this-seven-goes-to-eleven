@@ -14,11 +14,11 @@
      pointer. The dark LED is the message — on the instrument an unlit preset
      is one that is not active, so the panel says it without a caption. To go
      live, wrap a group in <a> and swap is-soon for is-live. -->
-<svg class="panel-buttons" viewBox="0 -38 424 156" role="group">
+<svg class="panel-buttons" viewBox="0 -46 424 164" role="group">
   <defs><linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
 
   <!-- DOWNLOAD legend and its bracket, turning down toward the two buttons. -->
-  <text class="lbl-alt" x="89" y="-18">DOWNLOAD</text>
+  <text class="lbl-alt" x="89" y="-24">DOWNLOAD</text>
   <path class="clavi-line" d="M41 2V-10H137V2"/>
 
   <g class="panel-btn is-soon">
