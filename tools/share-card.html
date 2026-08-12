@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <!-- Share card source. Rendered to a PNG by tools/render-share.js; not part of
      the published site. Built from the site's OWN header and the app's own
-     panel artwork, so the picture people see in a link preview is the thing
-     they will actually open, not an approximation of it. -->
+     panel artwork, so the picture in a link preview is the thing people will
+     actually open. Re-run the renderer when either changes. -->
 <style>
 /* This Seven Goes to Eleven — white page, with the instrument's red felt as
    the one strong accent. Deliberately unrelated to jx-3p.com; the two sites
@@ -270,15 +270,46 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
 
-html, body { margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidden; background: #fff; }
-.site-head { margin: 0; }
-.card-strip { background: #101012; padding: 6px 0 0; }
+html { margin: 0; padding: 0; }
+/* The card fills its 1200x630 exactly: header and panel take what they need,
+   the headline takes the rest. Sized by the layout rather than by a guess, so
+   changing the panel's height cannot leave a band of white at the bottom. */
+body {
+  margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidden;
+  background: #fff; display: flex; flex-direction: column;
+}
+
+/* The card is one object: header, instrument panel and headline share the same
+   edges. On the site the header's contents sit in the reading column; here the
+   panel below is full-bleed, so the header matches it instead. */
+.site-head {
+  /* On the site the header is a panel inset on the page (max-width + padding).
+     On the card it is the top of one object, so it loses the inset entirely
+     and meets the same edges as the instrument panel below it. */
+  max-width: none; margin: 0; padding: 0;
+}
+.site-head .panel { border-radius: 0; padding: 1.4rem 0; }
+.site-head .panel-inner,
+.alum-inner { max-width: none; padding: 0 40px; }
+.knob { width: 84px; height: 84px; }
+.wordmark { font-size: 2.6rem; }
+.alum { padding: .6rem 0; }
+.alum-inner { font-size: 1.05rem; }
+
+/* The app's panel, flush to the same edges. */
+.card-strip { background: #101012; }
 .card-strip svg { display: block; width: 100%; height: auto; }
+
 .card-line {
-  padding: 28px 44px 0;
-  font: 700 54px/1.12 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  flex: 1; display: flex; align-items: center;
+  padding: 0 40px;
+  font: 700 52px/1.12 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: -0.02em; color: #16161a;
 }
+
+/* The live site picks the logo hue per visitor and the knob turns to match.
+   A still needs a decision: the Seven's own LED red. */
+:root { --seven-hue: 4; }
 </style>
 </head>
 <body>
@@ -843,5 +874,22 @@ html, body { margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidd
 </svg>
 </div>
   <div class="card-line">Patch editor, librarian, and setlist software for the mighty Crumar Seven!</div>
+  <script>
+    // The flutes and the rotor angle are drawn by the site's script at runtime;
+    // the card draws them once, at the chosen hue, so the knob is lit rather
+    // than sitting in its unstyled default.
+    const hue = 4;
+    const ribs = document.querySelector('.k-ribs');
+    for (let i = 0; i < 30; i++) {
+      const a = (i * 12) * Math.PI / 180;
+      const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      l.setAttribute('x1', 52 + 22.8 * Math.sin(a)); l.setAttribute('y1', 52 - 22.8 * Math.cos(a));
+      l.setAttribute('x2', 52 + 27.3 * Math.sin(a)); l.setAttribute('y2', 52 - 27.3 * Math.cos(a));
+      ribs && ribs.appendChild(l);
+    }
+    const rotor = document.getElementById('knob-rotor');
+    if (rotor) rotor.setAttribute('transform', `rotate(${hue} 52 52)`);
+    document.documentElement.style.setProperty('--seven-hue', String(hue));
+  </script>
 </body>
 </html>
