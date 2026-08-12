@@ -109,11 +109,18 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
 @media (max-width: 46rem) {
-  .knob { width: 60px; height: 60px; }
+  .knob { width: 54px; height: 54px; }
   /* Preset buttons don't survive a phone screen; the strip carries the
      navigation instead — see .alum-nav's own media query, which must come
      AFTER the base rule that hides it or the cascade discards it. */
   .panel-buttons { display: none; }
+  /* Everything tightens toward the knob so the wordmark gets the width it
+     needs: the panel is a fixed line of type and it has to fit on one line.
+     Sized from the VIEWPORT here rather than clamped at a rem floor — the old
+     floor was wider than a phone and the line ran off the panel. */
+  .site-head { padding: 0 .5rem; }
+  .site-head .panel-inner { gap: .55rem; padding: 0 .8rem; }
+  .wordmark { font-size: clamp(.9rem, 4.9vw, 1.5rem); }
 }
 
 .alum {
@@ -147,11 +154,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    This block sits after the base rule above deliberately — an earlier
    media query lost to it on specificity and the nav never appeared. */
 @media (max-width: 46rem) {
-  /* Four items now, not two: let them wrap rather than squeeze the tagline. */
-  .alum-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55rem .8rem; }
-  /* The tagline wraps to two lines at phone width; centre the links against
-     the block rather than leaving them stranded on the first line. */
-  .alum-inner { align-items: center; font-size: .9rem; }
+  /* The strip's whole job on a phone is the four links. The tagline is the
+     first thing the page says below anyway, and keeping it here squeezed it
+     into a four-line column beside them. */
+  .alum .tagline { display: none; }
+  .alum-nav {
+    display: flex; flex: 1; flex-wrap: nowrap;
+    justify-content: space-between; gap: .4rem;
+  }
+  .alum-inner { align-items: center; font-size: .9rem; padding: 0 .8rem; }
 }
 .alum nav a { color: #26262a; text-decoration: none; font-weight: 600; }
 .alum nav a:hover { color: #000; }
