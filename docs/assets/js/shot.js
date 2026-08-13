@@ -5,10 +5,13 @@
   const openers = [...document.querySelectorAll('.shot-open')];
   if (!openers.length) return;
 
+  // No captions under the thumbnails — the screenshots are the point and a
+  // line of type under each put the page height back where it started
+  // (Daniel, 2026-08-12). The enlarged view keeps its position counter, which
+  // is the one thing a reader cannot work out from the picture.
   const shots = openers.map((o) => {
     const img = o.querySelector('img');
-    const cap = o.closest('.shot')?.querySelector('figcaption');
-    return { src: img.src, alt: img.alt, caption: cap ? cap.textContent : '' };
+    return { src: img.src, alt: img.alt };
   });
   let index = 0;
 
@@ -27,9 +30,7 @@
     index = (i + shots.length) % shots.length;   // wraps both ways
     img.src = shots[index].src;
     img.alt = shots[index].alt;
-    caption.textContent = shots.length > 1
-      ? `${shots[index].caption} — ${index + 1} of ${shots.length}`
-      : shots[index].caption;
+    caption.textContent = shots.length > 1 ? `${index + 1} of ${shots.length}` : '';
   };
 
   openers.forEach((o, i) => o.addEventListener('click', () => { show(i); dialog.showModal(); }));
