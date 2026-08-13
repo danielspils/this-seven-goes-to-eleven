@@ -244,7 +244,10 @@ main li { margin: .3rem 0; }
   .shot-open:hover, .shot-open:focus-visible { transform: none; }
 }
 dialog.shot-modal {
-  width: min(96vw, 1600px); padding: 0; border: none; border-radius: 8px;
+  /* 20% off what this used to be (96vw / 1600px): filling the screen edge to
+     edge read as the app having taken over the page rather than as a picture
+     being shown (Daniel, 2026-08-13). */
+  width: min(77vw, 1280px); padding: 0; border: none; border-radius: 8px;
   background: none; position: relative; overflow: visible;
 }
 dialog.shot-modal::backdrop { background: rgba(0, 0, 0, .72); }
