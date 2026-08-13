@@ -219,16 +219,30 @@ main li { margin: .3rem 0; }
 
 /* Screenshot with click-to-enlarge. The button wrapper keeps it keyboard
    reachable; the dialog is native, so Escape and backdrop clicks come free. */
-/* Gallery: one column on a phone, two side by side with room. */
-.shots { display: grid; gap: 1rem; margin: 2rem 0; }
-@media (min-width: 40rem) { .shots { grid-template-columns: 1fr 1fr; } }
-.shot { margin: 0; }
+/* Gallery: a STRIP, not a grid. Stacked two up, five screenshots ran the page
+   down several screens before the writing resumed. Across, they read as a
+   filmstrip you open rather than a wall you scroll past. */
+.shots {
+  display: flex; gap: .5rem; margin: 2rem 0;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.shot { position: relative; margin: 0; flex: 1 1 0; min-width: 0; scroll-snap-align: start; }
+/* Too narrow to show five at any useful size, so show one and a bit — the
+   part-visible neighbour is what says the strip keeps going. */
+@media (max-width: 44rem) { .shot { flex: 0 0 76%; } }
 .shot-open {
   display: block; width: 100%; padding: 0; border: 1px solid var(--line);
-  border-radius: 8px; overflow: hidden; background: none; cursor: zoom-in;
+  border-radius: 6px; overflow: hidden; background: none; cursor: zoom-in;
+  transition: border-color .15s ease, transform .15s ease;
 }
+.shot-open:hover, .shot-open:focus-visible { border-color: var(--muted); transform: translateY(-2px); }
 .shot-open img { display: block; width: 100%; height: auto; }
-.shot figcaption { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+@media (prefers-reduced-motion: reduce) {
+  .shot-open { transition: none; }
+  .shot-open:hover, .shot-open:focus-visible { transform: none; }
+}
 dialog.shot-modal {
   width: min(96vw, 1600px); padding: 0; border: none; border-radius: 8px;
   background: none; position: relative; overflow: visible;
