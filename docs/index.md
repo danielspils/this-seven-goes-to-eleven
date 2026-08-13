@@ -17,7 +17,7 @@ browser-based app proved to be a royal pain. The Wi-Fi dongle was hard to
 connect, and no sooner had I got it working than I’d forgotten how by the next
 time I needed it. But mostly I wanted software that made sense to me and was a
 pleasure to use. About a week ago I began talking to Claude about my dream
-software for the Crumar Seven. Ecco: This Seven Goes to Eleven!
+software for the Crumar Seven. Ecco: *This Seven Goes to Eleven*!
 
 *This Seven Goes to Eleven* talks to your Crumar over a USB cable. It backs up
 all 32 presets in under a minute, keeps them as files on your computer, and
@@ -73,7 +73,4 @@ organizes them into setlists you can take on the road.
 <ul class="features">
   <li>Packaged downloads for macOS 12+ and Windows 10+</li>
 </ul>
-
-Being built in public — the [source is on GitHub](https://github.com/danielspils/crumar-seven-editor),
-and progress shows up in [Notes]({{ '/notes/' | relative_url }}).
 </div>
