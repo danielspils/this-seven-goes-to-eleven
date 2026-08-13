@@ -9,9 +9,13 @@
   // line of type under each put the page height back where it started
   // (Daniel, 2026-08-12). The enlarged view keeps its position counter, which
   // is the one thing a reader cannot work out from the picture.
+  // The strip shows small JPEGs; the enlarged view loads the full PNG. Three
+  // full-size screenshots came to 1.5MB, all of it downloaded to draw
+  // thumbnails a few hundred pixels wide — on a phone the dialog opened onto a
+  // dimmed screen and sat there waiting for an image (Daniel, 2026-08-12).
   const shots = openers.map((o) => {
     const img = o.querySelector('img');
-    return { src: img.src, alt: img.alt };
+    return { thumb: img.src, full: img.dataset.full || img.src, alt: img.alt };
   });
   let index = 0;
 
@@ -28,9 +32,20 @@
   const caption = dialog.querySelector('.shot-caption');
   const show = (i) => {
     index = (i + shots.length) % shots.length;   // wraps both ways
-    img.src = shots[index].src;
-    img.alt = shots[index].alt;
+    const shot = shots[index];
+    // The thumbnail first — it is already downloaded, so the dialog has
+    // something in it the instant it opens — then the full image swapped in
+    // behind it once it arrives. The guard matters: on a slow connection you
+    // can page past a picture before it loads, and without it a late arrival
+    // would replace whatever you had moved on to.
+    img.src = shot.thumb;
+    img.alt = shot.alt;
     caption.textContent = shots.length > 1 ? `${index + 1} of ${shots.length}` : '';
+    if (shot.full !== shot.thumb) {
+      const full = new Image();
+      full.onload = () => { if (shots[index] === shot) img.src = shot.full; };
+      full.src = shot.full;
+    }
   };
 
   openers.forEach((o, i) => o.addEventListener('click', () => { show(i); dialog.showModal(); }));

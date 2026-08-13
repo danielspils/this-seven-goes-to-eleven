@@ -26,19 +26,25 @@ organizes them into setlists you can take on the road.
 <div class="shots">
   <figure class="shot">
     <button type="button" class="shot-open" aria-label="Enlarge screenshot">
-      <img src="{{ '/assets/img/app-carousel-dark.png' | relative_url }}" width="1147" height="687" loading="lazy"
+      <img src="{{ '/assets/img/app-carousel-dark-thumb.jpg' | relative_url }}"
+           data-full="{{ '/assets/img/app-carousel-dark.png' | relative_url }}"
+           width="640" height="383" loading="lazy"
            alt="Dark theme: a sampled Venice Grand on bank 2, with the instrument carousel open and a piano either side, ready to page to another sound.">
     </button>
   </figure>
   <figure class="shot">
     <button type="button" class="shot-open" aria-label="Enlarge screenshot">
-      <img src="{{ '/assets/img/app-carousel-light.png' | relative_url }}" width="1147" height="687" loading="lazy"
+      <img src="{{ '/assets/img/app-carousel-light-thumb.jpg' | relative_url }}"
+           data-full="{{ '/assets/img/app-carousel-light.png' | relative_url }}"
+           width="640" height="383" loading="lazy"
            alt="Light theme: the modeled Reed Piano on bank 2, the instrument carousel open, and a keyboard strip showing which keys this sound does not answer to.">
     </button>
   </figure>
   <figure class="shot">
     <button type="button" class="shot-open" aria-label="Enlarge screenshot">
-      <img src="{{ '/assets/img/app-clavi.png' | relative_url }}" width="1147" height="687" loading="lazy"
+      <img src="{{ '/assets/img/app-clavi-thumb.jpg' | relative_url }}"
+           data-full="{{ '/assets/img/app-clavi.png' | relative_url }}"
+           width="640" height="383" loading="lazy"
            alt="Light theme: a Clavi patch showing its filter tabs and pickup switches, with FX1 open on Pedal Wha-Wha.">
     </button>
   </figure>

@@ -261,6 +261,17 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 .shot-nav.prev { left: .5rem; }
 .shot-nav.next { right: .5rem; }
 @media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
+/* On a phone, fitting a landscape screenshot of an app to the screen width
+   makes it about 210px tall — smaller than useless, and barely larger than the
+   thumbnail it opened from. So it opens at a size you can actually read and
+   pans sideways instead. */
+@media (max-width: 44rem) {
+  dialog.shot-modal { width: 96vw; overflow-x: auto; overflow-y: hidden; }
+  dialog.shot-modal img { width: 820px; max-width: none; cursor: grab; }
+  /* Pinned to the viewport rather than the image, or they would scroll away
+     from you the moment you panned. */
+  .shot-nav { position: fixed; }
+}
 
 /* Metrics tiles. */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
