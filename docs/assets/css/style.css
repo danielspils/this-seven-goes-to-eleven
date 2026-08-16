@@ -335,3 +335,22 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
 
+
+/* ---- Downloads and the donation line -------------------------------------
+   The two buttons carry the same colours the JX-3P site uses, so someone who
+   has both apps sees one family. Until _config.yml has release URLs they are
+   rendered as spans and dimmed — present, and not pretending. */
+.downloads { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.4rem 0 .9rem; }
+.btn-green, .btn-blue {
+  display: inline-block; padding: .55rem 1.1rem; border-radius: 4px;
+  font-weight: 600; text-decoration: none; color: #fff;
+}
+.btn-green { background: #1c7a45; }
+.btn-blue { background: #2a5fae; }
+.btn-green:hover, .btn-blue:hover { filter: brightness(1.08); }
+.downloads .is-soon { opacity: .45; cursor: default; }
+
+/* PRESENT, NOT ASKED: a line under the buttons, no prompt and nothing to
+   dismiss. Nobody donates for software they have not run, and the install step
+   is where Gatekeeper and SmartScreen warnings already land. */
+.donate-line { color: var(--text-dim); font-size: .95rem; margin: 0 0 1.6rem; }
