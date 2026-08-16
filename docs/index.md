@@ -63,13 +63,9 @@ Crumar Seven. Ecco: *This Seven Goes to Eleven*!
   <li>Dark / light mode</li>
 </ul>
 
-<!-- The two downloads, from _config.yml. Until those URLs exist the buttons
-     are present but unlit — the same thing the header's panel LED says — so
-     nothing here promises a file that is not there yet. -->
-<p class="downloads">
-{% if site.downloads.mac %}<a class="btn-green" href="{{ site.downloads.mac }}">Mac download</a>{% else %}<span class="btn-green is-soon" title="Coming soon">Mac download</span>{% endif %}
-{% if site.downloads.pc %}<a class="btn-blue" href="{{ site.downloads.pc }}">PC download</a>{% else %}<span class="btn-blue is-soon" title="Coming soon">PC download</span>{% endif %}
-</p>
+<div class="downloads">
+  {% include download-buttons.svg %}
+</div>
 
 *This Seven Goes to Eleven* is free. [Donations](https://ko-fi.com/danielspils)
 help cover code signing and hosting. Thanks from Seattle! - Daniel
