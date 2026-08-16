@@ -1,0 +1,50 @@
+<!-- The page's downloads, in the panel's own language: the same two preset
+     buttons the header carries, with the same DOWNLOAD legend and bracketed
+     hairline — drawn at roughly twice the header's size because here they are
+     the thing you came for rather than navigation (Daniel, 2026-08-16).
+
+     Geometry is copied from panel-buttons.svg unchanged, so the two stay
+     identical; only the viewBox is cropped to the MAC/PC pair and its legend.
+
+     The gradient is defined again under its own id: both SVGs appear on the
+     same page, and two elements sharing one id is how a fill silently resolves
+     to the wrong gradient later.
+
+     MAC and PC are inert while there is nothing to download — dark LED, no
+     pointer, exactly as in the header. Filling in site.downloads wraps each in
+     an <a> and lights it. -->
+<svg class="panel-buttons download-buttons" viewBox="4 -46 170 164" role="group"
+     aria-label="Downloads">
+  <defs><linearGradient id="bf2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
+
+  <text class="lbl-alt" x="89" y="-24">DOWNLOAD</text>
+  <path class="clavi-line" d="M41 -4V-14H137V-4"/>
+
+  {% if site.downloads.mac %}<a href="{{ site.downloads.mac }}" class="panel-btn is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
+    <text class="lbl" x="41" y="14">MAC</text>
+    <rect class="btn-bezel" x="14" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="18" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="18,58 64,58 60,62 22,62"/>
+    <polygon class="f-l" points="18,58 22,62 22,106 18,110"/>
+    <polygon class="f-r" points="64,58 64,110 60,106 60,62"/>
+    <polygon class="f-b" points="18,110 22,106 60,106 64,110"/>
+    <rect class="plateau" x="22" y="62" width="38" height="44"/>
+    <path class="edge" d="M18 110 L64 110 L64 26"/>
+    <circle class="led" cx="41" cy="42" r="5"/>
+    {% if site.downloads.mac %}<rect class="hit" x="14" y="2" width="54" height="112" fill="transparent"/>{% endif %}
+  {% if site.downloads.mac %}</a>{% else %}</g>{% endif %}
+
+  {% if site.downloads.pc %}<a href="{{ site.downloads.pc }}" class="panel-btn is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
+    <text class="lbl" x="137" y="14">PC</text>
+    <rect class="btn-bezel" x="110" y="22" width="54" height="92" rx="3"/>
+    <rect class="btn-face" x="114" y="26" width="46" height="84"/>
+    <polygon class="f-t" points="114,58 160,58 156,62 118,62"/>
+    <polygon class="f-l" points="114,58 118,62 118,106 114,110"/>
+    <polygon class="f-r" points="160,58 160,110 156,106 156,62"/>
+    <polygon class="f-b" points="114,110 118,106 156,106 160,110"/>
+    <rect class="plateau" x="118" y="62" width="38" height="44"/>
+    <path class="edge" d="M114 110 L160 110 L160 26"/>
+    <circle class="led" cx="137" cy="42" r="5"/>
+    {% if site.downloads.pc %}<rect class="hit" x="110" y="2" width="54" height="112" fill="transparent"/>{% endif %}
+  {% if site.downloads.pc %}</a>{% else %}</g>{% endif %}
+</svg>
