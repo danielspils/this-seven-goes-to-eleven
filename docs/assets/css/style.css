@@ -341,6 +341,14 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 /* Kept: the date line on a post PAGE, which is not part of the index. */
 .post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
 
+/* The per-asset table on /metrics/. Scrolls inside itself rather than pushing
+   the page sideways — asset names are long and phones are not. */
+.m-table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 0 0 1.5rem; }
+.m-table th, .m-table td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
+.m-table th { color: var(--muted); font-weight: 600; }
+.m-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.m-table td:first-child { word-break: break-all; }
+
 /* These five declarations used to live in a SECOND copy of this rule further
    down the file — a chunk of an older stylesheet that got pasted in whole.
    Being last, that copy won, which is why `margin-top: 4rem` here never did

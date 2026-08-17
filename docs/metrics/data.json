@@ -1,6 +1,55 @@
 {
-  "generated": "2026-08-17T07:58:07.943Z",
-  "downloads": 0,
-  "releases": 0,
-  "assets": []
+  "generated": "2026-08-17T21:08:24.523Z",
+  "downloads": 9,
+  "releases": 1,
+  "assets": [
+    {
+      "name": "latest-mac.yml",
+      "tag": "v1.0.0",
+      "count": 0,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "latest.yml",
+      "tag": "v1.0.0",
+      "count": 1,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0-universal-mac.zip",
+      "tag": "v1.0.0",
+      "count": 0,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0-universal-mac.zip.blockmap",
+      "tag": "v1.0.0",
+      "count": 0,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe",
+      "tag": "v1.0.0",
+      "count": 4,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe.blockmap",
+      "tag": "v1.0.0",
+      "count": 0,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg",
+      "tag": "v1.0.0",
+      "count": 4,
+      "published": "2026-08-17T16:17:51Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
+      "tag": "v1.0.0",
+      "count": 0,
+      "published": "2026-08-17T16:17:51Z"
+    }
+  ]
 }
