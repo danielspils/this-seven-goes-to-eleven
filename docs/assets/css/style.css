@@ -301,9 +301,39 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 .stat .lbl { font-size: .85rem; color: var(--muted); }
 .stat .val { font-size: 1.7rem; font-weight: 600; }
 
-.post-list { list-style: none; margin: 0; }
-.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
-.post-list time { display: block; color: var(--muted); font-size: .9rem; }
+/* NOTES index, laid out the way jx-3p.com's is: a titled section, an italic
+   line under it, then one dated entry per post with the opening paragraph and
+   a way in. Same structure, this site's own colours — the two sites share no
+   assets, so nothing here is imported from that one (Daniel, 2026-08-16).
+   The bare list it replaces gave a reader a date and a title and nothing to
+   decide on. */
+.notes-head {
+  position: relative; padding-left: .75rem; margin: 0 0 .45rem;
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.notes-head::before {
+  content: ""; position: absolute; left: 0; top: .05em; bottom: .05em;
+  width: 4px; background: var(--felt);
+}
+.notes-subhead { font-style: italic; color: var(--muted); margin: 0 0 1.6rem; }
+.notes-list { margin-top: 1.6rem; }
+.note-entry { padding: 1.5rem 0; border-top: 1px solid var(--line); }
+.note-entry:last-child { border-bottom: 1px solid var(--line); }
+.note-entry-date { display: block; color: var(--muted); font-size: .9rem; margin-bottom: .3rem; }
+/* The .notes-list prefix outranks the global link colour. */
+.notes-list .note-entry-title {
+  display: inline-block; font-size: 1.3rem; font-weight: 600; line-height: 1.3;
+  color: var(--text); text-decoration: none; transition: color .15s ease;
+}
+.notes-list .note-entry-title:hover { color: var(--felt); }
+.note-entry-excerpt { margin: .45rem 0 0; color: var(--muted); }
+.notes-list .note-entry-more {
+  display: inline-block; margin-top: .7rem; font-weight: 600;
+  color: var(--felt); text-decoration: none;
+}
+.notes-list .note-entry-more:hover { text-decoration: underline; }
+.notes-empty { margin-top: 1.6rem; color: var(--muted); font-style: italic; }
+/* Kept: the date line on a post PAGE, which is not part of the index. */
 .post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
 
 .site-foot { margin-top: 4rem; }

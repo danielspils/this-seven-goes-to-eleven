@@ -2,18 +2,22 @@
 layout: default
 title: Notes
 ---
-<h1>Notes</h1>
-<p class="muted">Thoughts on <em>This Seven Goes to Eleven</em> (aka 7/11) and The Crumar Seven</p>
-{% if site.posts.size > 0 %}
-<ul class="post-list">
-  {% for post in site.posts %}
-  <li>
-    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %B %Y" }}</time>
-    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
+<h1 class="notes-head">Notes</h1>
+<p class="notes-subhead">Thoughts on <em>This Seven Goes to Eleven</em> (aka 7/11) and The Crumar Seven</p>
 
-{% endif %}
 {% include subscribe-form.html %}
+
+<div class="notes-list">
+{% if site.posts.size > 0 %}
+{% for post in site.posts %}
+  <div class="note-entry">
+    <span class="note-entry-date">{{ post.date | date: '%B %-d, %Y' }}</span>
+    <a class="note-entry-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    {% if post.excerpt %}<p class="note-entry-excerpt">{{ post.excerpt | strip_html | truncatewords: 50 }}</p>{% endif %}
+    <a class="note-entry-more" href="{{ post.url | relative_url }}">Read more &rarr;</a>
+  </div>
+{% endfor %}
+{% else %}
+  <p class="notes-empty">No notes yet — check back soon.</p>
+{% endif %}
+</div>
