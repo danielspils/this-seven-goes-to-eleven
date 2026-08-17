@@ -20,7 +20,7 @@
   <text class="lbl-alt" x="89" y="-24">DOWNLOAD</text>
   <path class="clavi-line" d="M41 -4V-14H137V-4"/>
 
-  {% if site.downloads.mac %}<a href="{{ site.downloads.mac }}" class="panel-btn is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
+  {% if site.downloads.mac %}<a href="{{ site.downloads.mac }}" class="panel-btn btn-mac is-live">{% else %}<g class="panel-btn btn-mac is-soon">{% endif %}
     <text class="lbl" x="41" y="14">MAC</text>
     <rect class="btn-bezel" x="14" y="22" width="54" height="92" rx="3"/>
     <rect class="btn-face" x="18" y="26" width="46" height="84"/>
@@ -34,7 +34,7 @@
     {% if site.downloads.mac %}<rect class="hit" x="14" y="2" width="54" height="112" fill="transparent"/>{% endif %}
   {% if site.downloads.mac %}</a>{% else %}</g>{% endif %}
 
-  {% if site.downloads.pc %}<a href="{{ site.downloads.pc }}" class="panel-btn is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
+  {% if site.downloads.pc %}<a href="{{ site.downloads.pc }}" class="panel-btn btn-pc is-live">{% else %}<g class="panel-btn btn-pc is-soon">{% endif %}
     <text class="lbl" x="137" y="14">PC</text>
     <rect class="btn-bezel" x="110" y="22" width="54" height="92" rx="3"/>
     <rect class="btn-face" x="114" y="26" width="46" height="84"/>
