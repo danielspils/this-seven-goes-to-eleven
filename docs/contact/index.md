@@ -6,8 +6,7 @@ description: Send feedback, bug reports, or questions about This Seven Goes to E
 
 # Contact
 
-Questions, bugs, feature ideas, or just want to say the software helped —
-this reaches me directly.
+Questions, bugs, or backslaps — drop me a line.
 
 <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
   <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
