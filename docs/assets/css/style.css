@@ -336,7 +336,17 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 /* Kept: the date line on a post PAGE, which is not part of the index. */
 .post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
 
-.site-foot { margin-top: 4rem; }
+/* These five declarations used to live in a SECOND copy of this rule further
+   down the file — a chunk of an older stylesheet that got pasted in whole.
+   Being last, that copy won, which is why `margin-top: 4rem` here never did
+   anything (its `margin: 0 auto` reset it). Merged up so the footer looks
+   exactly as it does today, from one rule instead of two (2026-08-16). The
+   look itself is worth revisiting: the border and the padding here are what
+   inset the felt strip from the window edges. */
+.site-foot {
+  max-width: 46rem; margin: 0 auto; padding: 1.5rem;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
+}
 .foot-strip {
   height: 4px; background: var(--felt);
 }
@@ -357,28 +367,12 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
   color: var(--text-dim); font-size: .82rem; text-align: center;
 }
 
-@media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
-
-/* Metrics tiles. */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 0 0 1.5rem; }
-.stat {
-  background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
-  padding: .9rem 1rem; display: flex; flex-direction: column; gap: .2rem;
-}
-.stat .lbl { font-size: .85rem; color: var(--muted); }
-.stat .val { font-size: 1.7rem; font-weight: 600; }
-
-.post-list { list-style: none; margin: 0; }
-.post-list li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
-.post-list time { display: block; color: var(--muted); font-size: .9rem; }
-.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
-
-.site-foot {
-  max-width: 46rem; margin: 0 auto; padding: 1.5rem;
-  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
-}
-.site-foot .fine { font-size: .82rem; opacity: .8; margin-top: .4rem; }
-
+/* The second copy of the metrics tiles, the old Notes list, the footer and the
+   .shot-nav query stood here — an older version of this file, pasted in whole.
+   Every rule in it existed above; the footer's declarations have been merged
+   into the one rule up there, and `.post-list`/`.site-foot .fine` went with it
+   because nothing has used either since the Notes index was rebuilt
+   (2026-08-16). This query is NOT a duplicate and stays. */
 @media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }
 
 
