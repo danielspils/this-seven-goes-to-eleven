@@ -48,6 +48,9 @@
     }
   };
 
+  // Background scrolling is locked in CSS, off the [open] attribute the
+  // browser maintains itself — deliberately not a class toggled from here,
+  // which would leave the page unscrollable if any exit path missed it.
   openers.forEach((o, i) => o.addEventListener('click', () => { show(i); dialog.showModal(); }));
   dialog.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); show(index - 1); });
   dialog.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); show(index + 1); });
