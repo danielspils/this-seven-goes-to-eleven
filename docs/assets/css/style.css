@@ -84,7 +84,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .f-b { fill: rgba(0,0,0,.45); }
 .panel-buttons .plateau { fill: rgba(255,255,255,.035); }
 .panel-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
-.panel-buttons .led { fill: #7d2b26; stroke: #1a1a1c; stroke-width: .5; }
+.panel-buttons .led { fill: #4a2320; stroke: #1a1a1c; stroke-width: .5; }
 .panel-buttons .panel-btn { cursor: pointer; }
 /* DOWNLOAD legend and bracket: the instrument's own CLAVI TABS treatment —
    same yellow, same hairline, turning down toward the pair it labels. */
@@ -98,15 +98,20 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   fill: #8d8d97; font-family: 'Archivo Narrow', Helvetica, Arial, sans-serif;
   font-weight: 700; font-size: 11px; letter-spacing: .04em; text-anchor: middle;
 }
-/* Nothing to download yet: dark LED, no pointer. is-live lights it. */
+/* Nothing to download yet: no pointer. The LED is dark either way. */
 .panel-buttons .is-soon { cursor: default; }
 /* MAC and PC are part of the DOWNLOAD group, so they carry its colour —
    the same relationship the panel's CLAVI TABS legends have with their
    bracket. */
 .panel-buttons .is-soon .lbl { fill: #d9c24a; font-size: 19px; }
-.panel-buttons .is-soon .led { fill: #4a2320; }
-.panel-buttons .is-live .led { fill: #ff3b30; }
-.panel-buttons .panel-btn:hover .led { fill: #ff3b30; }
+/* THE LED IS OFF AT REST, on every button, live or not. It used to burn red
+   the moment a download existed, so the panel looked like four presets all
+   engaged at once — on the instrument a lit LED means THIS one is active, and
+   four of them lit means nothing (Daniel, 2026-08-17). It lights under the
+   pointer, on keyboard focus, and while the button is held. */
+.panel-buttons .panel-btn:hover .led,
+.panel-buttons .panel-btn:focus-visible .led,
+.panel-buttons .panel-btn:active .led { fill: #ff3b30; }
 .panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
 @media (max-width: 46rem) {
   .knob { width: 54px; height: 54px; }

@@ -98,5 +98,14 @@
     <p class="foot-fine">Not affiliated with, funded by, or endorsed by Crumar or GSi.
       “Crumar” and “Seven” are their marks.</p>
   </footer>
+  {% if site.goatcounter %}
+  <!-- GoatCounter — page counts, no cookies, nothing to consent to.
+       Dashboard: https://{{ site.goatcounter }}.goatcounter.com
+       Counts PAGE VIEWS only. Downloads are counted separately, by GitHub,
+       and the two are never added together: a click here and a completed
+       download there are different facts. -->
+  <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  {% endif %}
 </body>
 </html>
