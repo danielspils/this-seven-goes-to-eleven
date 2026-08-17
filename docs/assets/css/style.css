@@ -248,9 +248,25 @@ dialog.shot-modal {
      edge read as the app having taken over the page rather than as a picture
      being shown (Daniel, 2026-08-13). */
   width: min(77vw, 1280px); padding: 0; border: none; border-radius: 8px;
-  background: none; position: relative; overflow: visible;
+  background: none; overflow: visible;
+  /* The UA centres a modal dialog with `margin: auto`, which the `* { margin:
+     0 }` reset at the top of this file wipes out. Put back explicitly. */
+  margin: auto;
+  /* No `position` here, deliberately. A modal <dialog> centres itself in the
+     VIEWPORT only while it keeps the UA's `position: fixed`; this rule used to
+     say `relative`, which laid it out against the document instead — on a
+     phone, tapping a screenshot 630px down the page dimmed the screen and put
+     the picture 630px above it, off-screen (Daniel, 2026-08-16). The arrows do
+     not need `relative`: `fixed` is a containing block for absolute children
+     just the same. */
 }
 dialog.shot-modal::backdrop { background: rgba(0, 0, 0, .72); }
+/* Stop the page scrolling behind the open picture — otherwise you come back to
+   somewhere other than where you left. Keyed off the [open] attribute the
+   browser sets and clears itself, so there is no state here to get stuck: no
+   exit path can leave the page unscrollable. iOS Safari before 15.4 has no
+   :has() and simply keeps scrolling, which is what it does today. */
+html:has(dialog.shot-modal[open]) { overflow: hidden; }
 dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius: 8px; cursor: zoom-out; }
 .shot-caption { color: #e8e8ea; text-align: center; font-size: .9rem; margin: .6rem 0 0; }
 /* Arrows sit over the image edges — visible on both light and dark shots. */
