@@ -12,8 +12,12 @@
 
      MAC and PC are inert while there is nothing to download: dark LED, no
      pointer. The dark LED is the message — on the instrument an unlit preset
-     is one that is not active, so the panel says it without a caption. To go
-     live, wrap a group in <a> and swap is-soon for is-live. -->
+     is one that is not active, so the panel says it without a caption.
+     site.downloads drives it, exactly as it drives the pair on the landing
+     page: filled in, each group becomes an <a> with a lit LED and a hit
+     rectangle. That used to be a note here telling a human to do it by hand,
+     and the hand never came — v1.0.0 shipped with these two dark while the
+     page below them offered the same downloads (Daniel, 2026-08-17). -->
 <svg class="panel-buttons" viewBox="0 -46 424 164" role="group">
   <defs><linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2e32"/><stop offset="1" stop-color="#18181b"/></linearGradient></defs>
 
@@ -21,7 +25,7 @@
   <text class="lbl-alt" x="89" y="-24">DOWNLOAD</text>
   <path class="clavi-line" d="M41 -4V-14H137V-4"/>
 
-  <g class="panel-btn is-soon">
+  {% if site.downloads.mac %}<a href="{{ site.downloads.mac }}" class="panel-btn btn-mac is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
     <text class="lbl" x="41" y="14">MAC</text>
     <rect class="btn-bezel" x="14" y="22" width="54" height="92" rx="3"/>
     <rect class="btn-face" x="18" y="26" width="46" height="84"/>
@@ -32,9 +36,10 @@
     <rect class="plateau" x="22" y="62" width="38" height="44"/>
     <path class="edge" d="M18 110 L64 110 L64 26"/>
     <circle class="led" cx="41" cy="42" r="5"/>
-  </g>
+    {% if site.downloads.mac %}<rect class="hit" x="14" y="-30" width="54" height="144" fill="transparent"/>{% endif %}
+  {% if site.downloads.mac %}</a>{% else %}</g>{% endif %}
 
-  <g class="panel-btn is-soon">
+  {% if site.downloads.pc %}<a href="{{ site.downloads.pc }}" class="panel-btn btn-pc is-live">{% else %}<g class="panel-btn is-soon">{% endif %}
     <text class="lbl" x="137" y="14">PC</text>
     <rect class="btn-bezel" x="110" y="22" width="54" height="92" rx="3"/>
     <rect class="btn-face" x="114" y="26" width="46" height="84"/>
@@ -45,7 +50,8 @@
     <rect class="plateau" x="118" y="62" width="38" height="44"/>
     <path class="edge" d="M114 110 L160 110 L160 26"/>
     <circle class="led" cx="137" cy="42" r="5"/>
-  </g>
+    {% if site.downloads.pc %}<rect class="hit" x="110" y="-30" width="54" height="144" fill="transparent"/>{% endif %}
+  {% if site.downloads.pc %}</a>{% else %}</g>{% endif %}
 
   <a href="{{ '/notes/' | relative_url }}" class="panel-btn">
     <text class="lbl" x="273" y="14">NOTES</text>
