@@ -1,1 +1,42 @@
-{}
+{
+  "518245243": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
+    "tag": "v1.0.0",
+    "count": 0
+  },
+  "518245244": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0-universal-mac.zip.blockmap",
+    "tag": "v1.0.0",
+    "count": 0
+  },
+  "518245245": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg",
+    "tag": "v1.0.0",
+    "count": 4
+  },
+  "518245246": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0-universal-mac.zip",
+    "tag": "v1.0.0",
+    "count": 0
+  },
+  "518245248": {
+    "name": "latest-mac.yml",
+    "tag": "v1.0.0",
+    "count": 0
+  },
+  "518245251": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe",
+    "tag": "v1.0.0",
+    "count": 4
+  },
+  "518245253": {
+    "name": "latest.yml",
+    "tag": "v1.0.0",
+    "count": 1
+  },
+  "518245254": {
+    "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe.blockmap",
+    "tag": "v1.0.0",
+    "count": 0
+  }
+}
