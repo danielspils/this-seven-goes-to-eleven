@@ -43,7 +43,11 @@
         // endsWith('.exe') would take it. Exclude it explicitly.
         const asset = assets.find((a) => match(a.name) && !a.name.endsWith('.blockmap'));
         if (!asset) continue;
-        button.href = asset.browser_download_url;
+        // setAttribute, NOT `.href =`. The panel buttons are SVG anchors, and
+        // an SVGAElement's href is a read-only SVGAnimatedString: assigning to
+        // it fails silently, which left those two buttons on the release page
+        // while the plain links resolved (measured on the live site).
+        button.setAttribute('href', asset.browser_download_url);
         button.setAttribute('data-version', release.tag_name || '');
       }
     })
