@@ -342,6 +342,14 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
    the plateau, the LED, the DOWNLOAD legend and its bracket — is inherited
    from .panel-buttons, so the two can never drift apart. */
 .downloads { margin: 1.6rem 0 .9rem; }
+
+/* MAC green, PC blue — the same two colours the app uses for modeled and
+   sampled sounds, so the family holds across the app and the site. Only the
+   LABELS take colour: the buttons themselves are the instrument's, and
+   painting those would stop them being the panel (Daniel, 2026-08-16).
+   The header pair is untouched — there the two are navigation. */
+.download-buttons .btn-mac .lbl { fill: #4caf6d; }
+.download-buttons .btn-pc .lbl { fill: #5b8fd9; }
 .download-buttons { width: 172px; margin-left: 0; }
 .download-buttons .btn-face { fill: url(#bf2); }
 
