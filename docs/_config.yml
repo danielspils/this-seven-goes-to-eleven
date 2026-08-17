@@ -20,6 +20,13 @@ downloads:
   mac: "https://github.com/danielspils/crumar-seven-editor/releases/latest"
   pc: "https://github.com/danielspils/crumar-seven-editor/releases/latest"
 
+# GoatCounter code, the way jx-3p.com has one: privacy-friendly page counts,
+# no cookies, so no consent banner. The dashboard is
+# https://<code>.goatcounter.com and the site must be created there first —
+# this is only the half that lives in the page. Empty means no analytics at
+# all, which is what shipped until now.
+goatcounter: "t7gt11"
+
 # Both Pages-native: sitemap.xml for search engines, feed.xml for RSS readers
 # (and for post-to-email automation later, the way jx-3p.com does it).
 plugins:
