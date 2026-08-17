@@ -67,6 +67,10 @@ Crumar Seven. Ecco: *This Seven Goes to Eleven*!
   {% include download-buttons.svg %}
 </div>
 
+Windows may warn you the first few times — click **More info**, then **Run
+anyway**. It's signed; the warning fades as more people download.
+{: .win-note}
+
 *This Seven Goes to Eleven* is free. [Donations](https://ko-fi.com/danielspils)
 help cover code signing and hosting. Thanks from Seattle! - Daniel
 {: .donate-line}
