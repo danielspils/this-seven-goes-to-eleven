@@ -8,6 +8,11 @@ description: Send feedback, bug reports, or questions about This Seven Goes to E
 
 Questions, bugs, or backslaps — drop me a line.
 
+<!-- AFTER A SUBMIT, Web3Forms redirects to /thanks/. That target is set in
+     the Web3Forms DASHBOARD — the "Seven 11 contact" form, Settings → Redirect
+     URL — and NOT anywhere in this repo, so changing anything here does not
+     move it. If /thanks/ is renamed or removed, the redirect breaks silently
+     and this comment is the only sign the page exists. -->
 <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
   <input type="hidden" name="access_key" value="216bb3c9-826f-47b7-b0bb-b149a05cdccb">
   <input type="hidden" name="subject" value="This Seven Goes to Eleven — feedback">
