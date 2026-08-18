@@ -1,6 +1,6 @@
 {
-  "generated": "2026-08-17T21:25:36.112Z",
-  "downloads": 9,
+  "generated": "2026-08-18T07:49:01.451Z",
+  "downloads": 14,
   "releases": 1,
   "assets": [
     {
@@ -12,7 +12,7 @@
     {
       "name": "latest.yml",
       "tag": "v1.0.0",
-      "count": 1,
+      "count": 4,
       "published": "2026-08-17T16:17:51Z"
     },
     {
@@ -42,13 +42,13 @@
     {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg",
       "tag": "v1.0.0",
-      "count": 4,
+      "count": 5,
       "published": "2026-08-17T16:17:51Z"
     },
     {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
       "tag": "v1.0.0",
-      "count": 0,
+      "count": 1,
       "published": "2026-08-17T16:17:51Z"
     }
   ]
