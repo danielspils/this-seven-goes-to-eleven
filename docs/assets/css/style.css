@@ -77,14 +77,25 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   text-anchor: middle;
 }
 .panel-buttons .btn-bezel { fill: #1a1a1c; }
-.panel-buttons .btn-face { fill: url(#bf); stroke: #75757c; stroke-width: 1.5; rx: 3; }
+.panel-buttons .btn-face {
+  fill: url(#bf); stroke: #75757c; stroke-width: 1.5; rx: 3;
+  transition: fill .26s ease, stroke .26s ease;   /* app: .pm-btn .pm-face */
+}
 .panel-buttons .f-t { fill: rgba(255,255,255,.2); }
 .panel-buttons .f-l { fill: rgba(255,255,255,.04); }
 .panel-buttons .f-r { fill: rgba(0,0,0,.3); }
 .panel-buttons .f-b { fill: rgba(0,0,0,.45); }
 .panel-buttons .plateau { fill: rgba(255,255,255,.035); }
 .panel-buttons .edge { fill: none; stroke: #6e6e75; stroke-width: 1.4; }
-.panel-buttons .led { fill: #4a2320; stroke: #1a1a1c; stroke-width: .5; }
+/* PORTED FROM THE APP, which is the reference for anything the panel draws
+   (crumar-seven-editor, src/index.html, .panel-mini). The site had drifted:
+   a darker unlit LED, no transitions at all, and a hover that only flattened
+   the face. Geometry, bezel, legend and label colours are the site's own and
+   are untouched (Daniel, 2026-08-18). */
+.panel-buttons .led {
+  fill: #5a2320; stroke: #1a1a1c; stroke-width: .5;
+  transition: fill .12s ease;                 /* app: .pm-btn .pm-led */
+}
 .panel-buttons .panel-btn { cursor: pointer; }
 /* DOWNLOAD legend and bracket: the instrument's own CLAVI TABS treatment —
    same yellow, same hairline, turning down toward the pair it labels. */
@@ -112,7 +123,21 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .panel-buttons .panel-btn:hover .led,
 .panel-buttons .panel-btn:focus-visible .led,
 .panel-buttons .panel-btn:active .led { fill: #ff3b30; }
-.panel-buttons .panel-btn:hover .btn-face { fill: #2b2b2e; }
+.panel-buttons .panel-btn:hover .btn-face,
+.panel-buttons .panel-btn:focus-visible .btn-face,
+.panel-buttons .panel-btn:active .btn-face {
+  fill: #4e4e57; stroke: #b6b6c0; stroke-width: 1.4;   /* app: .pm-active .pm-face */
+}
+.panel-buttons .panel-btn:hover .plateau,
+.panel-buttons .panel-btn:focus-visible .plateau,
+.panel-buttons .panel-btn:active .plateau {
+  fill: rgba(255, 255, 255, .12);                      /* app: .pm-active .pm-cap */
+}
+
+/* 4: the app guards its own transitions the same way. */
+@media (prefers-reduced-motion: reduce) {
+  .panel-buttons .led, .panel-buttons .btn-face { transition: none; }
+}
 @media (max-width: 46rem) {
   .knob { width: 54px; height: 54px; }
   /* Preset buttons don't survive a phone screen; the strip carries the
