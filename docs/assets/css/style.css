@@ -208,7 +208,13 @@ main li { margin: .3rem 0; }
 /* Contact form (Web3Forms — no backend of our own). */
 .contact-form { display: flex; flex-direction: column; gap: .4rem; max-width: 34rem; }
 .contact-form label { font-size: .9rem; color: var(--muted); margin-top: .6rem; }
-.contact-form input[type=email], .contact-form textarea {
+/* EVERY text-ish input, not just the email one. The rule named
+   input[type=email] specifically, so the name field added on 2026-08-18
+   rendered with the browser's default box beside a styled one — and the next
+   field added would have done the same. The honeypot is excluded by type
+   rather than by class, so it stays invisible; hidden inputs are excluded
+   because styling them means nothing. */
+.contact-form input:not([type=checkbox]):not([type=hidden]), .contact-form textarea {
   font: inherit; font-size: 1rem; padding: .55rem .7rem;
   border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--text);
 }
