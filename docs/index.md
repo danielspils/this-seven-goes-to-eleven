@@ -2,7 +2,7 @@
 layout: default
 ---
 
-In 2024 I was asked to play a few shows with The Long Winters in Seattle. The
+In 2024 I was invited to play a few shows with The Long Winters in Seattle. The
 only problem: I’d sold my B3, Rhodes, and other classic keyboards I’d played in
 Maktub years ago.
 
