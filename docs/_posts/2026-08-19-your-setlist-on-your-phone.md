@@ -20,7 +20,7 @@ connection to anything.
 
 So 1.2 adds two icons to each setlist: copy to clipboard, and email.
 
-![The setlist view in This Seven Goes to Eleven, showing "The Long Winters Gig @ the Pig" with its numbered slots — Wurly w/ overdrive on Bank 2 Preset 2, Electric Grand Piano on Preset 3, Shapes Clav on Preset 4. Two handwritten notes above the window point down at the two new header icons with curved orange arrows: "Copy to clipboard — paste, print, present however you like" aims at the clipboard icon, and "Or email the setlist to yourself" aims at the envelope beside it.](/assets/img/setlist-copy-email.png)
+![Copy and email icons in the setlist header](/assets/img/setlist-copy-email-annotated.png)
 
 Click copy and the setlist is on your clipboard. Paste it into a text doc and
 print it. Or, if you're me, paste it into the iOS Notes app, which syncs to
