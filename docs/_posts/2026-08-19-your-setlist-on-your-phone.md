@@ -30,7 +30,8 @@ Or email it to yourself. In a pinch you can pull the email up at the gig to
 remind yourself where everything lives.
 
 Got another show next week with an “Outdoor Music Festival Setlist”? No prob —
-copy and paste, or email the new order.
+copy, then paste, print or present how you see fit. Or email the new setlist to
+yourself (and peek at your phone between songs on stage).
 
 Sometimes the simplest solution is best. I’m open to something more ambitious
 later. In the meantime, take it for a spin.
