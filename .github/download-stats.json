@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-19T14:59:21.896Z",
+  "date": "2026-08-18T07:49:01Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -14,7 +14,7 @@
     "518245245": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg",
       "tag": "v1.0.0",
-      "count": 6
+      "count": 5
     },
     "518245246": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0-universal-mac.zip",
@@ -24,7 +24,7 @@
     "518245248": {
       "name": "latest-mac.yml",
       "tag": "v1.0.0",
-      "count": 2
+      "count": 0
     },
     "518245251": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe",
@@ -39,47 +39,7 @@
     "518245254": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0-x64-win.exe.blockmap",
       "tag": "v1.0.0",
-      "count": 1
-    },
-    "519631627": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0.dmg",
-      "tag": "v1.1.0",
-      "count": 2
-    },
-    "519631628": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0-universal-mac.zip",
-      "tag": "v1.1.0",
-      "count": 1
-    },
-    "519631629": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0.dmg.blockmap",
-      "tag": "v1.1.0",
       "count": 0
-    },
-    "519631631": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0-universal-mac.zip.blockmap",
-      "tag": "v1.1.0",
-      "count": 0
-    },
-    "519631633": {
-      "name": "latest-mac.yml",
-      "tag": "v1.1.0",
-      "count": 3
-    },
-    "519631641": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0-x64-win.exe",
-      "tag": "v1.1.0",
-      "count": 1
-    },
-    "519631643": {
-      "name": "This-Seven-Goes-to-Eleven-1.1.0-x64-win.exe.blockmap",
-      "tag": "v1.1.0",
-      "count": 1
-    },
-    "519631644": {
-      "name": "latest.yml",
-      "tag": "v1.1.0",
-      "count": 2
     }
   }
 }
