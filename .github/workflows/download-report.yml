@@ -33,6 +33,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The allow-list that decides what counts as a download, checked before
+      # anything is sent. There is no package.json here and no other runner —
+      # this step is the only thing that runs these tests, so a broken
+      # classification fails the job instead of emailing a wrong number.
+      - name: Check the classification
+        run: node --test "scripts/*.test.mjs"
+
       - name: Build the report
         id: calc
         env:
@@ -50,7 +57,9 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           from: This Seven Goes to Eleven <${{ secrets.MAIL_USERNAME }}>
           to: danielspils@gmail.com
-          subject: "T7GT11 — new downloads"
+          # Carries the count, so most days can be read from the notification
+          # without opening anything (steps.calc emits it).
+          subject: ${{ steps.calc.outputs.subject }}
           # Both body and html_body => multipart/alternative.
           body: ${{ steps.calc.outputs.body }}
           html_body: ${{ steps.calc.outputs.html }}
