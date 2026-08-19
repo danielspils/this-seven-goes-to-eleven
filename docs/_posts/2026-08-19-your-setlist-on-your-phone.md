@@ -29,7 +29,7 @@ your iPhone. Google ‘Keep’ does the same thing on Android.
 Or email it to yourself. In a pinch you can pull the email up at the gig to
 remind yourself where everything lives.
 
-Another show next week with an "Outdoor Music Festival Setlist"? No prob —
+Got another show next week with an “Outdoor Music Festival Setlist”? No prob —
 copy and paste, or email the new order.
 
 Sometimes the simplest solution is the best one. This may not be the full
