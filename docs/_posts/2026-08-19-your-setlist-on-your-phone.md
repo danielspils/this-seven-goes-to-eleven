@@ -32,6 +32,5 @@ remind yourself where everything lives.
 Got another show next week with an “Outdoor Music Festival Setlist”? No prob —
 copy and paste, or email the new order.
 
-Sometimes the simplest solution is the best one. This may not be the full
-feature Rich imagined, but it does the thing he actually needed. I'm open to
-something more ambitious later. For now, take it for a spin.
+Sometimes the simplest solution is best. I’m open to something more ambitious
+later. In the meantime, take it for a spin.
