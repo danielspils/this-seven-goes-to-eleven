@@ -23,9 +23,8 @@ So 1.2 adds two icons to each setlist: copy to clipboard, and email.
 ![Copy and email icons in the setlist header](/assets/img/setlist-copy-email-annotated.png)
 
 Click copy and the setlist is on your clipboard. Paste it into a text doc and
-print it. Or, if you're me, paste it into the iOS Notes app, which syncs to
-your phone before you've closed the laptop. Google Keep does the same thing on
-Android.
+print it. Or, if you’re like me, paste it into the native Apple Notes app—it syncs to
+your iPhone. Google ‘Keep’ does the same thing on Android.
 
 Or email it to yourself. In a pinch you can pull the email up at the gig to
 remind yourself where everything lives.
