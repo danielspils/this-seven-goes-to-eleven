@@ -2,6 +2,25 @@
 // the arrow keys or the on-screen controls. A native <dialog> supplies
 // Escape, focus handling and the backdrop.
 (function () {
+  // POST IMAGES JOIN THE SAME LIGHTBOX. A Notes post writes a plain markdown
+  // image — ![alt](/assets/img/x.png) — the way jx-3p.com's posts do, so
+  // writing one needs no button markup and no separate -thumb file. CSS shows
+  // it small; this wraps each one in the opener the homepage strip already
+  // uses, so the site has ONE enlarge mechanism rather than two that drift.
+  //
+  // The image is its own "full" version here: a post screenshot is published
+  // once, at the size it was captured, and a second file to keep in sync would
+  // be a second thing to forget.
+  for (const img of document.querySelectorAll('.post img')) {
+    if (img.closest('.shot-open')) continue;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'shot-open post-shot';
+    btn.setAttribute('aria-label', `Enlarge: ${img.alt || 'image'}`);
+    img.parentNode.insertBefore(btn, img);
+    btn.appendChild(img);
+  }
+
   const openers = [...document.querySelectorAll('.shot-open')];
   if (!openers.length) return;
 

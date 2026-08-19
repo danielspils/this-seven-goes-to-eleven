@@ -454,3 +454,39 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 
 /* On a phone the pair keeps its size — it is two buttons, not a layout. */
 @media (max-width: 480px) { .download-buttons { width: 150px; } }
+
+
+/* ── Images inside a Notes post ────────────────────────────────────────
+   Matched to jx-3p.com's posts: the image sits inline as a modest
+   thumbnail and expands on click, so a post can carry a screenshot
+   without the page becoming mostly screenshot. The expanding is the
+   homepage's own lightbox (shot.js wraps these in .shot-open), so there
+   is one enlarge mechanism on the site rather than two.
+
+   Authoring stays plain markdown — ![alt](/assets/img/x.png) — with no
+   button markup and no separate -thumb file to keep in sync. */
+.post-shot {
+  display: block;
+  margin: 1.75em auto;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: zoom-in;
+}
+.post-shot img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .12);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+@media (min-width: 700px) {
+  .post-shot img { max-width: 380px; }
+}
+.post-shot:hover img { transform: scale(1.04); }
+.post-shot:focus-visible img { outline: 2px solid var(--accent, #c8862a); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .post-shot img { transition: none; }
+  .post-shot:hover img { transform: none; }
+}
