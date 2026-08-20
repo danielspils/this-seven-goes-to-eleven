@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-19T15:01:19.132Z",
+  "date": "2026-08-20T07:52:01.218Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -44,7 +44,7 @@
     "519631627": {
       "name": "This-Seven-Goes-to-Eleven-1.1.0.dmg",
       "tag": "v1.1.0",
-      "count": 2
+      "count": 3
     },
     "519631628": {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-universal-mac.zip",
@@ -59,12 +59,12 @@
     "519631631": {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-universal-mac.zip.blockmap",
       "tag": "v1.1.0",
-      "count": 0
+      "count": 1
     },
     "519631633": {
       "name": "latest-mac.yml",
       "tag": "v1.1.0",
-      "count": 3
+      "count": 4
     },
     "519631641": {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-x64-win.exe",
@@ -74,12 +74,52 @@
     "519631643": {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-x64-win.exe.blockmap",
       "tag": "v1.1.0",
-      "count": 1
+      "count": 2
     },
     "519631644": {
       "name": "latest.yml",
       "tag": "v1.1.0",
       "count": 2
+    },
+    "521282022": {
+      "name": "latest-mac.yml",
+      "tag": "v1.2.0",
+      "count": 2
+    },
+    "521282023": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0.dmg.blockmap",
+      "tag": "v1.2.0",
+      "count": 0
+    },
+    "521282024": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0.dmg",
+      "tag": "v1.2.0",
+      "count": 1
+    },
+    "521282025": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-universal-mac.zip",
+      "tag": "v1.2.0",
+      "count": 1
+    },
+    "521282028": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-universal-mac.zip.blockmap",
+      "tag": "v1.2.0",
+      "count": 1
+    },
+    "521282034": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-x64-win.exe.blockmap",
+      "tag": "v1.2.0",
+      "count": 1
+    },
+    "521282036": {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-x64-win.exe",
+      "tag": "v1.2.0",
+      "count": 3
+    },
+    "521282038": {
+      "name": "latest.yml",
+      "tag": "v1.2.0",
+      "count": 5
     }
   }
 }
