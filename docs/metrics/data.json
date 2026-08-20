@@ -1,12 +1,60 @@
 {
-  "generated": "2026-08-19T15:01:22.720Z",
-  "downloads": 28,
-  "releases": 2,
+  "generated": "2026-08-20T07:52:03.053Z",
+  "downloads": 46,
+  "releases": 3,
   "assets": [
     {
       "name": "latest-mac.yml",
-      "tag": "v1.1.0",
+      "tag": "v1.2.0",
+      "count": 2,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "latest.yml",
+      "tag": "v1.2.0",
+      "count": 5,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-universal-mac.zip",
+      "tag": "v1.2.0",
+      "count": 1,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-universal-mac.zip.blockmap",
+      "tag": "v1.2.0",
+      "count": 1,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-x64-win.exe",
+      "tag": "v1.2.0",
       "count": 3,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0-x64-win.exe.blockmap",
+      "tag": "v1.2.0",
+      "count": 1,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0.dmg",
+      "tag": "v1.2.0",
+      "count": 1,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "This-Seven-Goes-to-Eleven-1.2.0.dmg.blockmap",
+      "tag": "v1.2.0",
+      "count": 0,
+      "published": "2026-08-19T19:51:03Z"
+    },
+    {
+      "name": "latest-mac.yml",
+      "tag": "v1.1.0",
+      "count": 4,
       "published": "2026-08-18T15:27:54Z"
     },
     {
@@ -24,7 +72,7 @@
     {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-universal-mac.zip.blockmap",
       "tag": "v1.1.0",
-      "count": 0,
+      "count": 1,
       "published": "2026-08-18T15:27:54Z"
     },
     {
@@ -36,13 +84,13 @@
     {
       "name": "This-Seven-Goes-to-Eleven-1.1.0-x64-win.exe.blockmap",
       "tag": "v1.1.0",
-      "count": 1,
+      "count": 2,
       "published": "2026-08-18T15:27:54Z"
     },
     {
       "name": "This-Seven-Goes-to-Eleven-1.1.0.dmg",
       "tag": "v1.1.0",
-      "count": 2,
+      "count": 3,
       "published": "2026-08-18T15:27:54Z"
     },
     {
