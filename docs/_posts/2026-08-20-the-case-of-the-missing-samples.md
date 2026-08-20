@@ -4,7 +4,7 @@ date: 2026-08-20
 excerpt: "Rich Olivieri reported a bug where samples he had installed on his Seven were showing up as \"installed, not in catalogue\". So, the samples were 'there' but not there."
 ---
 
-Rich Olivieri from the [FB Crumar Seven & Seventeen Users](https://www.facebook.com/groups/984650751685043)
+Rich Olivieri from [FB Crumar Seven & Seventeen Users](https://www.facebook.com/groups/984650751685043)
 reported a bug where samples he had installed on his Seven were showing up as
 "installed, not in catalogue". So, the samples were 'there' but not there.
 
