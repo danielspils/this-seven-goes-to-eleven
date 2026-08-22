@@ -1,24 +1,24 @@
 {
-  "generated": "2026-08-21T07:52:57.332Z",
-  "downloads": 104,
+  "generated": "2026-08-22T07:40:03.609Z",
+  "downloads": 116,
   "releases": 5,
   "assets": [
     {
       "name": "latest-mac.yml",
       "tag": "v1.4.0",
-      "count": 2,
+      "count": 3,
       "published": "2026-08-20T22:20:21Z"
     },
     {
       "name": "latest.yml",
       "tag": "v1.4.0",
-      "count": 27,
+      "count": 37,
       "published": "2026-08-20T22:20:21Z"
     },
     {
       "name": "This-Seven-Goes-to-Eleven-1.4.0-universal-mac.zip",
       "tag": "v1.4.0",
-      "count": 1,
+      "count": 2,
       "published": "2026-08-20T22:20:21Z"
     },
     {
