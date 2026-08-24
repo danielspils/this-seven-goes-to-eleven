@@ -99,11 +99,19 @@
       “Crumar” and “Seven” are their marks.</p>
   </footer>
   {% if site.goatcounter %}
-  <!-- GoatCounter — page counts, no cookies, nothing to consent to.
+  <!-- GoatCounter — no cookies, nothing to consent to.
        Dashboard: https://{{ site.goatcounter }}.goatcounter.com
-       Counts PAGE VIEWS only. Downloads are counted separately, by GitHub,
-       and the two are never added together: a click here and a completed
-       download there are different facts. -->
+
+       PAGE VIEWS, and since 2026-08-23 one event per download BUTTON PRESS
+       (assets/js/download.js, paths of the form download/mac/v1.5.2).
+
+       THREE COUNTS, NEVER ADDED TOGETHER:
+         page views      somebody looked at a page
+         button presses  somebody asked for an installer — the intent
+         GitHub counters somebody's download actually completed
+       They will disagree, and the disagreement is the useful part: presses
+       that never became installs, and installs from links that bypass this
+       site entirely. Summing them would destroy exactly that. -->
   <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
   {% endif %}
