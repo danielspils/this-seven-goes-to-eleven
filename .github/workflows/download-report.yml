@@ -64,6 +64,13 @@ jobs:
           body: ${{ steps.calc.outputs.body }}
           html_body: ${{ steps.calc.outputs.html }}
 
+      # ONE ROW PER DAY, and the only way a curve can exist at all: GitHub
+      # reports a counter's value today and keeps no history, so a day not
+      # written down is a day lost for good. Rebuilt from git plus the snapshot
+      # this job just wrote, so it cannot drift from the readings it describes.
+      - name: Append today's reading to the download history
+        run: node scripts/backfill-download-history.mjs
+
       # Refreshed every run: the page shouldn't go stale on days with no
       # downloads (and therefore no email).
       - name: Build metrics data
@@ -75,6 +82,6 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .github/download-stats.json docs/metrics/data.json
+          git add .github/download-stats.json .github/download-history.jsonl docs/metrics/data.json
           git diff --staged --quiet || git commit -m "Metrics: daily refresh [skip ci]"
           git push
