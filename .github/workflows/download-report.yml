@@ -32,6 +32,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # THE DOWNLOAD HISTORY IS REBUILT FROM `git log` of the daily
+          # snapshot, and the default checkout is depth 1 — one commit, so the
+          # rebuild saw nothing and six days of history became two on the first
+          # run (2026-08-24). The script now also merges rather than replaces,
+          # so neither fix alone is load-bearing.
+          fetch-depth: 0
 
       # The allow-list that decides what counts as a download, checked before
       # anything is sent. There is no package.json here and no other runner —

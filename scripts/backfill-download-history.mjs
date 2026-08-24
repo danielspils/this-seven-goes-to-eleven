@@ -18,10 +18,19 @@
 // OUT rather than interpolated. A straight line drawn between two real
 // readings is a claim nobody measured, and this project has a rule about that.
 //
-// RUN IT EVERY DAY, not once. It rebuilds the whole file from git plus the
-// snapshot in the working tree, so today's reading lands without an append
-// step and the history can never drift from the snapshots it is derived from.
-// Re-running gives the same answer, which is what makes it auditable.
+// RUN IT EVERY DAY, not once. It rebuilds from git plus the snapshot in the
+// working tree, so today's reading lands without an append step.
+//
+// IT MERGES. A ROW ONCE WRITTEN IS NEVER REMOVED, and that is not caution —
+// it is a repair. The first version replaced the file outright, reasoning that
+// deriving it from git meant it could never drift. Then the daily workflow ran
+// on GitHub's default SHALLOW CHECKOUT, where `git log` sees one commit, and
+// six days of history became two. Derived from a source the caller may not be
+// able to see in full is strictly worse than append-only (2026-08-24).
+//
+// So: existing rows are kept, re-derived rows win where both exist, and the
+// checkout is deepened in the workflow as well. Either fix alone would have
+// been enough; a history that cannot be rebuilt is worth both.
 //
 // Matches the row shape JP Patches uses (.github/download-history.jsonl), so
 // one page and one builder can read either project's history.
@@ -109,6 +118,16 @@ try {
 const byDay = new Map();
 for (const r of readings) byDay.set(r.day, r.snapshot);   // last wins
 
+// EVERYTHING ALREADY WRITTEN DOWN, kept whatever this run can see.
+const existing = new Map();
+try {
+  for (const line of readFileSync(OUT, 'utf8').trim().split('\n')) {
+    if (!line) continue;
+    const row = JSON.parse(line);
+    if (row && row.date) existing.set(row.date, row);
+  }
+} catch { /* no history yet */ }
+
 const rows = [];
 let prev = null;
 for (const [date, snapshot] of [...byDay.entries()].sort()) {
@@ -128,14 +147,23 @@ for (const [date, snapshot] of [...byDay.entries()].sort()) {
   prev = t;
 }
 
-const text = `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`;
+// Re-derived rows win where both exist — they come from the snapshots and are
+// reproducible — but a day only the old file knows about survives.
+const merged = new Map(existing);
+for (const r of rows) merged.set(r.date, r);
+const out = [...merged.values()].sort((a, b) => a.date.localeCompare(b.date));
+
+const dropped = [...existing.keys()].filter((d) => !merged.has(d));
+if (dropped.length) process.stderr.write(`refusing to drop: ${dropped.join(', ')}\n`);
+
+const text = `${out.map((r) => JSON.stringify(r)).join('\n')}\n`;
 if (DRY) {
   process.stdout.write(text);
-  const days = rows.length;
-  const span = days ? `${rows[0].date} … ${rows[days - 1].date}` : '(none)';
+  const days = out.length;
+  const span = days ? `${out[0].date} … ${out[days - 1].date}` : '(none)';
   process.stderr.write(`\n${days} daily readings, ${span}\n`);
 } else {
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, text);
-  process.stdout.write(`wrote ${rows.length} rows to ${OUT}\n`);
+  process.stdout.write(`wrote ${out.length} rows to ${OUT} (${rows.length} re-derived)\n`);
 }
