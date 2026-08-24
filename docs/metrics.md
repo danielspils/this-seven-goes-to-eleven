@@ -30,6 +30,14 @@ description: Usage and download figures for This Seven Goes to Eleven.
 Page views and downloads are never added together: a visit and a completed
 download are different facts.</p>
 
+<p class="muted">Download <em>button presses</em> are counted there too, as
+events under <code>download/mac/&lt;version&gt;</code> and
+<code>download/pc/&lt;version&gt;</code> — that is the intent to install, and
+GoatCounter's own country reading comes with it. It is a third figure and not a
+substitute for either of the others: a press that never finishes is not a
+download, and an install from a link that never touched this site is a download
+with no press behind it.</p>
+
 <script>
 // The numbers come from docs/metrics/data.json, refreshed daily by the
 // Download report workflow whether or not there were downloads — so this page

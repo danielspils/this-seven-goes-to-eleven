@@ -52,4 +52,48 @@
       }
     })
     .catch(() => { /* the button already points at the release page */ });
+
+  // ── COUNTING THE CLICK ────────────────────────────────────────────────
+  //
+  // GitHub reports a number and nothing else — never where a download came
+  // from, and never how many people pressed a button without finishing. This
+  // records the PRESS, which is the only half this site can see.
+  //
+  // A CLICK IS NOT A DOWNLOAD, and the two are never added together. GitHub's
+  // counter is the completed transfer; this is the intent. They will disagree,
+  // and the difference is itself worth having: presses that never became
+  // installs. Same rule this site already applies to page views.
+  //
+  // GoatCounter, so it stays cookieless and there is nothing to consent to. It
+  // is the same script the layout already loads, asked to record an event
+  // rather than a page — and the country comes from GoatCounter's own reading
+  // of the request, not from anything stored on the visitor.
+  //
+  // Fire-and-forget by construction: `count` is queued and the navigation
+  // proceeds regardless. If GoatCounter is blocked, slow, or absent, this does
+  // nothing at all and the download is untouched — the button's job is the
+  // download, and no measurement may stand in front of it.
+  const platformOf = (a) =>
+    (a.classList.contains('btn-mac') || a.classList.contains('dl-mac')) ? 'mac'
+      : (a.classList.contains('btn-pc') || a.classList.contains('dl-pc')) ? 'pc'
+        : null;
+
+  for (const button of buttons) {
+    const platform = platformOf(button);
+    if (!platform) continue;
+    button.addEventListener('click', () => {
+      try {
+        if (!window.goatcounter || typeof window.goatcounter.count !== 'function') return;
+        // The version is whatever the button actually resolved to, so a click
+        // is attributed to the release it would have fetched — not to whatever
+        // is newest by the time anybody reads the figures.
+        const version = button.getAttribute('data-version') || 'unresolved';
+        window.goatcounter.count({
+          path: `download/${platform}/${version}`,
+          title: `Download ${platform} ${version}`,
+          event: true,
+        });
+      } catch { /* never let counting break a download */ }
+    });
+  }
 })();
