@@ -18,7 +18,7 @@ routes = [
 # safe to publish in full.
 [[kv_namespaces]]
 binding = "PINGS"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "ac64c2650bc540fda1379ec034cc8a06"
 
 [vars]
 # Where the active-install mirror lands, so it sits beside the download

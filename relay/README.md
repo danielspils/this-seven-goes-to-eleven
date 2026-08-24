@@ -33,6 +33,11 @@ Needs a Cloudflare account with the `thissevengoestoeleven.com` zone on it.
     # 3. Check it is alive — expect {"ok":true,"active":{...}}
     curl -s https://ping.thissevengoestoeleven.com/totals
 
+**`/totals` lags by up to a minute.** KV's `list` is eventually consistent, so
+a ping shows up in `/ping/stats` immediately and in `/totals` about 45 seconds
+later — measured on the first deploy, 2026-08-24. It reads as a bug the first
+time you see it and is not one; don't go looking for a fault in `bumpMonthly`.
+
 **No secrets.** Nothing here needs a token, and nothing here should ever be
 given one. The Worker holds counts of app launches; that is the whole reason
 it can be published in full and read by anybody.
