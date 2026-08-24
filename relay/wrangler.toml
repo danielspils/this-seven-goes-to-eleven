@@ -1,0 +1,27 @@
+# This Seven Goes to Eleven — active-install relay.
+# Deploy steps in relay/README.md.
+name = "seven-relay"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+
+# Served at ping.thissevengoestoeleven.com — the site's zone is on this same
+# Cloudflare account. The custom domain doubles as the Worker's only address;
+# the workers.dev subdomain is deliberately not registered, so there is no
+# second URL to remember or to leak.
+routes = [
+  { pattern = "ping.thissevengoestoeleven.com", custom_domain = true }
+]
+
+# One counter per day/platform/version/country, and a permanent monthly
+# rollup. NO SECRETS ARE BOUND TO THIS WORKER and none should ever be: it
+# holds counts of app launches and nothing else, which is what makes it
+# safe to publish in full.
+[[kv_namespaces]]
+binding = "PINGS"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+[vars]
+# Where the active-install mirror lands, so it sits beside the download
+# events the site already records. Unset = no mirror, and the ping still
+# works.
+GOATCOUNTER_URL = "https://thissevengoestoeleven.goatcounter.com"
