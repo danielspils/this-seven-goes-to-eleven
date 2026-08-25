@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-24T08:02:09.630Z",
+  "date": "2026-08-25T07:53:43.708Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -294,7 +294,7 @@
     "526578288": {
       "name": "latest-mac.yml",
       "tag": "v1.5.2",
-      "count": 2
+      "count": 4
     },
     "526578289": {
       "name": "This-Seven-Goes-to-Eleven-1.5.2.dmg",
@@ -319,7 +319,7 @@
     "526578313": {
       "name": "latest.yml",
       "tag": "v1.5.2",
-      "count": 5
+      "count": 7
     }
   }
 }
