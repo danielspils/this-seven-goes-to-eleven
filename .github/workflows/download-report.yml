@@ -55,7 +55,18 @@ jobs:
 
       - name: Email the report
         if: steps.calc.outputs.send == 'true'
-        uses: dawidd6/action-send-mail@v3
+        # PINNED TO A FULL COMMIT SHA, not the mutable v3 tag. This step is
+        # handed MAIL_USERNAME/MAIL_PASSWORD — a Gmail App Password that
+        # bypasses 2FA on the mailbox that is the recovery address for the
+        # Apple, Azure, GitHub and Cloudflare accounts. A tag can be moved by
+        # whoever owns the action; a SHA cannot. Moving that tag would run
+        # their code, daily, with those in env.
+        #
+        # SHA below = v3.11.0, which is what v3 resolved to when this was
+        # pinned (2026-08-25) — so this changed nothing about what runs today.
+        # JP Patches pins the same commit. Updating is deliberate: resolve the
+        # new tag's SHA yourself and change both the ref and this comment.
+        uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7  # v3.11.0
         with:
           server_address: smtp.gmail.com
           server_port: 465
