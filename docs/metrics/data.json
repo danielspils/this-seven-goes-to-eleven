@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-25T07:53:44.957Z",
+ "generated": "2026-08-26T07:55:12.402Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -57,6 +57,12 @@
     "mac": 16,
     "pc": 19,
     "upd": 7
+   },
+   {
+    "date": "2026-08-26",
+    "mac": 16,
+    "pc": 19,
+    "upd": 7
    }
   ]
  },
@@ -65,7 +71,7 @@
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.2",
-   "count": 4,
+   "count": 5,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -449,25 +455,27 @@
  ],
  "active": {
   "reachable": true,
-  "total": 2,
+  "total": 3,
   "byMonth": {
-   "2026-08": 2
+   "2026-08": 3
   },
   "byCountry": {
-   "US": 2
+   "US": 3
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 2,
+   "total": 3,
    "byDay": {
-    "20260824": 2
+    "20260824": 2,
+    "20260825": 1
    },
    "byVersion": {
-    "1.5.2": 2
+    "1.5.2": 2,
+    "1.5.3": 1
    },
    "byPlatform": {
-    "mac": 2
+    "mac": 3
    }
   }
  }
