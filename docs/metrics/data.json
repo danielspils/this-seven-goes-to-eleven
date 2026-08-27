@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-26T07:55:12.402Z",
+ "generated": "2026-08-27T18:15:08.071Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -63,6 +63,12 @@
     "mac": 16,
     "pc": 19,
     "upd": 7
+   },
+   {
+    "date": "2026-08-27",
+    "mac": 16,
+    "pc": 19,
+    "upd": 7
    }
   ]
  },
@@ -77,7 +83,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.2",
-   "count": 7,
+   "count": 9,
    "published": "2026-08-23T19:48:03Z"
   },
   {
