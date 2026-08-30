@@ -16,9 +16,17 @@ url: "https://thissevengoestoeleven.com"
 # whatever the newest release is, so shipping a version never needs a site
 # edit. assets/js/download.js then resolves each one to the actual .dmg/.exe
 # of that release; with JS off, the button still lands on the release page.
+# THE RELAY RESOLVES THE FILE, so these work with JavaScript off. They used to
+# be /releases/latest for both platforms, which meant a visitor without JS —
+# or one whose browser could not reach GitHub's API — got the release page and
+# a list of eight files to choose from, identically for Mac and PC.
+# ping.thissevengoestoeleven.com/download/<platform> 302s to the actual
+# installer for that platform. No version appears here or anywhere on the site:
+# the relay reads it from the newest release, so a release never needs a site
+# edit. See relay/worker.js.
 downloads:
-  mac: "https://github.com/danielspils/crumar-seven-editor/releases/latest"
-  pc: "https://github.com/danielspils/crumar-seven-editor/releases/latest"
+  mac: "https://ping.thissevengoestoeleven.com/download/mac"
+  pc: "https://ping.thissevengoestoeleven.com/download/pc"
 
 # GoatCounter code, the way jx-3p.com has one: privacy-friendly page counts,
 # no cookies, so no consent banner. The dashboard is
