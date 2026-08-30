@@ -163,6 +163,220 @@ async function handleTotals(env) {
   return json({ ok: true, active: acc });
 }
 
+// ── /download/mac and /download/pc ──────────────────────────────────────
+//
+// The site's buttons resolve the actual installer in JavaScript, which works
+// and will keep working. This is the floor UNDER that: a plain href that
+// lands on the right FILE for the right platform with no JavaScript at all,
+// and without the visitor's browser needing to talk to GitHub's API.
+//
+// The API call the page makes is unauthenticated — 60 requests an hour PER
+// ADDRESS. One visitor never approaches that; an office behind a single
+// outbound address can, and the failure is silent by design: the button stays
+// pointing at the releases page and Mac and PC both land on the same list of
+// eight files. Fine for a hobbyist, wrong for the manufacturer.
+//
+// 302, NEVER 301. The target is a versioned URL that changes every release —
+// a permanent redirect would be cached by browsers and CDNs and would keep
+// handing out an old installer long after it stopped being current.
+
+const APP_REPO = 'danielspils/crumar-seven-editor';
+// The releases page: correct for a human, wrong for a platform. Used ONLY when
+// the lookup fails, and never written to KV — see below.
+const DL_FALLBACK = `https://github.com/${APP_REPO}/releases/latest`;
+// Ten minutes. Long enough that a burst of visitors costs one API call, short
+// enough that a new release is live on the buttons almost immediately.
+const DL_CACHE_TTL = 600;
+
+// RESOLVED, THEN CACHED — AND A FAILURE IS NEVER CACHED. That distinction is
+// the whole function. JP Patches shipped this same endpoint and cached a
+// fallback URL during a rate-limited lookup; the PC button then served that
+// stale answer for as long as the entry lived, so a transient GitHub hiccup
+// became a persistently wrong button. Here a miss returns null, the caller
+// redirects to the releases page for that ONE request, and the next request
+// tries again.
+//
+// TWO WAYS TO ASK, because the obvious one does not work here. The REST API is
+// authoritative and was the first implementation — and it returned 403 with
+// `x-ratelimit-remaining: 0` on the very first call from production. The
+// unauthenticated API allows 60 requests an hour PER ADDRESS, and a Worker
+// does not have its own address: it egresses from Cloudflare's shared pool,
+// whose hourly budget is already spent by other tenants. Measured, not
+// assumed — that is what the log line below reported.
+//
+// So the API is tried first and is expected to fail most of the time, and the
+// real path is the plain website, which has no such limit:
+//
+//   1. /releases/latest       302 → …/releases/tag/<tag>     (the tag)
+//   2. /releases/expanded_assets/<tag>                       (the filenames)
+//
+// Step 2 reads the ACTUAL asset names out of the markup rather than building
+// a filename from a pattern. A guessed name that happens to be right today is
+// a silent breakage the first time the naming changes; a name read from the
+// page is either there or the lookup fails loudly into the fallback.
+//
+// `expanded_assets` is an internal GitHub fragment, not a documented API, and
+// it may change without notice. That is acceptable ONLY because every failure
+// path here ends at the releases page — a worse first impression, never a
+// broken link — and because it says so in the log when it happens.
+async function resolveDownload(env, platform) {
+  const key = `dlurl:${platform}`;
+  const cached = await env.PINGS.get(key);
+  if (cached) return cached;
+
+  const wanted = platform === 'mac' ? '.dmg' : '.exe';
+  const url = (await viaApi(platform, wanted)) || (await viaWebsite(platform, wanted));
+  if (!url) return null;
+
+  await env.PINGS.put(key, url, { expirationTtl: DL_CACHE_TTL });
+  return url;
+}
+
+async function viaApi(platform, wanted) {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${APP_REPO}/releases/latest`, {
+      headers: { accept: 'application/vnd.github+json', 'user-agent': 'seven-relay' },
+    });
+    if (!res.ok) {
+      // WHY, not just that it failed. A silent fallback is indistinguishable
+      // from a working button pointing at the wrong place, and the remaining
+      // rate-limit budget is the one number that tells them apart.
+      console.log(`[download] api ${res.status} for ${platform}`
+        + ` (ratelimit-remaining: ${res.headers.get('x-ratelimit-remaining')})`);
+      return null;
+    }
+    const release = await res.json();
+    // .blockmap sits beside each installer and ends in .exe.blockmap, so a bare
+    // endsWith would take it — the same trap the site's own script documents.
+    const asset = (release.assets || []).find(
+      (a) => a.name.endsWith(wanted) && !a.name.endsWith('.blockmap')
+    );
+    return (asset && asset.browser_download_url) || null;
+  } catch (err) {
+    console.log(`[download] api threw for ${platform}: ${err && err.message}`);
+    return null;
+  }
+}
+
+async function viaWebsite(platform, wanted) {
+  try {
+    const head = await fetch(`https://github.com/${APP_REPO}/releases/latest`, {
+      redirect: 'manual',
+      headers: { 'user-agent': 'seven-relay' },
+    });
+    const loc = head.headers.get('location') || '';
+    const tag = (/\/releases\/tag\/([^/?#]+)/.exec(loc) || [])[1];
+    if (!tag) {
+      console.log(`[download] no tag in redirect for ${platform}: ${head.status} ${loc}`);
+      return null;
+    }
+    const page = await fetch(`https://github.com/${APP_REPO}/releases/expanded_assets/${tag}`, {
+      headers: { 'user-agent': 'seven-relay' },
+    });
+    if (!page.ok) {
+      console.log(`[download] expanded_assets ${page.status} for ${tag}`);
+      return null;
+    }
+    const html = await page.text();
+    // Real filenames off real hrefs — never a name assembled from the tag.
+    const names = [...html.matchAll(/\/releases\/download\/[^"'\s]+?\/([^"'\s\/]+)/g)]
+      .map((m) => m[1]);
+    const name = names.find((n) => n.endsWith(wanted) && !n.endsWith('.blockmap'));
+    if (!name) {
+      console.log(`[download] no ${wanted} among ${names.length} assets on ${tag}`);
+      return null;
+    }
+    return `https://github.com/${APP_REPO}/releases/download/${tag}/${name}`;
+  } catch (err) {
+    console.log(`[download] website path threw for ${platform}: ${err && err.message}`);
+    return null;
+  }
+}
+
+// A REDIRECT SERVED IS NOT A COMPLETED DOWNLOAD, and this count must never be
+// added to GitHub's. GitHub counts the transfer finishing; this counts the
+// browser being sent. It is strictly larger — cancelled transfers, bots and
+// link previews all land here — and its value is the thing GitHub cannot
+// give at all: WHERE. Same key shape as the pings so the two read alike.
+async function countDownload(env, platform, country) {
+  const day = today();
+  const month = new Date().toISOString().slice(0, 7);
+  const bump = async (key, ttl) => {
+    const next = (Number(await env.PINGS.get(key)) || 0) + 1;
+    await env.PINGS.put(key, String(next), ttl ? { expirationTtl: ttl } : undefined);
+  };
+  await bump(`dl:${day}:${platform}:${country}`, PING_TTL_SECONDS);
+  await bump(`dlm:${month}:${platform}:${country}`, null);   // permanent
+}
+
+async function handleDownload(request, env, ctx, platform, count = true) {
+  const country = (request.cf && request.cf.country) || 'XX';
+  const url = await resolveDownload(env, platform);
+  // Counted even when the lookup failed: somebody still asked for a download,
+  // and a count that quietly omits the broken days would hide exactly the
+  // period worth knowing about.
+  if (count && ctx) ctx.waitUntil(countDownload(env, platform, country));
+  return new Response(null, {
+    status: 302,
+    headers: {
+      location: url || DL_FALLBACK,
+      // Belt and braces against an intermediary caching a versioned target.
+      'cache-control': 'no-store',
+    },
+  });
+}
+
+// GET /version — what the buttons currently point at, for the page to SHOW.
+//
+// The site used to ask GitHub's API for this directly from the visitor's
+// browser. That works for one person and fails for an office: 60 requests an
+// hour per address, and a failure meant the page silently named no version at
+// all. Asking the relay instead costs the visitor nothing, is answered from
+// the same ten-minute cache the redirect uses, and means the browser never
+// talks to GitHub at all.
+//
+// It reports the tag it RESOLVED, so the version on the page is by
+// construction the version the button hands you — not a number typed into the
+// site that has to be remembered at release time. Nothing here is ever
+// hardcoded; if the lookup fails, the field is null and the page says nothing
+// rather than something stale.
+async function handleVersion(env) {
+  const out = { ok: true, tag: null, mac: null, pc: null };
+  for (const platform of ['mac', 'pc']) {
+    const url = await resolveDownload(env, platform);
+    if (!url) continue;
+    const m = /\/releases\/download\/([^/]+)\/([^/]+)$/.exec(url);
+    if (!m) continue;
+    out.tag = out.tag || m[1];
+    out[platform] = { name: m[2], url };
+  }
+  return json(out);
+}
+
+// GET /downloads — what the redirect has served, by month and country. Kept
+// separate from /totals so nothing can accidentally sum a redirect with a
+// check-in; they answer different questions.
+async function handleDownloadStats(env) {
+  const acc = { byMonth: {}, byCountry: {}, byPlatform: {}, total: 0 };
+  let cursor;
+  do {
+    const page = await env.PINGS.list({ prefix: 'dlm:', cursor });
+    for (const k of page.keys) {
+      const parts = k.name.split(':');        // dlm:<YYYY-MM>:<platform>:<country>
+      if (parts.length !== 4) continue;
+      const [, month, platform, country] = parts;
+      const n = Number(await env.PINGS.get(k.name)) || 0;
+      if (!n) continue;
+      acc.byMonth[month] = (acc.byMonth[month] || 0) + n;
+      acc.byCountry[country] = (acc.byCountry[country] || 0) + n;
+      acc.byPlatform[platform] = (acc.byPlatform[platform] || 0) + n;
+      acc.total += n;
+    }
+    cursor = page.list_complete ? null : page.cursor;
+  } while (cursor);
+  return json({ ok: true, meaning: 'Redirects served by /download/*. Browsers SENT to an installer, not transfers finished. Never add to GitHub download counts.', downloads: acc });
+}
+
 // The metrics page reads /totals and /ping/stats from the site's own origin,
 // so those two answer CORS. /ping is called by the APP, which sends no Origin
 // and needs none — and a browser being unable to POST a ping is a feature.
@@ -190,6 +404,26 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/totals') {
       const res = await handleTotals(env);
+      for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
+      return res;
+    }
+    // HEAD IS ANSWERED LIKE GET. A link checker sends HEAD, and a route that
+    // 302s to a browser while 404ing to curl -I reads as a broken button to
+    // exactly the person auditing the buttons. The response carries no body
+    // either way — it is a redirect — so there is nothing to strip.
+    const readMethod = request.method === 'GET' || request.method === 'HEAD';
+    if (readMethod && (url.pathname === '/download/mac' || url.pathname === '/download/pc')) {
+      // A HEAD is a link check, not a person downloading, so it is NOT counted.
+      return handleDownload(request, env, ctx, url.pathname.endsWith('mac') ? 'mac' : 'pc',
+        request.method === 'GET');
+    }
+    if (readMethod && url.pathname === '/version') {
+      const res = await handleVersion(env);
+      for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
+      return res;
+    }
+    if (request.method === 'GET' && url.pathname === '/downloads') {
+      const res = await handleDownloadStats(env);
       for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
       return res;
     }

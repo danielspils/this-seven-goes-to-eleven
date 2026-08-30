@@ -67,6 +67,8 @@ Crumar Seven. Ecco: *This Seven Goes to Eleven*!
   {% include download-buttons.svg %}
 </div>
 
+<p class="dl-version" id="dl-version" hidden></p>
+
 Windows may warn you the first few times — click **More info**, then **Run
 anyway**. It's signed; the warning fades as more people download.
 {: .win-note}

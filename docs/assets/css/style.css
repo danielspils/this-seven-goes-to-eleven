@@ -442,6 +442,16 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
    your PC" — and a warning nobody warned you about reads as "this is broken"
    (Daniel, 2026-08-17). Sits under the buttons, quieter than the donation
    line, because it only concerns half the visitors. */
+/* WHICH VERSION THE BUTTON WILL HAND YOU. Sits directly under the pair, in
+   the same muted voice as the SmartScreen note beneath it. Ships `hidden` and
+   is only revealed once the relay has answered — an absent version is a small
+   loss, a stale one is the thing worth avoiding. */
+.dl-version {
+  color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums;
+  margin: -.4rem 0 1.1rem;
+}
+.dl-version[hidden] { display: none; }
+
 .win-note {
   color: var(--muted); font-size: .9rem; line-height: 1.5;
   margin: 0 0 1.1rem; max-width: 32rem;
