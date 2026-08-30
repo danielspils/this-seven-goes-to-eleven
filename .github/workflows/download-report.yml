@@ -22,6 +22,26 @@ on:
     # 07:12 UTC ≈ just after midnight Pacific, so each report covers a
     # finished local day. The :12 dodges top-of-hour cron congestion.
     - cron: '12 7 * * *'
+    # SAME-DAY RETRY, because GitHub's scheduled-workflow cron is not
+    # dependable. Observed on JP Patches 2026-08-27/28: the same 07:12 schedule
+    # fired ELEVEN HOURS late one day and had not fired at all by midday the
+    # next. A missed run is not a missed email — it is a missed reading, and
+    # GitHub keeps no history of its own counters, so a day nobody records is a
+    # day gone for good.
+    #
+    # 15:12 UTC ≈ 08:12 Pacific, so if the midnight run was dropped the report
+    # still lands in the morning.
+    #
+    # SAFE TO DOUBLE-RUN, and this was proven rather than assumed. The job is
+    # idempotent by delta: whichever run fires first sends and commits the
+    # advanced snapshot, and a second run the same day diffs against THAT and
+    # goes quiet. Measured by rolling the snapshot back and running twice —
+    # run 1 `send=true` with 7 new downloads, run 2 `send=false`,
+    # "No new downloads since the last report." A duplicate email is not
+    # possible while saveSnapshot() stays on both exit paths of
+    # scripts/download-report.mjs; if that ever changes, this second cron has
+    # to go with it.
+    - cron: '12 15 * * *'
   workflow_dispatch: {}
 
 permissions:
