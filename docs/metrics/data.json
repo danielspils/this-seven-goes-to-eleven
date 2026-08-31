@@ -1,13 +1,13 @@
 {
- "generated": "2026-08-30T18:38:12.273Z",
+ "generated": "2026-08-31T15:02:14.887Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 21,
-  "pc": 25,
+  "mac": 22,
+  "pc": 29,
   "upd": 7,
   "series": [
    {
@@ -87,6 +87,12 @@
     "mac": 21,
     "pc": 25,
     "upd": 7
+   },
+   {
+    "date": "2026-08-31",
+    "mac": 22,
+    "pc": 29,
+    "upd": 7
    }
   ]
  },
@@ -101,7 +107,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.2",
-   "count": 11,
+   "count": 13,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -119,7 +125,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.2-x64-win.exe",
    "tag": "v1.5.2",
-   "count": 8,
+   "count": 12,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -131,7 +137,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.2.dmg",
    "tag": "v1.5.2",
-   "count": 6,
+   "count": 7,
    "published": "2026-08-23T19:48:03Z"
   },
   {
