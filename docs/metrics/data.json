@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-03T18:38:37.183Z",
+ "generated": "2026-09-04T01:23:44.069Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -125,7 +125,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.2",
-   "count": 18,
+   "count": 19,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -155,7 +155,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.2.dmg",
    "tag": "v1.5.2",
-   "count": 9,
+   "count": 10,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -503,28 +503,16 @@
  ],
  "active": {
   "reachable": true,
-  "total": 3,
-  "byMonth": {
-   "2026-08": 3
-  },
-  "byCountry": {
-   "US": 3
-  },
+  "total": 0,
+  "byMonth": {},
+  "byCountry": {},
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 3,
-   "byDay": {
-    "20260824": 2,
-    "20260825": 1
-   },
-   "byVersion": {
-    "1.5.2": 2,
-    "1.5.3": 1
-   },
-   "byPlatform": {
-    "mac": 3
-   }
+   "total": 0,
+   "byDay": {},
+   "byVersion": {},
+   "byPlatform": {}
   }
  }
 }
