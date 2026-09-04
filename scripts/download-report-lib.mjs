@@ -185,21 +185,17 @@ export function renderBody({ since, delta, lifetime, latest }) {
     row('PC', lifetime.pc),
   ]);
 
-  // IN FULL, EVERY TIME. It sits at the bottom where it is easy to skip, which
-  // is exactly why it cannot be conditional: in three months a Windows number
-  // read without it invites the question of whether auto-updates are in there.
-  // The caveat travels with the data or it is not a caveat.
+  // TWO LINES. The long version explained why the numbers are what they are —
+  // the start date, the filenames that are not downloads, why Mac splits and PC
+  // does not — and every one of those answers a question nobody asks daily.
+  // What survives is the one caveat that changes how a number is READ: the PC
+  // figure is not comparable to the Mac figure (Daniel, 2026-08-20). His
+  // wording; do not expand it.
   sections.push([
     'HOW THIS IS COUNTED',
     '',
-    `  • These are GitHub’s cumulative per-asset counters — no timestamps and no`,
-    `    geography. Counted since ${since ? formatDate(since, { year: true }) : 'the first run'}.`,
-    '  • A Windows AUTO-UPDATE and a fresh Windows download both increment the',
-    '    same .exe counter and cannot be told apart. No split is guessed.',
-    '  • Mac separates only because the updater fetches the .zip while a person',
-    '    fetches the .dmg.',
-    '  • Update checks (latest.yml, latest-mac.yml) and .blockmap helpers are not',
-    '    downloads and are never counted.',
+    '    Mac counts new downloads',
+    '    PC combines new downloads + updates (GitHub can\'t distinguish)',
   ]);
 
   return `${sections.map((s) => s.join('\n')).join('\n\n')}\n`;
