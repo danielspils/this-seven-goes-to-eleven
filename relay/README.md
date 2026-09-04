@@ -38,6 +38,27 @@ a ping shows up in `/ping/stats` immediately and in `/totals` about 45 seconds
 later — measured on the first deploy, 2026-08-24. It reads as a bug the first
 time you see it and is not one; don't go looking for a fault in `bumpMonthly`.
 
+**`wrangler kv` reads a LOCAL store unless you say `--remote`.** In Wrangler 4
+every `kv key list|get|delete` defaults to the simulated namespace under
+`.wrangler/`, not the one the deployed Worker uses. On 2026-09-03 that reported
+this namespace EMPTY while `/ping/stats` was returning three pings — which
+reads as "the data is already gone" and stops you looking. Every KV command
+against this relay takes `--remote`:
+
+    wrangler kv key list --namespace-id=<id> --remote --prefix=pg
+
+And check the id against the DEPLOYED Worker rather than wrangler.toml, since
+a binding can be changed in the dashboard without touching the file:
+
+    wrangler versions view <version-id> --name seven-relay
+
+**Two stores, and one of them is not derived.** `/ping/stats` sums the `pg:`
+day keys at read time, so removing those changes it. `pgm:` is a separate
+permanent rollup incremented at WRITE time, and `/totals` reads it directly —
+so deleting the day keys alone leaves the monthly and country totals unchanged
+and the two halves disagreeing. Anything that removes pings has to remove
+both.
+
 **No secrets.** Nothing here needs a token, and nothing here should ever be
 given one. The Worker holds counts of app launches; that is the whole reason
 it can be published in full and read by anybody.
