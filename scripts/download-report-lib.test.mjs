@@ -107,12 +107,15 @@ test('each section leads with its own total, right-aligned', () => {
   assert.match(body, /^ {2}PC {4}1$/m);
 });
 
-test('the date is the snapshot’s, in the header and in the footnote', () => {
+test('the date is the snapshot’s, in the header', () => {
   const { delta, lifetime } = NORMAL();
   const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0' });
   assert.match(body, /SINCE 17 AUG/);
-  assert.match(body, /Counted since 17 Aug 2026\./);
   assert.ok(!/the last time this ran/.test(body), 'the vague phrasing is gone');
+  // The footnote no longer repeats it. The header already says the window, and
+  // a start date in the caveat answered a question nobody asks daily
+  // (Daniel, 2026-08-20).
+  assert.ok(!/Counted since/.test(body), 'the start date is not repeated below');
 });
 
 test('a blank line separates every section', () => {
@@ -164,13 +167,19 @@ test('an auto-update to something other than latest is called out too', () => {
   assert.match(oddBody, /\(1 to 1\.0\.0\)/);
 });
 
-test('the footnote is always there, in full, and claims no geography', () => {
+// TWO LINES, unconditional. The one caveat that changes how a number is READ
+// is that the PC figure is not comparable to the Mac one; everything else the
+// long footnote carried explained why a number is not in the number, which is
+// not a daily question (Daniel, 2026-08-20). His wording, so this pins it
+// verbatim — an expansion here is a regression.
+test('the footnote is always there, and is exactly the two lines', () => {
   for (const latest of ['1.1.0', '9.9.9']) {
     const { delta, lifetime } = NORMAL();
     const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest });
     assert.match(body, /^HOW THIS IS COUNTED$/m);
-    assert.strictEqual((body.match(/^ {2}• /gm) || []).length, 4, 'all four bullets');
-    assert.match(body, /cannot be told apart/);
+    assert.match(body, /^ {4}Mac counts new downloads$/m);
+    assert.match(body, /^ {4}PC combines new downloads \+ updates \(GitHub can't distinguish\)$/m);
+    assert.strictEqual((body.match(/^ {2}• /gm) || []).length, 0, 'no bullets survive');
     assert.ok(!/country|Country/.test(body), 'no geography — this site has no click relay');
   }
 });
