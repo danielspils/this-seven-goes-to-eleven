@@ -1,13 +1,13 @@
 {
- "generated": "2026-09-08T12:06:31.499Z",
+ "generated": "2026-09-08T18:40:12.199Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 26,
-  "pc": 32,
+  "mac": 31,
+  "pc": 36,
   "upd": 7,
   "series": [
    {
@@ -138,18 +138,66 @@
    },
    {
     "date": "2026-09-08",
-    "mac": 26,
-    "pc": 32,
+    "mac": 31,
+    "pc": 36,
     "upd": 7
    }
   ]
  },
- "releases": 8,
+ "releases": 9,
  "assets": [
   {
    "name": "latest-mac.yml",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "latest.yml",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3-universal-mac.zip",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3-universal-mac.zip.blockmap",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3-x64-win.exe",
+   "tag": "v1.5.3",
+   "count": 1,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3-x64-win.exe.blockmap",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3.dmg",
+   "tag": "v1.5.3",
+   "count": 2,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.3.dmg.blockmap",
+   "tag": "v1.5.3",
+   "count": 0,
+   "published": "2026-09-08T17:21:28Z"
+  },
+  {
+   "name": "latest-mac.yml",
    "tag": "v1.5.2",
-   "count": 6,
+   "count": 8,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -173,7 +221,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.2-x64-win.exe",
    "tag": "v1.5.2",
-   "count": 15,
+   "count": 18,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -185,7 +233,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.2.dmg",
    "tag": "v1.5.2",
-   "count": 11,
+   "count": 14,
    "published": "2026-08-23T19:48:03Z"
   },
   {
@@ -533,16 +581,26 @@
  ],
  "active": {
   "reachable": true,
-  "total": 0,
-  "byMonth": {},
-  "byCountry": {},
+  "total": 1,
+  "byMonth": {
+   "2026-09": 1
+  },
+  "byCountry": {
+   "US": 1
+  },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 0,
-   "byDay": {},
-   "byVersion": {},
-   "byPlatform": {}
+   "total": 1,
+   "byDay": {
+    "20260908": 1
+   },
+   "byVersion": {
+    "1.5.3": 1
+   },
+   "byPlatform": {
+    "mac": 1
+   }
   }
  }
 }
