@@ -3,8 +3,8 @@ layout: default
 ---
 
 In 2024 I was invited to play a few shows with The Long Winters in Seattle. The
-only problem: I’d sold my B3, Rhodes, and other classic keyboards I’d played in
-Maktub years ago.
+only problem: I’d sold my B3, Rhodes, and other classic keyboards I’d played
+years ago.
 
 So it was time to build a new keyboard rig from the ground up. The [Crumar
 Seven](https://www.crumar.it/?a=showproduct&b=36) drew me in with its style and
