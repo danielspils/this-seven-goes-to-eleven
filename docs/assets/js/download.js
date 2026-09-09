@@ -60,35 +60,19 @@
     })
     .catch(() => { /* no version shown, and the buttons work regardless */ });
 
-  // ── COUNTING THE PRESS ────────────────────────────────────────────────
+  // THE CLICK EVENT THAT USED TO LIVE HERE IS GONE (2026-09-09).
   //
-  // A CLICK IS NOT A DOWNLOAD, and the two are never added together. GitHub's
-  // counter is the completed transfer; this is the intent. They will disagree,
-  // and the difference is itself worth having: presses that never became
-  // installs. Same rule this site already applies to page views.
+  // It fired window.goatcounter.count() on click and then the browser navigated
+  // to the relay. A fire-and-forget request racing a navigation loses, and it
+  // lost almost every time: ONE press recorded in the two weeks since
+  // 2026-08-23, against FORTY-ONE redirects the relay logged for the same
+  // clicks. It was not misconfigured — it was counting from the wrong side of a
+  // navigation, and it produced a number that looked like a count and was not.
   //
-  // The relay now counts these too, server-side, and that count is the more
-  // complete one — it survives this file being blocked. This stays because it
-  // is the only one that can see the version, and because GoatCounter is where
-  // the site's other numbers already live.
+  // The relay counts the same presses server-side at the moment of redirect,
+  // where nothing can race it, and carries country as well. That figure is on
+  // /metrics under "Started from the website".
   //
-  // Fire-and-forget by construction: `count` is queued and the navigation
-  // proceeds regardless. If GoatCounter is blocked, slow, or absent, this does
-  // nothing at all and the download is untouched — the button's job is the
-  // download, and no measurement may stand in front of it.
-  for (const button of buttons) {
-    const platform = platformOf(button);
-    if (!platform) continue;
-    button.addEventListener('click', () => {
-      try {
-        if (!window.goatcounter || typeof window.goatcounter.count !== 'function') return;
-        const version = button.getAttribute('data-version') || 'unresolved';
-        window.goatcounter.count({
-          path: `download/${platform}/${version}`,
-          title: `Download ${platform} ${version}`,
-          event: true,
-        });
-      } catch { /* never let counting break a download */ }
-    });
-  }
+  // GoatCounter itself stays: page views and referrers are unaffected and are
+  // still recorded by the tag in the layout.
 })();

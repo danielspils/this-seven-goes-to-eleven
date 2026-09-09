@@ -102,8 +102,11 @@
   <!-- GoatCounter — no cookies, nothing to consent to.
        Dashboard: https://{{ site.goatcounter }}.goatcounter.com
 
-       PAGE VIEWS, and since 2026-08-23 one event per download BUTTON PRESS
-       (assets/js/download.js, paths of the form download/mac/v1.5.2).
+       PAGE VIEWS ONLY. A per-click download event lived here from 2026-08-23
+       and was removed on 2026-09-09: it fired on click and lost the race
+       against the navigation that followed, recording one press against the
+       relay's forty-one for the same clicks. Presses are counted server-side
+       by the relay now and shown on /metrics.
 
        THREE COUNTS, NEVER ADDED TOGETHER:
          page views      somebody looked at a page

@@ -180,7 +180,14 @@ test('the footnote is always there, and is exactly the two lines', () => {
     assert.match(body, /^ {4}Mac counts new downloads$/m);
     assert.match(body, /^ {4}PC combines new downloads \+ updates \(GitHub can't distinguish\)$/m);
     assert.strictEqual((body.match(/^ {2}• /gm) || []).length, 0, 'no bullets survive');
-    assert.ok(!/country|Country/.test(body), 'no geography — this site has no click relay');
+    assert.ok(!/country|Country/.test(body),
+      // The old reason — "this site has no click relay" — stopped being true on
+      // 2026-09-08, when the download buttons moved to the relay and it began
+      // counting presses by country. The assertion still holds; its reason did
+      // not. The real reason today is simply that nobody has added geography to
+      // this email — not a principle, just work not done. If it is added, this
+      // test is what must change with it.
+      'no geography in the email — the relay has country data, but the email has never shown it');
   }
 });
 
