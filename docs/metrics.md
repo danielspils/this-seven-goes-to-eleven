@@ -409,6 +409,32 @@ download are different facts.</p>
     });
   }
 
+  // STARTED FROM THE WEBSITE — the relay's redirect counts, in their own
+  // section with their own qualifying line. Deliberately NOT merged with the
+  // check-in chart above: one counts installs that opened the app, the other
+  // counts button presses by people who may never have installed anything.
+  // Side by side without labels they would read as one number disagreeing
+  // with itself.
+  function renderPresses() {
+    const by = (presses && presses.byCountry) || {};
+    const cc = Object.entries(by).sort((a, b) => b[1] - a[1]);
+    el('m-press-sub').textContent = !presses
+      ? 'The relay could not be read, so this is missing rather than empty.'
+      : cc.length
+        ? `Button presses by country · ${presses.total} in total`
+        : 'No button presses recorded yet.';
+    if (!cc.length) { el('m-press-wrap').style.display = 'none'; return; }
+    el('m-press-wrap').style.display = '';
+    el('m-press-wrap').style.height = Math.max(140, cc.length * 38 + 60) + 'px';
+    if (pressChart) pressChart.destroy();
+    pressChart = new Chart(el('m-press'), {
+      type: 'bar',
+      data: { labels: cc.map((c) => NAMES[c[0]] || c[0]), datasets: [{ data: cc.map((c) => c[1]), backgroundColor: PC, borderColor: PC, borderWidth: 1, borderRadius: 4, barThickness: 20 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { color: GRID, z: 1 }, ticks: { color: INK, precision: 0 } }, y: { grid: { display: false }, ticks: { color: INK } } } },
+    });
+  }
+
   function renderAssets() {
     const assets = (D.assets || []).slice().sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
     const rows = assets.map((a) => `<tr><td>${a.name}</td><td>${a.tag}</td><td class="num">${a.count}</td></tr>`).join('');
