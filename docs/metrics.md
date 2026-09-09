@@ -26,8 +26,16 @@ description: Usage and download figures for This Seven Goes to Eleven.
 <div class="m-chart"><canvas id="m-curve" role="img" aria-label="Downloads over time, Mac and PC."></canvas></div>
 
 <h2>Where it's being used</h2>
+<p class="m-pop">Installs running 1.5.3 or later that opened the app and haven't opted out.</p>
 <p class="muted m-sub" id="m-country-sub">Check-ins by country</p>
 <div class="m-chart" id="m-country-wrap"><canvas id="m-country" role="img" aria-label="Check-ins by country, ranked."></canvas></div>
+
+<h2>Started from the website</h2>
+<p class="m-pop">Download button presses on this site. Includes presses that never finished downloading, and people who never installed.</p>
+<p class="muted m-sub" id="m-press-sub">Button presses by country</p>
+<div class="m-chart" id="m-press-wrap"><canvas id="m-press" role="img" aria-label="Download button presses by country, ranked."></canvas></div>
+
+<p class="muted">The first is every download. The second is the ones that came through this site.</p>
 
 <h2>Every asset</h2>
 
@@ -51,14 +59,6 @@ how many people use it.</p>
 (no cookies, nothing to consent to) and read there rather than repeated here.
 Page views and downloads are never added together: a visit and a completed
 download are different facts.</p>
-
-<p class="muted">Download <em>button presses</em> are counted there too, as
-events under <code>download/mac/&lt;version&gt;</code> and
-<code>download/pc/&lt;version&gt;</code> — that is the intent to install, and
-GoatCounter's own country reading comes with it. It is a fourth figure and not a
-substitute for any of the others: a press that never finishes is not a download,
-and an install from a link that never touched this site is a download with no
-press behind it.</p>
 
 <style>
 /* This page borrows its STRUCTURE from jx-3p.com/metrics and none of its
@@ -90,6 +90,12 @@ press behind it.</p>
 .m-note { color: var(--muted); font-size: .92rem; }
 .m-note b { color: var(--text); }
 .m-dead { color: var(--felt); }
+/* WHAT POPULATION A SECTION COUNTS, directly under its heading. Two country
+   tables from two sources sit on this page and they disagree — 4 check-ins
+   from one country against 41 presses from seven — because they observe
+   different people. Unlabelled they read as a contradiction; the small one
+   reads as low adoption rather than a young measurement. */
+.m-pop { color: var(--text); font-size: .92rem; margin: -.9rem 0 .5rem; }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -126,6 +132,7 @@ press behind it.</p>
   const keyToIso = (k) => `${k.slice(0, 4)}-${k.slice(4, 6)}-${k.slice(6, 8)}`;
 
   let D = null, active = null, activeLive = false, curve = null, country = null;
+  let presses = null, pressChart = null;
   let mode = 'downloads', preset = 'all';
 
   fetch('{{ "/metrics/data.json" | relative_url }}?cb=' + Date.now())
@@ -149,7 +156,12 @@ press behind it.</p>
     return Promise.all([
       fetch(`${RELAY}/totals`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
       fetch(`${RELAY}/ping/stats?since=${since}`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
-    ]).then(([t, p]) => {
+      // A THIRD, DIFFERENT POPULATION. /downloads counts redirects served —
+      // browsers SENT to an installer — which is not what /totals counts and
+      // must never be added to it or to GitHub's completed-download figure.
+      fetch(`${RELAY}/downloads`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    ]).then(([t, p, dl]) => {
+      if (dl && dl.ok) presses = dl.downloads;
       if (!t || !t.ok || !p || !p.ok) return;
       activeLive = true;
       active = {
@@ -180,6 +192,7 @@ press behind it.</p>
     ].filter(([, v]) => v).map(([k, v]) => `<li><b>${k}</b> — ${v}</li>`).join('');
 
     renderCountries();
+    renderPresses();
     renderAssets();
     render();
   }

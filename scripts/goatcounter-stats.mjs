@@ -118,11 +118,38 @@ const actives = [];
 for (const h of hits.hits || []) {
   const p = (h.path || '').replace(/^\//, '');
   const row = { path: p, count: h.count ?? h.count_unique ?? 0 };
-  if (cfg.press.test(p)) presses.push(row);
+  if (cfg.press && cfg.press.test(p)) presses.push(row);
   else if (cfg.active && cfg.active.test(p)) actives.push(row);
   else pages.push(row);
 }
 const sum = (rows) => rows.reduce((n, r) => n + r.count, 0);
+
+// A ZERO MUST MEAN ZERO, NOT "I LOOKED IN THE WRONG PLACE".
+//
+// The first run of this script reported "0 button presses" for JP while
+// /download-pc sat in its own top-pages list with 22. The pattern had been
+// written for the Seven's event shape and silently reclassified JP's presses
+// as ordinary pages. A zero that is really a mis-declared pattern reads as a
+// finding, and it is the most dangerous output this script can produce.
+//
+// So: if a site declares a press shape and NOTHING matches it, that is a
+// configuration error, not a measurement. It says so in words and exits
+// non-zero rather than printing a number nobody should trust. A site with
+// genuinely no presses yet declares `press: null` and is exempt.
+if (cfg.press && presses.length === 0) {
+  const near = pages.filter((r) => /download|active/i.test(r.path)).slice(0, 8);
+  console.error(
+    `No path matched this site's declared press shape (${cfg.press}).\n\n`
+    + 'That is almost certainly the pattern, not the truth — refusing to print '
+    + '0 for it.\n'
+    + (near.length
+      ? `\nPaths that look like they might be presses:\n${near.map((r) => `  ${String(r.count).padStart(5)}  /${r.path}`).join('\n')}\n`
+      : '\nNothing download-ish appeared in the top paths either.\n')
+    + `\nFix SITES.${which}.press in ${path.basename(new URL(import.meta.url).pathname)}, `
+    + 'or set it to null if this site genuinely records no presses.\n'
+  );
+  process.exit(3);
+}
 const byPlatform = {};
 for (const r of presses) {
   const plat = cfg.platformOf(r.path) || '?';
