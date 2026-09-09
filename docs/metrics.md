@@ -13,7 +13,7 @@ description: Usage and download figures for This Seven Goes to Eleven.
 
 <div class="stats" id="m-stats"></div>
 
-<h2 id="m-chart-title">Cumulative downloads over time</h2>
+<h2 id="m-chart-title">All downloads over time</h2>
 <p class="muted m-sub" id="m-chart-sub">GitHub's own counters · the running total to date</p>
 
 <div class="m-ctl" id="m-range">
@@ -176,7 +176,7 @@ press behind it.</p>
     // a second copy that could drift.
     const M = D.meaning || {};
     el('m-meaning').innerHTML = [
-      ['Downloads', M.downloads], ['Updates', M.updates], ['Check-ins', M.active],
+      ['All downloads', M.downloads], ['Updates', M.updates], ['Check-ins', M.active],
     ].filter(([, v]) => v).map(([k, v]) => `<li><b>${k}</b> — ${v}</li>`).join('');
 
     renderCountries();
@@ -184,6 +184,21 @@ press behind it.</p>
     render();
   }
 
+  // "ALL DOWNLOADS" RATHER THAN "DOWNLOADS". There are two download-ish
+  // numbers in this project and until now neither had a name that told them
+  // apart, so they read as a contradiction: GitHub's counter is every copy
+  // that left by ANY route — this site, the releases page, a direct link, a
+  // forum post — while the relay counts button presses HERE. On 2026-09-09
+  // they stood at 76 and 41 and looked like a discrepancy rather than two
+  // different events.
+  //
+  // This page shows only the GitHub side today, so it says ALL DOWNLOADS and
+  // stops. The explanatory line belongs where BOTH are on screen; putting it
+  // here would explain a contrast the reader cannot see.
+  //
+  // NEVER label the relay number "downloads" if it is added later. It counts
+  // presses, not completions, and the two are never summed, differenced, or
+  // shown as a percentage of each other.
   // ── The tiles ─────────────────────────────────────────────────────────
   function renderTiles(dMac, dPc) {
     const windowed = dMac !== null;
@@ -208,7 +223,7 @@ press behind it.</p>
 
     el('m-stats').innerHTML =
       `<div class="stat stat-hero${sc}${on('downloads')}" data-mode="downloads">` +
-        `<div><div class="lbl">Downloads</div><div class="val">${mac + pc}</div></div>` +
+        `<div><div class="lbl">All downloads</div><div class="val">${mac + pc}</div></div>` +
         `<div><div class="lbl">Mac / PC</div><div class="val">${mac} / ${pc}</div></div>` +
       `</div>` +
       [
@@ -283,7 +298,7 @@ press behind it.</p>
       let prev = base;
       const perMac = [], perPc = [];
       for (const p of s) { perMac.push(p.mac - prev.mac); perPc.push(p.pc - prev.pc); prev = p; }
-      el('m-chart-title').textContent = 'New downloads over time';
+      el('m-chart-title').textContent = 'New all-downloads per day';
       el('m-chart-sub').textContent = "GitHub's own counters · new each day in this window";
       swatches([[MAC, 'Mac', 1], [PC, 'PC', 0]]);
       curve = new Chart(el('m-curve'), {
@@ -298,7 +313,7 @@ press behind it.</p>
       return;
     }
 
-    el('m-chart-title').textContent = 'Cumulative downloads over time';
+    el('m-chart-title').textContent = 'All downloads over time';
     el('m-chart-sub').textContent = "GitHub's own counters · the running total to date";
     swatches([[MAC, 'Mac', 1], [PC, 'PC', 0], [UPD, 'Updater', 2]]);
     curve = new Chart(el('m-curve'), {

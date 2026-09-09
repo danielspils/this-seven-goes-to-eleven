@@ -96,11 +96,11 @@ test('each section leads with its own total, right-aligned', () => {
   const { delta, lifetime } = NORMAL();
   const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0' });
   // The figure you read first is the one you would otherwise add up yourself.
-  assert.match(body, /^NEW DOWNLOADS SINCE 17 AUG {11}4$/m);
-  assert.match(body, /^TOTAL DOWNLOADS {22}4$/m);
+  assert.match(body, /^ALL DOWNLOADS SINCE 17 AUG {11}4$/m);
+  assert.match(body, /^ALL DOWNLOADS, LIFETIME {14}4$/m);
   // Both figures end in the same column, which is what makes them scannable.
   const cols = body.split('\n')
-    .filter((l) => /^(NEW DOWNLOADS|TOTAL DOWNLOADS)/.test(l)).map((l) => l.length);
+    .filter((l) => /^ALL DOWNLOADS/.test(l)).map((l) => l.length);
   assert.deepStrictEqual(cols, [38, 38]);
   // The breakdown is still there, underneath.
   assert.match(body, /^ {2}Mac {3}3$/m);

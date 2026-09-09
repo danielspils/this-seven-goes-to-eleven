@@ -156,12 +156,26 @@ export function subject({ delta }) {
   return `Seven→11 — ${plural(delta.macUpdate.total, 'Mac auto-update')}`;
 }
 
+// "ALL DOWNLOADS" RATHER THAN "DOWNLOADS", and the word is doing work.
+//
+// There are two download-ish numbers in this project and they had no way to be
+// told apart by name, so they read as a contradiction: GitHub's counter says
+// every copy that left, by any route — the website, the releases page, a
+// direct link, a forum post — while the relay counts button presses on the
+// site. On 2026-09-09 they stood at 76 and 41 and looked like a discrepancy
+// rather than two different events.
+//
+// This email carries only the GitHub side, so it says ALL DOWNLOADS and stops
+// there. The explanatory line belongs where BOTH appear; adding it here would
+// explain a contrast the reader cannot see.
+//
+// NEVER call the relay number "downloads". It counts presses, not completions.
 export function renderBody({ since, delta, lifetime, latest }) {
   const sections = [];
   const sinceLabel = since ? ` SINCE ${formatDate(since).toUpperCase()}` : '';
 
   sections.push([
-    header(`NEW DOWNLOADS${sinceLabel}`, delta.mac.total + delta.pc.total),
+    header(`ALL DOWNLOADS${sinceLabel}`, delta.mac.total + delta.pc.total),
     '',
     row('Mac', delta.mac.total, offLatest(delta.mac.byVersion, latest)),
     row('PC', delta.pc.total, offLatest(delta.pc.byVersion, latest)),
@@ -179,7 +193,7 @@ export function renderBody({ since, delta, lifetime, latest }) {
   }
 
   sections.push([
-    header('TOTAL DOWNLOADS', lifetime.mac + lifetime.pc),
+    header('ALL DOWNLOADS, LIFETIME', lifetime.mac + lifetime.pc),
     '',
     row('Mac', lifetime.mac),
     row('PC', lifetime.pc),
