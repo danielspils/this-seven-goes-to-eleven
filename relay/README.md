@@ -17,6 +17,26 @@ No identifier, and none derived. See the privacy note at the top of
 `worker.js` before changing anything in here — the design depends on the app's
 once-a-day rule, and adding a field to the payload is a decision, not a tweak.
 
+**A DAY IS THE FINEST RESOLUTION THERE IS, and that rules out rolling windows.**
+Nothing here stores a timestamp, so "the last 24 hours" is not a question this
+store can answer — only "since midnight UTC on day N". `/metrics/` therefore
+labels its shortest window **Today** rather than "1 day"; a button promising
+24 rolling hours would be a label the data cannot honour. The visible cost is
+that an evening session on the US west coast is already tomorrow in UTC and
+lands on the next day's count, which is stated on the page.
+
+Two ways out if that ever matters enough to pay for, neither taken:
+stamp the key in a fixed non-UTC zone (one line, moves the boundary to a
+sensible hour, still a calendar day), or add an hour to the key (a true rolling
+window, at **24× the key count** — and `/ping/stats` does one KV `get` per key,
+so it is the read path that pays).
+
+**`/ping/stats?since=` filters SERVER-SIDE and returns `byCountry` already
+summed**, so a single response cannot be re-cut into a shorter window client-
+side — the day dimension is gone by the time it arrives. `/metrics/` asks once
+per window for that reason. A `byDayCountry` cross-tab here would collapse
+those to one request; it is not worth it at this key count.
+
 ## Deploy
 
 Needs a Cloudflare account with the `thissevengoestoeleven.com` zone on it.
