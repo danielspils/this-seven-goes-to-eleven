@@ -12,10 +12,16 @@ description: Usage and download figures for This Seven Goes to Eleven.
 <p class="muted" id="m-asof">Reading the latest figures…</p>
 
 <h2>Where it's running</h2>
-<p class="m-pop">Installs running 1.5.3 or later that opened the app and haven't opted out. Older versions don't report, so this number grows as people update.</p>
-<p class="m-big"><span id="m-active">—</span> <span class="m-big-unit">active today</span></p>
-<p class="muted m-sub" id="m-active-sub">By country</p>
-<div class="m-chart" id="m-country-wrap"><canvas id="m-country" role="img" aria-label="Active installs by country, ranked."></canvas></div>
+<p class="m-pop">Installs running 1.5.3 or later that opened the app and haven't opted out. Older versions don't report, so this grows as people update.</p>
+<p class="m-big"><span id="m-active">—</span> <span class="m-big-unit" id="m-active-unit">check-ins</span></p>
+<div class="m-ctl m-ctl-run" id="m-window">
+  <button data-w="1" class="on">Today</button>
+  <button data-w="7">7 days</button>
+  <button data-w="30">30 days</button>
+  <button data-w="all">All time</button>
+</div>
+<p class="muted m-sub" id="m-active-sub">Reading the relay…</p>
+<div id="m-countries"></div>
 
 <h2>All downloads</h2>
 <p class="m-pop">Every copy that left GitHub, from any route — this site, the releases page, a direct link. Installers only; the updater's own feed files are excluded.</p>
@@ -51,7 +57,7 @@ download are different facts.</p>
 should ever be added to another</strong>.</p>
 
 <ul class="m-note">
-  <li><b>Where it's running</b> — one check-in per install per day, sent by the app itself. No identifier, so two installs behind one router count as two, and an install opened five times in a day counts once. It measures where the app is being used, not how many people own it.</li>
+  <li><b>Where it's running</b> — one check-in per install per day, sent by the app itself. No identifier, so two installs behind one router count as two, and an install opened five times in a day counts once. Over a longer window it counts once <i>per day</i>, which is why the figure is labelled check-ins and not installs. It measures where the app is being used, not how many people own it. <b>The windows are calendar days in UTC, not the last N hours</b> — the relay stores a count per day and nothing finer, so "Today" means since midnight UTC and an evening session on the US west coast lands on the next day's count.</li>
   <li><b>All downloads</b> — GitHub's own counter for the installer files. A completed transfer, with no geography attached. The updater's feed files and blockmaps are machine traffic and are left out.</li>
   <li><b>Started from the website</b> — button presses here, counted the moment this site sends the browser to the file. Always larger than the downloads that came through this site, because a press is not a finished transfer.</li>
   <li><b>Site visits</b> — page views in GoatCounter, which is a different question again.</li>
@@ -83,6 +89,11 @@ through this site.</p>
   border-radius: 6px;
 }
 .m-ctl button.on { background: var(--m-scope, #c8862a); border-color: var(--m-scope, #c8862a); color: #fff; }
+/* The downloads controls recolour themselves per range through --m-scope, a
+   variable set on :root. The ping controls are a DIFFERENT section reading a
+   different source, so they take a fixed colour rather than inheriting a
+   scope that belongs to the section below them. */
+.m-ctl-run button.on { background: #b8362b; border-color: #b8362b; }
 .m-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0 0 .6rem; font-size: .82rem; color: var(--muted); }
 .m-legend span[data-di] { display: flex; align-items: center; gap: .35rem; cursor: pointer; }
 .m-legend span[data-di]:hover { color: var(--text); text-decoration: underline; }
@@ -120,8 +131,12 @@ through this site.</p>
   // The relay stamps its day keys in UTC, so "today" is asked in UTC too.
   const utcKey = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
 
-  let D = null, active = null, activeLive = false, presses = null;
-  let curve = null, countryChart = null, pressChart = null, preset = 'all';
+  let D = null, activeLive = false, presses = null;
+  let curve = null, pressChart = null, preset = 'all';
+  // One entry per window button. null means "not read", which renders as an
+  // em dash and a sentence saying so — never as 0.
+  let runWin = '1';
+  const runData = { 1: null, 7: null, 30: null, all: null };
 
   const opts = (stacked, zero) => ({
     responsive: true, maintainAspectRatio: false,
@@ -143,24 +158,49 @@ through this site.</p>
   });
 
   // ── 1. WHERE IT'S RUNNING — the daily ping ──────────────────────────
+  //
+  // THE NOUN IS "CHECK-INS", NOT "INSTALLS", and the distinction is the whole
+  // reason the unit is printed beside the number. The app checks in once per
+  // install per day, so over ONE day the two are the same figure — but over
+  // seven, an install opened on five of them contributes five. A headline
+  // saying "installs" would then overstate by however loyal the users are,
+  // which is the direction that flatters the author.
+  //
+  // WINDOWS ARE UTC CALENDAR DAYS, NOT ROLLING HOURS. The relay's finest
+  // stored resolution is a day — `pg:<YYYYMMDD>:…` — so "the last 24 hours"
+  // is not a question this data can answer, and a button promising it would
+  // be a label the numbers cannot honour. The shortest window is therefore
+  // called "Today" and means since midnight UTC. Its cost is real and is
+  // stated under "How this is counted": an evening session on the US west
+  // coast is already tomorrow in UTC and lands on the next day's count.
+  const WIN_UNIT = {
+    1: 'check-ins today', 7: 'check-ins · last 7 days',
+    30: 'check-ins · last 30 days', all: 'check-ins · all time',
+  };
   function renderRunning() {
-    const byDay = (active && active.window && active.window.byDay) || {};
-    // TODAY IS ONLY ANSWERABLE LIVE. data.json's copy is taken when the
-    // workflow runs, so after midnight UTC it holds no key for today and the
-    // lookup returns 0 — a day-old file stating nobody has opened the app.
-    const today = activeLive ? (byDay[utcKey(new Date())] || 0) : null;
-    el('m-active').textContent = today === null ? '—' : today;
+    const src = runData[runWin];
+    el('m-active-unit').textContent = WIN_UNIT[runWin];
+    el('m-active').textContent = src ? src.total : '—';
 
-    const cc = Object.entries((active && active.byCountry) || {}).sort((a, b) => b[1] - a[1]);
-    el('m-active-sub').textContent = !activeLive
+    const cc = Object.entries((src && src.byCountry) || {}).sort((a, b) => b[1] - a[1]);
+    const many = runWin !== '1';
+    el('m-active-sub').textContent = !src
       ? 'The relay could not be read, so this is missing rather than empty.'
-      : cc.length ? `By country · ${cc.length} ${cc.length === 1 ? 'country' : 'countries'} so far`
-        : 'No check-ins recorded yet.';
-    if (!cc.length) { el('m-country-wrap').style.display = 'none'; return; }
-    el('m-country-wrap').style.display = '';
-    el('m-country-wrap').style.height = Math.max(140, cc.length * 38 + 60) + 'px';
-    if (countryChart) countryChart.destroy();
-    countryChart = bar('m-country', cc, FELT);
+      : cc.length
+        ? `${cc.length} ${cc.length === 1 ? 'country' : 'countries'}`
+          + (many ? ' · an install that opened on five days counts five times' : '')
+        : 'No check-ins in this window.';
+
+    // A LIST, NOT A BAR CHART. Page rule: nothing gets a chart below five
+    // categories. One bar is a chart of nothing, and it spent its life here
+    // rendering a single red stripe labelled "United States" — which reads as
+    // a broken chart rather than as the finding that there is one country.
+    el('m-countries').innerHTML = cc.length
+      ? '<table class="m-table"><thead><tr><th>Country</th><th class="num">Check-ins</th>'
+        + '</tr></thead><tbody>'
+        + cc.map(([c, n]) => `<tr><td>${NAMES[c] || c}</td><td class="num">${n}</td></tr>`).join('')
+        + '</tbody></table>'
+      : '';
   }
 
   // ── 2. ALL DOWNLOADS — GitHub, installers only ──────────────────────
@@ -279,27 +319,41 @@ through this site.</p>
     renderVersions();
   }
 
+  // THE WINDOW IS ASKED FOR, NOT SLICED HERE. /ping/stats returns byCountry
+  // already summed over everything at or after `since`, so a single response
+  // cannot be re-cut client-side into a shorter window — the day dimension is
+  // gone by the time it arrives. One request per window is the cost of that,
+  // and at this key count it is three scans of a handful of keys. If the pg:
+  // space ever grows large enough for that to bite, the fix is a byDayCountry
+  // cross-tab in the Worker and ONE request, not a clever guess here.
+  const statsSince = (days) => {
+    const d = new Date(Date.now() - (days - 1) * 86400000);
+    return fetch(`${RELAY}/ping/stats?since=${utcKey(d)}`)
+      .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  };
+
   function live() {
-    const since = utcKey(new Date(Date.now() - 90 * 86400000));
     return Promise.all([
       fetch(`${RELAY}/totals`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
-      fetch(`${RELAY}/ping/stats?since=${since}`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
       fetch(`${RELAY}/downloads`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
-    ]).then(([t, p, dl]) => {
+      statsSince(1), statsSince(7), statsSince(30),
+    ]).then(([t, dl, w1, w7, w30]) => {
       if (dl && dl.ok) presses = dl.downloads;
-      if (!t || !t.ok || !p || !p.ok) return;
-      activeLive = true;
-      active = {
-        reachable: true,
-        total: t.active.total, byMonth: t.active.byMonth, byCountry: t.active.byCountry,
-        window: { reachable: true, days: 90, total: p.total, byDay: p.byDay, byVersion: p.byVersion, byPlatform: p.byPlatform },
-      };
+      // "All time" comes from /totals — the permanent monthly rollup — and not
+      // from a 90-day stats call. The pg: day keys expire at 90 days, so once
+      // this project is older than that the two would quietly disagree and the
+      // longest window would be the one that had lost data.
+      if (t && t.ok) runData.all = { total: t.active.total, byCountry: t.active.byCountry };
+      for (const [k, p] of [['1', w1], ['7', w7], ['30', w30]]) {
+        if (p && p.ok) runData[k] = { total: p.total, byCountry: p.byCountry };
+      }
+      activeLive = !!(t && t.ok && w1 && w1.ok);
     });
   }
 
   fetch('{{ "/metrics/data.json" | relative_url }}?cb=' + Date.now())
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error(r.status))))
-    .then((d) => { D = d; active = d.active || null; return live(); })
+    .then((d) => { D = d; return live(); })
     .then(() => { paint(); })
     .catch((e) => {
       el('m-asof').textContent = 'Could not read the figures just now. They are rebuilt daily.';
@@ -308,6 +362,12 @@ through this site.</p>
       // this exact catch once swallowed a ReferenceError and blanked the page.
       console.error('[metrics]', e);
     });
+
+  el('m-window').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    el('m-window').querySelectorAll('button').forEach((x) => x.classList.remove('on'));
+    b.classList.add('on'); runWin = b.dataset.w; renderRunning();
+  });
 
   el('m-range').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
