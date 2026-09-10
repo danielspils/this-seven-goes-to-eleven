@@ -1,13 +1,13 @@
 {
- "generated": "2026-09-10T12:11:39.920Z",
+ "generated": "2026-09-10T18:28:02.694Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 35,
-  "pc": 41,
+  "mac": 36,
+  "pc": 42,
   "upd": 9,
   "series": [
    {
@@ -150,24 +150,72 @@
    },
    {
     "date": "2026-09-10",
-    "mac": 35,
-    "pc": 41,
+    "mac": 36,
+    "pc": 42,
     "upd": 9
    }
   ]
  },
- "releases": 10,
+ "releases": 11,
  "assets": [
   {
    "name": "latest-mac.yml",
+   "tag": "v1.5.5",
+   "count": 1,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "latest.yml",
+   "tag": "v1.5.5",
+   "count": 1,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5-universal-mac.zip",
+   "tag": "v1.5.5",
+   "count": 0,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5-universal-mac.zip.blockmap",
+   "tag": "v1.5.5",
+   "count": 0,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe",
+   "tag": "v1.5.5",
+   "count": 1,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe.blockmap",
+   "tag": "v1.5.5",
+   "count": 0,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg",
+   "tag": "v1.5.5",
+   "count": 1,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg.blockmap",
+   "tag": "v1.5.5",
+   "count": 0,
+   "published": "2026-09-10T17:41:19Z"
+  },
+  {
+   "name": "latest-mac.yml",
    "tag": "v1.5.4",
-   "count": 3,
+   "count": 4,
    "published": "2026-09-08T19:48:56Z"
   },
   {
    "name": "latest.yml",
    "tag": "v1.5.4",
-   "count": 5,
+   "count": 6,
    "published": "2026-09-08T19:48:56Z"
   },
   {
@@ -641,28 +689,28 @@
  ],
  "active": {
   "reachable": true,
-  "total": 5,
+  "total": 6,
   "byMonth": {
-   "2026-09": 5
+   "2026-09": 6
   },
   "byCountry": {
-   "US": 5
+   "US": 6
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 5,
+   "total": 6,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
-    "20260910": 1
+    "20260910": 2
    },
    "byVersion": {
     "1.5.3": 2,
-    "1.5.4": 3
+    "1.5.4": 4
    },
    "byPlatform": {
-    "mac": 2,
+    "mac": 3,
     "win": 3
    }
   }
