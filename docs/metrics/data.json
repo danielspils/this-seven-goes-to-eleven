@@ -1,12 +1,12 @@
 {
- "generated": "2026-09-20T18:12:04.342Z",
+ "generated": "2026-09-21T13:59:19.455Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 58,
+  "mac": 59,
   "pc": 53,
   "upd": 10,
   "series": [
@@ -213,6 +213,12 @@
     "mac": 58,
     "pc": 53,
     "upd": 10
+   },
+   {
+    "date": "2026-09-21",
+    "mac": 59,
+    "pc": 53,
+    "upd": 10
    }
   ]
  },
@@ -227,7 +233,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.5",
-   "count": 11,
+   "count": 13,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -257,7 +263,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg",
    "tag": "v1.5.5",
-   "count": 23,
+   "count": 24,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -749,17 +755,17 @@
  ],
  "active": {
   "reachable": true,
-  "total": 12,
+  "total": 13,
   "byMonth": {
-   "2026-09": 12
+   "2026-09": 13
   },
   "byCountry": {
-   "US": 12
+   "US": 13
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 13,
+   "total": 14,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -768,16 +774,17 @@
     "20260914": 2,
     "20260916": 1,
     "20260917": 2,
-    "20260920": 1
+    "20260920": 1,
+    "20260921": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
-    "1.5.5": 5
+    "1.5.5": 6
    },
    "byPlatform": {
     "mac": 4,
-    "win": 9
+    "win": 10
    }
   }
  }
