@@ -14,7 +14,7 @@
 //
 // Preview without sending:  node scripts/download-report.mjs --dry-run
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
-import { tally, hasActivity, renderBody, htmlBody, subject, version } from './download-report-lib.mjs';
+import { tally, hasActivity, renderBody, htmlBody, subject, version, ctaBullet } from './download-report-lib.mjs';
 
 const APP_REPO = 'danielspils/crumar-seven-editor'; // downloads live there
 const SNAPSHOT = '.github/download-stats.json';
@@ -136,7 +136,10 @@ if (!hasActivity({ delta })) {
   process.exit(0);
 }
 
-const body = renderBody({ since, delta, lifetime, latest, press });
+// The links ride on the TEXT half here; htmlBody adds its own anchored
+// copy, so renderBody stays purely the report and the tests that pin its
+// shape are not reading a footer they do not care about.
+const body = `${renderBody({ since, delta, lifetime, latest, press })}\n${ctaBullet()}\n`;
 console.log(body);
 if (ignored.total > 0) {
   // JOB LOG ONLY — this line is printed after the body and is never part of

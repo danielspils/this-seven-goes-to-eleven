@@ -8,7 +8,10 @@
 import test from 'node:test';
 import assert from 'node:assert';
 
-import { classify, tally, hasActivity, renderBody, subject } from './download-report-lib.mjs';
+import {
+  classify, tally, hasActivity, renderBody, subject,
+  ctaBullet, htmlBody, METRICS_URL, GOATCOUNTER_URL,
+} from './download-report-lib.mjs';
 
 // The real filenames, from danielspils/crumar-seven-editor. Not invented:
 // every pattern in the lib was checked against these.
@@ -374,4 +377,52 @@ test('an unreadable week never shows a number beside its notice', () => {
   });
   const head = body.split('\n').find((l) => l.startsWith('STARTED FROM THE WEBSITE — LAST 7 DAYS'));
   assert.ok(/—$/.test(head), `the header claims nothing: "${head}"`);
+});
+
+// ── FOOTER LINKS ────────────────────────────────────────────────────────────
+
+// EACH EMAIL POINTS AT ITS OWN SITE. Both projects share this file's shape and
+// most of its prose, and these two constants are the one place where copying
+// from the other repo produces something that is wrong rather than merely
+// duplicated: a Seven reader sent to jx-3p.com/metrics would find a page of
+// numbers about a different instrument and no way to tell.
+//
+// Mutation-proved: put jx-3p.com in either constant and this fails.
+test('the footer points at this site, and never at the other one', () => {
+  for (const url of [METRICS_URL, GOATCOUNTER_URL]) {
+    assert.match(url, /^https:\/\/thissevengoestoeleven(\.com|\.goatcounter\.com)/,
+      `${url} is a This Seven Goes to Eleven address`);
+  }
+  const text = ctaBullet();
+  assert.ok(!/jx-3p|jx3p/i.test(text), `no JP address reaches this email:\n${text}`);
+  assert.match(text, /thissevengoestoeleven\.com\/metrics/);
+});
+
+// The text half spells the URL out — a plain-text email has nowhere to hide a
+// link, and the reader may be copying it by hand.
+test('the text half carries the address itself', () => {
+  const text = ctaBullet();
+  assert.match(text, /^ {2}• Historical metrics at thissevengoestoeleven\.com\/metrics: https:\/\//m);
+  assert.match(text, /^ {2}• more metrics: GoatCounter: https:\/\//m);
+});
+
+// The HTML half anchors the link TEXT and drops the bare URL, so the address
+// does not appear twice in one <pre>.
+test('the html half anchors the text instead of repeating the address', () => {
+  const html = htmlBody('REPORT BODY\n');
+  assert.match(html, new RegExp(`<a href="${METRICS_URL.replace(/[/.]/g, '\\$&')}">`));
+  assert.match(html, />thissevengoestoeleven\.com\/metrics<\/a>/);
+  // The address appears once per link — inside href, never also as visible text.
+  const visible = html.replace(/href="[^"]*"/g, '');
+  assert.ok(!/https:\/\//.test(visible), `no bare URL in the rendered text:\n${visible}`);
+  assert.match(html, /REPORT BODY/, 'and the report itself survives');
+});
+
+// The report body stays the report. The links are appended by the driver and
+// by htmlBody, so every test above that pins section order and spacing is
+// reading the format and not a footer.
+test('renderBody itself carries no links', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({ since: null, delta, lifetime, latest: '1.1.0' });
+  assert.ok(!/https?:\/\//.test(body), 'renderBody is the report, nothing else');
 });

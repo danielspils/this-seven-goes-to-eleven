@@ -363,9 +363,39 @@ export function renderBody({ since, delta, lifetime, latest, press = null }) {
   return `${sections.map((s) => s.join('\n')).join('\n\n')}\n`;
 }
 
+// Footer links — the durable, graphed history a daily email cannot show. The
+// email is a delta; /metrics is the shape over time, and the two answer
+// different questions.
+//
+// THE SHARED FORMAT IS THE STRUCTURE, NOT THE STRING. These were briefly
+// dropped from both emails so the two would be word-identical, which was the
+// rule applied past its purpose: the point of a shared format is that one
+// reader reads one layout twice, and a link to the site the email is ABOUT
+// does not break that. Each email carries its own site's URLs (Daniel,
+// 2026-09-24) — jx-3p.com's email points at jx-3p.com, this one points here.
+// A footer that sent Seven readers to JP's metrics page would be the only
+// version of this that is actually wrong.
+export const METRICS_URL = 'https://thissevengoestoeleven.com/metrics/';
+export const GOATCOUNTER_URL = 'https://thissevengoestoeleven.goatcounter.com';
+const CTAS = [
+  { prefix: 'Historical metrics at ', link: 'thissevengoestoeleven.com/metrics', url: METRICS_URL },
+  { prefix: 'more metrics: ', link: 'GoatCounter', url: GOATCOUNTER_URL },
+];
+
+// The plain-text half spells the URL out, because a text email has nowhere to
+// hide a link and a reader may be copying it by hand.
+export function ctaBullet() {
+  return CTAS.map((c) => `  • ${c.prefix}${c.link}: ${c.url}`).join('\n');
+}
+
 // The HTML half of the multipart email: the same text, escaped, in one <pre>.
 // No reflow and no markdown — the alignment above is the layout.
+//
+// ONLY THE LINK TEXT IS ANCHORED, and the raw URL is dropped from this half.
+// A <pre> that carried both would show the address twice, once as words and
+// once as itself, which is how a monospace email starts looking like a log.
 export function htmlBody(text) {
   const esc = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return `<pre style="font:13px/1.5 ui-monospace,Menlo,monospace">${esc}</pre>`;
+  const cta = `${CTAS.map((c) => `  • ${c.prefix}<a href="${c.url}">${c.link}</a>`).join('\n')}\n`;
+  return `<pre style="font:13px/1.5 ui-monospace,Menlo,monospace">${esc}${cta}</pre>`;
 }
