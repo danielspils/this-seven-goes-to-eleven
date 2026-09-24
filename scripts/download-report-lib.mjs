@@ -36,6 +36,35 @@ export const ASSET_RE = {
   pc: /\.exe$/,
 };
 
+// COUNTRY NAMES ARE SPELLED OUT, NEVER CODES. A two-letter code is a lookup
+// the reader has to do in their head every morning, and some of them are
+// actively misleading — this email's own relay reports T1 for Tor exits, which
+// is not a country at all and reads as one.
+//
+// The same list the metrics page carries, deliberately: one vocabulary across
+// the email and the page, so the same visitor is named the same way in both.
+// An unknown code falls through to itself rather than being dropped, because
+// a country nobody has mapped is still a real press.
+export const COUNTRY_NAMES = {
+  US: 'United States', GB: 'Great Britain', DE: 'Germany', JP: 'Japan', CA: 'Canada',
+  AU: 'Australia', FR: 'France', NL: 'Netherlands', SE: 'Sweden', IT: 'Italy',
+  ES: 'Spain', BR: 'Brazil', MX: 'Mexico', PL: 'Poland', NO: 'Norway', DK: 'Denmark',
+  FI: 'Finland', BE: 'Belgium', CH: 'Switzerland', AT: 'Austria', IE: 'Ireland',
+  NZ: 'New Zealand', RU: 'Russia', UA: 'Ukraine', CZ: 'Czechia', PT: 'Portugal',
+  GR: 'Greece', TR: 'Turkey', IN: 'India', CN: 'China', KR: 'South Korea',
+  TW: 'Taiwan', AR: 'Argentina', CL: 'Chile', CO: 'Colombia', ZA: 'South Africa',
+  IL: 'Israel', SG: 'Singapore', HK: 'Hong Kong', HU: 'Hungary', RO: 'Romania',
+  TH: 'Thailand', ID: 'Indonesia', PH: 'Philippines', VN: 'Vietnam', MY: 'Malaysia',
+  EE: 'Estonia', LT: 'Lithuania', LV: 'Latvia', SK: 'Slovakia', SI: 'Slovenia',
+  HR: 'Croatia', RS: 'Serbia', BG: 'Bulgaria', IS: 'Iceland', LU: 'Luxembourg',
+  // Not countries, and both arrive from Cloudflare looking exactly like one.
+  T1: 'Tor network', XX: 'Unknown',
+};
+
+export function countryName(code) {
+  return COUNTRY_NAMES[code] || String(code || '?');
+}
+
 export function classify(name) {
   const n = String(name || '').toLowerCase();
   if (ASSET_RE.mac.test(n)) return 'mac';
@@ -104,7 +133,14 @@ export function hasActivity({ delta }) {
 
 const INDENT = '  ';
 const LABEL_W = 6;
-const LINE_W = 38;   // where a header's figure ends, so every total shares a column
+// Where a header's figure ends, so every section total shares one column. It
+// was 38 until the press sections arrived: "STARTED FROM THE WEBSITE — LAST 7
+// DAYS" is 38 characters on its own, so its figure fell off the end and sat
+// one space after the words while every other total lined up without it. A
+// column that one row opts out of is not a column. Widened rather than
+// shortening the heading, because the headings are shared with JP's email
+// word for word.
+const LINE_W = 44;
 
 // THE SECTION TOTAL LIVES ON THE HEADER, right-aligned. Mac and PC underneath
 // are the breakdown; the number you read first should not be one you have to
@@ -133,6 +169,55 @@ function offLatest(byVersion, latest, preposition = 'on') {
   if (!old.length) return '';
   return old.map((v) => `${byVersion[v]} ${preposition} ${v}`).join(', ');
 }
+
+// Country rows, biggest first, then alphabetically so two equal counts have a
+// stable order rather than whatever the relay's key listing happened to give.
+// A row that counts nothing is dropped: a country appears because somebody
+// there pressed a button.
+function countryRows(byCountry) {
+  return Object.entries(byCountry || {})
+    .map(([cc, v]) => {
+      // Two shapes reach here. The windowed relay answer splits by platform,
+      // { mac, pc, total }; the all-time monthly rollup cannot and is a bare
+      // number. Both are legitimate and the shape says which.
+      const o = (v && typeof v === 'object') ? v : { total: Number(v) || 0 };
+      const mac = Number(o.mac) || 0;
+      const pc = Number(o.pc) || 0;
+      return { name: countryName(cc), mac, pc, total: Number(o.total) || mac + pc };
+    })
+    .filter((r) => r.total > 0)
+    .sort((a, b) => (b.total - a.total) || a.name.localeCompare(b.name));
+}
+
+// LAST 7 DAYS: "United States 3   Mac 2   PC 1". The platform cells are blank
+// when that platform had none, so the columns stay put and an all-Mac country
+// does not print "PC 0" — a zero nobody needs to read.
+function countryTableSplit(byCountry) {
+  const rows = countryRows(byCountry);
+  if (!rows.length) return [`${INDENT}none`];
+  const first = rows.map((r) => `${r.name} ${r.total}`);
+  const w1 = Math.max(LABEL_W, Math.max(...first.map((s) => s.length)) + 2);
+  const macCells = rows.map((r) => (r.mac > 0 ? `Mac ${r.mac}` : ''));
+  const w2 = Math.max(...macCells.map((s) => s.length)) + 3;
+  return rows.map((r, i) => (
+    INDENT + first[i].padEnd(w1) + macCells[i].padEnd(w2) + (r.pc > 0 ? `PC ${r.pc}` : '')
+  ).replace(/\s+$/, ''));
+}
+
+// TOTAL: country then one count. No platform split, because the permanent
+// monthly rollup this reads does not carry one.
+function countryTableCount(byCountry) {
+  const rows = countryRows(byCountry);
+  if (!rows.length) return [`${INDENT}none`];
+  const w = Math.max(LABEL_W, Math.max(...rows.map((r) => r.name.length)) + 2);
+  return rows.map((r) => INDENT + r.name.padEnd(w) + r.total);
+}
+
+// WHAT POPULATION A PRESS TABLE COUNTS, under its own heading. Two
+// country-ish numbers from two sources read as one number contradicting
+// itself unless each says who it counts — the lesson the metrics page paid
+// for, applied here before it could cost anything.
+const PRESS_POP = `${INDENT}(download button presses on the site — includes presses that never finished)`;
 
 // "17 Aug" for the header, "17 Aug 2026" where the year earns its place. Fixed
 // locale: this is one person's daily email, and en-GB puts the day first.
@@ -170,7 +255,25 @@ export function subject({ delta }) {
 // explain a contrast the reader cannot see.
 //
 // NEVER call the relay number "downloads". It counts presses, not completions.
-export function renderBody({ since, delta, lifetime, latest }) {
+// SECTION ORDER IS SHARED WITH jx-3p.com/metrics's email, same words in the
+// same order, so one person reading both every morning reads one format twice
+// rather than two formats. The one declared difference is JP's library-borrow
+// blocks, which have no counterpart here; a difference that is written down is
+// not drift.
+//
+//   1  ALL DOWNLOADS SINCE <date>
+//   2  ALL DOWNLOADS, LIFETIME
+//   3  MAC AUTO-UPDATES                    only when there was activity
+//   4  STARTED FROM THE WEBSITE — LAST 7 DAYS
+//   5  STARTED FROM THE WEBSITE — TOTAL
+//   6  (JP only) library borrows
+//   7  HOW THIS IS COUNTED
+//
+// `press` is the relay's half and may be absent in pieces:
+//   { week, weekNote, lifetime, lifetimeStale }
+// where `week` / `lifetime` are byCountry maps or null. A null block prints
+// what it could not read instead of a table — see the notices below.
+export function renderBody({ since, delta, lifetime, latest, press = null }) {
   const sections = [];
   const sinceLabel = since ? ` SINCE ${formatDate(since).toUpperCase()}` : '';
 
@@ -179,6 +282,13 @@ export function renderBody({ since, delta, lifetime, latest }) {
     '',
     row('Mac', delta.mac.total, offLatest(delta.mac.byVersion, latest)),
     row('PC', delta.pc.total, offLatest(delta.pc.byVersion, latest)),
+  ]);
+
+  sections.push([
+    header('ALL DOWNLOADS, LIFETIME', lifetime.mac + lifetime.pc),
+    '',
+    row('Mac', lifetime.mac),
+    row('PC', lifetime.pc),
   ]);
 
   // Only when there were some: a permanent "0" beside numbers that actually
@@ -192,12 +302,50 @@ export function renderBody({ since, delta, lifetime, latest }) {
     ]);
   }
 
-  sections.push([
-    header('ALL DOWNLOADS, LIFETIME', lifetime.mac + lifetime.pc),
-    '',
-    row('Mac', lifetime.mac),
-    row('PC', lifetime.pc),
-  ]);
+  // ── THE RELAY'S HALF ────────────────────────────────────────────────────
+  //
+  // NEVER CALLED "DOWNLOADS", anywhere, at any length. These are button
+  // presses: the browser was sent to an installer. GitHub counts the transfer
+  // finishing, so its figure is smaller and the two are different events. On
+  // 2026-09-09 they stood at 76 and 41 and read as a discrepancy rather than
+  // as two measurements of different things.
+  //
+  // A STALE SOURCE SAYS SO, FIRST. Ported from JP rather than reinvented,
+  // because the failure being prevented is specific and quiet: a relay that
+  // cannot be read renders an EMPTY country block, which is indistinguishable
+  // from a week when nobody pressed anything. The whole point of the notice is
+  // that "none" and "not known" stop looking alike.
+  // A HEADER FIGURE IS A CLAIM, so an unread source gets an em dash and not a
+  // zero. The first render of this section printed "0" above the sentence
+  // saying the relay could not be read — the two lines contradicting each
+  // other, with the more believable one wrong. Zero means the relay answered
+  // and nobody pressed anything; anything else says so in words.
+  const weekTotal = press && press.week
+    ? countryRows(press.week).reduce((n, r) => n + r.total, 0)
+    : null;
+  const weekBlock = [header('STARTED FROM THE WEBSITE — LAST 7 DAYS', weekTotal ?? '—'), PRESS_POP];
+  if (press && press.weekNote) weekBlock.push(INDENT + `(${press.weekNote})`);
+  weekBlock.push(...(press && press.week ? countryTableSplit(press.week) : [`${INDENT}none`]));
+  sections.push(weekBlock);
+
+  const lifeRows = press && press.lifetime ? countryRows(press.lifetime) : null;
+  const lifeBlock = [
+    header('STARTED FROM THE WEBSITE — TOTAL',
+      lifeRows ? lifeRows.reduce((n, r) => n + r.total, 0) : '—'),
+    PRESS_POP,
+  ];
+  // The fallback is the LAST REPORT'S stored table, and the notice leads so
+  // the number underneath is never mistaken for a current one.
+  if (press && press.lifetimeStale) {
+    lifeBlock.push(`${INDENT}(live press data unavailable — totals below are from the last report)`);
+  }
+  lifeBlock.push(...(lifeRows && lifeRows.length ? countryTableCount(press.lifetime) : [`${INDENT}none`]));
+  sections.push(lifeBlock);
+
+  // NO RESIDUAL LINE, deliberately. "Direct from GitHub" would be downloads
+  // minus presses, and subtracting a completion count from a press count
+  // produces a number that describes nothing. JP removed its own for the same
+  // reason. The rule is never sum, difference or percentage the two.
 
   // TWO LINES. The long version explained why the numbers are what they are —
   // the start date, the filenames that are not downloads, why Mac splits and PC

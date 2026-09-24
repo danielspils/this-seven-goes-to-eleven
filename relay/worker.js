@@ -356,7 +356,32 @@ async function handleVersion(env) {
 // GET /downloads — what the redirect has served, by month and country. Kept
 // separate from /totals so nothing can accidentally sum a redirect with a
 // check-in; they answer different questions.
-async function handleDownloadStats(env) {
+//
+// GET /downloads?since=YYYYMMDD reads the DAY keys instead of the monthly
+// rollup, which is the only way to ask for a window shorter than a month. The
+// daily email needs "the last 7 days"; the permanent `dlm:` keys cannot answer
+// that at any resolution finer than the month they are named after.
+//
+// THE RESPONSE ECHOES THE WINDOW BACK, and that is not decoration.
+//
+// A worker that has never heard of `since` IGNORES it and answers with the
+// all-time total — a 200, well-formed, and wrong by however long this project
+// has been running. That is the worst failure available here: a caller asking
+// for seven days and being handed every day there has ever been, with nothing
+// in the reply to say so. So a windowed answer carries `window: { since }` and
+// an all-time answer carries `window: null`, and a caller that wanted a window
+// and did not get the echo knows it is talking to an older relay and can say
+// so instead of printing the number.
+//
+// The two byCountry shapes differ on purpose and the echo is how you tell:
+// all-time is `{ US: 12 }`, which is what /metrics/ already reads and must not
+// change, while a window is `{ US: { mac, pc, total } }` — the email prints a
+// Mac/PC split per country and the monthly rollup cannot give one.
+async function handleDownloadStats(request, env) {
+  const raw = new URL(request.url).searchParams.get('since');
+  const since = /^[0-9]{8}$/.test(raw || '') ? raw : null;
+  if (since) return handleDownloadWindow(env, since);
+
   const acc = { byMonth: {}, byCountry: {}, byPlatform: {}, total: 0 };
   let cursor;
   do {
@@ -374,7 +399,47 @@ async function handleDownloadStats(env) {
     }
     cursor = page.list_complete ? null : page.cursor;
   } while (cursor);
-  return json({ ok: true, meaning: 'Redirects served by /download/*. Browsers SENT to an installer, not transfers finished. Never add to GitHub download counts.', downloads: acc });
+  return json({
+    ok: true, window: null,
+    meaning: 'Redirects served by /download/*. Browsers SENT to an installer, not transfers finished. Never add to GitHub download counts.',
+    downloads: acc,
+  });
+}
+
+// The windowed half of /downloads. Same source as the monthly rollup — every
+// redirect bumps both — read from the 90-day `dl:` day keys so a window
+// shorter than a month is answerable at all.
+async function handleDownloadWindow(env, since) {
+  const acc = { byCountry: {}, byPlatform: {}, byDay: {}, total: 0 };
+  let cursor;
+  do {
+    const page = await env.PINGS.list({ prefix: 'dl:', cursor });
+    for (const k of page.keys) {
+      const parts = k.name.split(':');        // dl:<YYYYMMDD>:<platform>:<country>
+      if (parts.length !== 4) continue;
+      const [, day, platform, country] = parts;
+      if (day < since) continue;
+      const n = Number(await env.PINGS.get(k.name)) || 0;
+      if (!n) continue;
+      const c = acc.byCountry[country] || (acc.byCountry[country] = { mac: 0, pc: 0, total: 0 });
+      if (platform === 'mac' || platform === 'pc') c[platform] += n;
+      c.total += n;
+      acc.byPlatform[platform] = (acc.byPlatform[platform] || 0) + n;
+      acc.byDay[day] = (acc.byDay[day] || 0) + n;
+      acc.total += n;
+    }
+    cursor = page.list_complete ? null : page.cursor;
+  } while (cursor);
+  // `dl:` keys expire at 90 days, so a `since` older than that is answerable
+  // but incomplete. Said in the reply rather than left for the caller to work
+  // out from the TTL — a truncated window that looks whole is the same class
+  // of fault as an ignored `since`.
+  return json({
+    ok: true,
+    window: { since, retentionDays: PING_TTL_SECONDS / 86400 },
+    meaning: 'Redirects served by /download/* at or after `since`. Browsers SENT to an installer, not transfers finished. Never add to GitHub download counts.',
+    downloads: acc,
+  });
 }
 
 // The metrics page reads /totals and /ping/stats from the site's own origin,
@@ -423,7 +488,7 @@ export default {
       return res;
     }
     if (request.method === 'GET' && url.pathname === '/downloads') {
-      const res = await handleDownloadStats(env);
+      const res = await handleDownloadStats(request, env);
       for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
       return res;
     }

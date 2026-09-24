@@ -96,12 +96,12 @@ test('each section leads with its own total, right-aligned', () => {
   const { delta, lifetime } = NORMAL();
   const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0' });
   // The figure you read first is the one you would otherwise add up yourself.
-  assert.match(body, /^ALL DOWNLOADS SINCE 17 AUG {11}4$/m);
-  assert.match(body, /^ALL DOWNLOADS, LIFETIME {14}4$/m);
+  assert.match(body, /^ALL DOWNLOADS SINCE 17 AUG {17}4$/m);
+  assert.match(body, /^ALL DOWNLOADS, LIFETIME {20}4$/m);
   // Both figures end in the same column, which is what makes them scannable.
   const cols = body.split('\n')
     .filter((l) => /^ALL DOWNLOADS/.test(l)).map((l) => l.length);
-  assert.deepStrictEqual(cols, [38, 38]);
+  assert.deepStrictEqual(cols, [44, 44]);
   // The breakdown is still there, underneath.
   assert.match(body, /^ {2}Mac {3}3$/m);
   assert.match(body, /^ {2}PC {4}1$/m);
@@ -135,7 +135,13 @@ test('no version detail when everything landed on the newest release', () => {
   const { delta, lifetime } = NORMAL();
   const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0' });
   assert.ok(!/1\.1\.0/.test(body), `no version anywhere:\n${body}`);
-  assert.ok(!/\(/.test(body.split('HOW THIS IS COUNTED')[0]), 'no parentheticals above the footnote');
+  // Scoped to the GitHub blocks. It used to cover everything above the
+  // footnote, which was the same statement until the press sections arrived
+  // carrying a population line that is legitimately parenthesised. What the
+  // assertion always meant is "no VERSION parenthetical" — say that instead of
+  // letting a broader wording forbid a later, unrelated feature.
+  assert.ok(!/\(/.test(body.split('STARTED FROM THE WEBSITE')[0]),
+    'no version parentheticals in the download blocks');
   assert.ok(!/MAC AUTO-UPDATES/.test(body), 'and no update block when there were none');
 });
 
@@ -159,7 +165,7 @@ test('a download on an older release is called out, and only that part', () => {
 test('an auto-update to something other than latest is called out too', () => {
   const clean = tally([{ name: `${V11}-universal-mac.zip`, tag: 'v1.1.0', count: 1, before: 0 }]);
   const cleanBody = renderBody({ since: null, ...clean, latest: '1.1.0' });
-  assert.match(cleanBody, /^MAC AUTO-UPDATES {21}1$/m, 'count on the header, not hanging below it');
+  assert.match(cleanBody, /^MAC AUTO-UPDATES {27}1$/m, 'count on the header, not hanging below it');
   assert.ok(!/\(to /.test(cleanBody), 'nothing to say when it went to latest');
 
   const odd = tally([{ name: `${V10}-universal-mac.zip`, tag: 'v1.0.0', count: 1, before: 0 }]);
@@ -180,14 +186,13 @@ test('the footnote is always there, and is exactly the two lines', () => {
     assert.match(body, /^ {4}Mac counts new downloads$/m);
     assert.match(body, /^ {4}PC combines new downloads \+ updates \(GitHub can't distinguish\)$/m);
     assert.strictEqual((body.match(/^ {2}• /gm) || []).length, 0, 'no bullets survive');
-    assert.ok(!/country|Country/.test(body),
-      // The old reason — "this site has no click relay" — stopped being true on
-      // 2026-09-08, when the download buttons moved to the relay and it began
-      // counting presses by country. The assertion still holds; its reason did
-      // not. The real reason today is simply that nobody has added geography to
-      // this email — not a principle, just work not done. If it is added, this
-      // test is what must change with it.
-      'no geography in the email — the relay has country data, but the email has never shown it');
+    // A "no geography here" assertion used to sit on this line. It was written
+    // when the site had no click relay, and it outlived its reason by a
+    // fortnight: the relay landed on 2026-09-08 and began counting presses by
+    // country, and the assertion went on forbidding the email from showing
+    // them. A test that pins the absence of a feature DEFENDS that absence —
+    // the fourth time that shape has cost something here. It is gone, and the
+    // block below is what replaced it.
   }
 });
 
@@ -211,4 +216,162 @@ test('the subject line carries the count', () => {
   // An update-only day still says what happened rather than "0 new downloads".
   const upd = tally([{ name: `${V11}-universal-mac.zip`, tag: 'v1.1.0', count: 2, before: 0 }]);
   assert.strictEqual(subject(upd), 'Seven→11 — 2 Mac auto-updates');
+});
+
+// ── THE RELAY'S HALF ────────────────────────────────────────────────────────
+
+// Countries as they'd arrive from /downloads?since=…, which splits by
+// platform, and from /downloads, which cannot and is a bare count.
+const WEEK = { US: { mac: 2, pc: 1, total: 3 }, DE: { mac: 0, pc: 2, total: 2 } };
+const LIFE = { US: 31, DE: 7, T1: 2 };
+
+// THE GUARD DANIEL ASKED FOR: if the relay has country data, the email shows
+// it. The failure being prevented is an empty country block sitting where a
+// populated one should be — which looks exactly like a quiet week and is the
+// one output nobody would question.
+//
+// MUTATION-PROVED: delete either countryTable call in renderBody and this
+// fails. Not the header, not the population line — the TABLE, which is the
+// part a well-meaning refactor drops.
+test('country data in, country block out', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0',
+    press: { week: WEEK, lifetime: LIFE, weekNote: null, lifetimeStale: false },
+  });
+
+  const week = body.split('STARTED FROM THE WEBSITE — LAST 7 DAYS')[1].split('STARTED FROM THE WEBSITE — TOTAL')[0];
+  assert.match(week, /^ {2}United States 3 {2}Mac 2 {3}PC 1$/m, 'the week splits by platform');
+  assert.match(week, /^ {2}Germany 2 {16}PC 2$/m, 'a platform with none leaves its cell blank');
+  assert.ok(!/none/.test(week), 'a populated week never also says none');
+
+  const total = body.split('STARTED FROM THE WEBSITE — TOTAL')[1];
+  assert.match(total, /^ {2}United States {2}31$/m);
+  assert.match(total, /^ {2}Germany {8}7$/m);
+  // Biggest first, and names never codes.
+  assert.ok(total.indexOf('United States') < total.indexOf('Germany'), 'ranked by count');
+  assert.ok(!/\bUS\b|\bDE\b/.test(body), 'country CODES never reach the reader');
+  // T1 is Cloudflare's Tor marker and arrives shaped exactly like a country.
+  assert.match(total, /^ {2}Tor network {4}2$/m, 'Tor is named, not printed as a country called T1');
+});
+
+// NEVER "DOWNLOADS". The relay counts presses; GitHub counts completions. The
+// two stood at 76 and 41 on 2026-09-09 and read as a discrepancy.
+test('the relay figures are never labelled downloads', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: { week: WEEK, lifetime: LIFE, weekNote: null, lifetimeStale: false },
+  });
+  for (const heading of ['STARTED FROM THE WEBSITE — LAST 7 DAYS', 'STARTED FROM THE WEBSITE — TOTAL']) {
+    const section = body.split(heading)[1].split('\n\n')[0];
+    assert.ok(!/download(s|ed)?\b(?! button)/i.test(section.replace(/download button presses/gi, '')),
+      `"${heading}" calls them presses, never downloads`);
+    assert.match(section, /includes presses that never finished/,
+      'and states what population it counts, under its own heading');
+  }
+});
+
+// A SOURCE THAT COULD NOT BE READ SAYS SO. An empty country block and a quiet
+// week are indistinguishable, so the notice is the whole defence.
+test('a stale total leads with the notice, and never renders as none', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: { week: null, lifetime: LIFE, weekNote: 'the relay could not be read just now', lifetimeStale: true },
+  });
+  const total = body.split('STARTED FROM THE WEBSITE — TOTAL')[1];
+  const notice = total.indexOf('live press data unavailable');
+  assert.ok(notice > -1, 'the notice is there');
+  assert.ok(notice < total.indexOf('United States'), 'and it LEADS, before any number it qualifies');
+
+  const week = body.split('LAST 7 DAYS')[1].split('STARTED FROM THE WEBSITE — TOTAL')[0];
+  assert.match(week, /the relay could not be read just now/);
+  assert.match(week, /^ {2}none$/m, 'the window renders none — it has no stored fallback');
+});
+
+// THE THIRD STATE, and the one that would be silent. A relay that predates
+// `since` ignores it and answers with the all-time total: a 200, real numbers,
+// and catastrophically wrong under a "LAST 7 DAYS" heading. The driver detects
+// it by the missing `window` echo and passes a note instead of a table.
+test('an un-upgraded relay is named, not printed as a week', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: {
+      week: null, lifetime: LIFE, lifetimeStale: false,
+      weekNote: 'this relay does not answer windowed queries yet — deploy relay/worker.js',
+    },
+  });
+  const week = body.split('LAST 7 DAYS')[1].split('STARTED FROM THE WEBSITE — TOTAL')[0];
+  assert.match(week, /does not answer windowed queries yet/);
+  assert.ok(!/United States/.test(week), 'and no all-time figure leaks into the week');
+});
+
+// THE SHARED FORMAT. Same sections, same order, as jx-3p.com's email. Pinned
+// because "same order on both sites" is a claim that rots the first time
+// somebody inserts a block in the obvious place rather than the agreed one.
+test('the sections appear in the shared order', () => {
+  const upd = tally([
+    { name: `${V11}.dmg`, tag: 'v1.1.0', count: 3, before: 0 },
+    { name: `${V11}-universal-mac.zip`, tag: 'v1.1.0', count: 2, before: 0 },
+  ]);
+  const body = renderBody({
+    since: '2026-08-17T07:12:00Z', ...upd, latest: '1.1.0',
+    press: { week: WEEK, lifetime: LIFE, weekNote: null, lifetimeStale: false },
+  });
+  const order = [
+    'ALL DOWNLOADS SINCE',
+    'ALL DOWNLOADS, LIFETIME',
+    'MAC AUTO-UPDATES',
+    'STARTED FROM THE WEBSITE — LAST 7 DAYS',
+    'STARTED FROM THE WEBSITE — TOTAL',
+    'HOW THIS IS COUNTED',
+  ];
+  let at = -1;
+  for (const heading of order) {
+    const found = body.indexOf(heading);
+    assert.ok(found > at, `${heading} comes after the section before it`);
+    at = found;
+  }
+});
+
+// The press blocks are structural: they appear every day, with "none" when
+// there is nothing, because a section that vanishes on quiet days makes the
+// reader wonder whether it broke.
+//
+// AND AN UNREAD SOURCE GETS AN EM DASH, NOT A ZERO. The first render of this
+// section put "0" on the header directly above the sentence saying the relay
+// could not be read — two lines contradicting each other, the wrong one more
+// believable. Zero is a measurement and is reserved for one: the relay
+// answered and nobody pressed anything.
+test('the press blocks appear even with no relay data at all, and claim nothing', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({ since: null, delta, lifetime, latest: '1.1.0' });
+  assert.match(body, /^STARTED FROM THE WEBSITE — LAST 7 DAYS {5}—$/m);
+  assert.match(body, /^STARTED FROM THE WEBSITE — TOTAL {11}—$/m);
+  assert.strictEqual((body.match(/^ {2}none$/gm) || []).length, 2);
+});
+
+test('zero is reserved for a relay that answered with nothing', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: { week: {}, lifetime: {}, weekNote: null, lifetimeStale: false },
+  });
+  assert.match(body, /^STARTED FROM THE WEBSITE — LAST 7 DAYS {5}0$/m,
+    'an empty answer is a real zero');
+  assert.match(body, /^STARTED FROM THE WEBSITE — TOTAL {11}0$/m);
+});
+
+// The contradiction itself, pinned: a figure and a "could not read it" notice
+// must never appear together.
+test('an unreadable week never shows a number beside its notice', () => {
+  const { delta, lifetime } = NORMAL();
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: { week: null, weekNote: 'the relay could not be read just now', lifetime: LIFE, lifetimeStale: false },
+  });
+  const head = body.split('\n').find((l) => l.startsWith('STARTED FROM THE WEBSITE — LAST 7 DAYS'));
+  assert.ok(/—$/.test(head), `the header claims nothing: "${head}"`);
 });

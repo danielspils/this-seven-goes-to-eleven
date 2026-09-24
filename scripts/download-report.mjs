@@ -18,7 +18,51 @@ import { tally, hasActivity, renderBody, htmlBody, subject, version } from './do
 
 const APP_REPO = 'danielspils/crumar-seven-editor'; // downloads live there
 const SNAPSHOT = '.github/download-stats.json';
+const RELAY = 'https://ping.thissevengoestoeleven.com';
 const dryRun = process.argv.includes('--dry-run');
+
+const utcKey = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
+
+// THE RELAY'S HALF, and every way it can fail to answer is a different
+// sentence in the email rather than a blank table.
+//
+// Three states, not two. "Read it" and "could not read it" are the obvious
+// pair; the third is a relay that is UP and answers the windowed query with
+// an all-time total, because it predates `since` and ignores query parameters
+// it does not know. That reply is a 200 with real numbers in it, and printing
+// them under "LAST 7 DAYS" would be the most confidently wrong output this
+// script can produce. The worker echoes `window` back for exactly this, so
+// its absence is detectable rather than invisible.
+async function relayPress(prevPress) {
+  const out = { week: null, weekNote: null, lifetime: null, lifetimeStale: false };
+  const get = async (path) => {
+    try {
+      const r = await fetch(`${RELAY}${path}`);
+      return r.ok ? await r.json() : null;
+    } catch { return null; }
+  };
+
+  // Seven calendar days including today, matching /metrics/'s own windows.
+  const since = utcKey(new Date(Date.now() - 6 * 86_400_000));
+  const w = await get(`/downloads?since=${since}`);
+  if (!w || !w.ok) {
+    out.weekNote = 'the relay could not be read just now';
+  } else if (!w.window) {
+    out.weekNote = 'this relay does not answer windowed queries yet — deploy relay/worker.js';
+  } else {
+    out.week = w.downloads.byCountry;
+  }
+
+  // TOTAL falls back to the stored table rather than to nothing: a permanent
+  // figure that vanishes on a bad morning reads as the counter being reset.
+  const t = await get('/downloads');
+  if (t && t.ok) out.lifetime = t.downloads.byCountry;
+  else if (prevPress && Object.keys(prevPress).length) {
+    out.lifetime = prevPress;
+    out.lifetimeStale = true;
+  }
+  return out;
+}
 
 const headers = { Accept: 'application/vnd.github+json' };
 if (process.env.GH_TOKEN) headers.Authorization = `Bearer ${process.env.GH_TOKEN}`;
@@ -42,6 +86,7 @@ for (const r of releases) {
 const raw = existsSync(SNAPSHOT) ? JSON.parse(readFileSync(SNAPSHOT, 'utf8')) : {};
 const previous = raw.assets || raw;
 const since = raw.date || null;
+const press = await relayPress(raw.press || null);
 
 const rows = Object.entries(current).map(([id, a]) => ({
   ...a, before: previous[id]?.count ?? 0,
@@ -66,7 +111,13 @@ const out = process.env.GITHUB_OUTPUT;
 const saveSnapshot = () => {
   if (dryRun) return;
   writeFileSync(SNAPSHOT, `${JSON.stringify({
-    date: new Date().toISOString(), assets: current,
+    date: new Date().toISOString(),
+    assets: current,
+    // The press table is kept so a morning when the relay is unreachable has
+    // something to fall back to. Only a LIVE reading is stored — writing the
+    // stale copy back would let one bad day become the permanent answer, with
+    // the notice disappearing the moment the relay recovered.
+    press: press.lifetimeStale ? (raw.press || {}) : (press.lifetime || {}),
   }, null, 2)}\n`);
 };
 
@@ -85,7 +136,7 @@ if (!hasActivity({ delta })) {
   process.exit(0);
 }
 
-const body = renderBody({ since, delta, lifetime, latest });
+const body = renderBody({ since, delta, lifetime, latest, press });
 console.log(body);
 if (ignored.total > 0) {
   // JOB LOG ONLY — this line is printed after the body and is never part of
