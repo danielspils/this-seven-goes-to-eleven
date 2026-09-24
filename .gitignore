@@ -2,3 +2,20 @@ _site/
 .jekyll-cache/
 .DS_Store
 Gemfile.lock
+
+# WRANGLER'S LOCAL STATE IS NOT SOURCE, and this repo is public.
+#
+# `relay/.wrangler/` was committed on 2026-08-29 and sat in a public
+# repository for 26 days. `cache/cf.json` is the request metadata Cloudflare
+# hands a `wrangler dev` session about the machine running it, which for this
+# project meant Daniel's LATITUDE AND LONGITUDE, postal code, city and ISP —
+# published, about a private individual, in a file nobody put there on
+# purpose. `cache/wrangler-account.json` carries the Cloudflare account id and
+# name, and `state/v3/` is a local miniflare KV simulation.
+#
+# None of it is a credential, which is exactly why no credential rule caught
+# it. The rule that applies is the older one this project already learned:
+# jx-3p.com once served 36 internal documents because a file sat in a
+# published directory and nothing distinguished it from a page. A tool's
+# working directory is not source, and `git add -A` does not know that.
+.wrangler/
