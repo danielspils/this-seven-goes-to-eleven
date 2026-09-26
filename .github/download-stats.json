@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-25T19:14:57.256Z",
+  "date": "2026-09-26T12:11:22.070Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -439,20 +439,21 @@
     "555491835": {
       "name": "latest.yml",
       "tag": "v1.5.5",
-      "count": 20
+      "count": 21
     }
   },
   "press": {
     "SG": 6,
-    "US": 48,
+    "US": 49,
     "IT": 3,
     "BR": 1,
     "FI": 2,
-    "FR": 6,
+    "FR": 7,
     "ID": 1,
     "JP": 1,
     "RU": 1,
     "SE": 22,
+    "DE": 1,
     "HK": 1
   }
 }
