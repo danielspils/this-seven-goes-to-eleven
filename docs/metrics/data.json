@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-30T20:00:46.434Z",
+ "generated": "2026-10-01T14:24:58.420Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -273,6 +273,12 @@
     "mac": 69,
     "pc": 61,
     "upd": 10
+   },
+   {
+    "date": "2026-10-01",
+    "mac": 69,
+    "pc": 61,
+    "upd": 10
    }
   ]
  },
@@ -287,7 +293,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.5",
-   "count": 23,
+   "count": 24,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -809,17 +815,18 @@
  ],
  "active": {
   "reachable": true,
-  "total": 16,
+  "total": 17,
   "byMonth": {
-   "2026-09": 16
+   "2026-09": 16,
+   "2026-10": 1
   },
   "byCountry": {
-   "US": 16
+   "US": 17
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 18,
+   "total": 19,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -832,16 +839,17 @@
     "20260921": 1,
     "20260922": 1,
     "20260925": 2,
-    "20260928": 1
+    "20260928": 1,
+    "20261001": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
-    "1.5.5": 10
+    "1.5.5": 11
    },
    "byPlatform": {
     "mac": 4,
-    "win": 14
+    "win": 15
    }
   }
  }
