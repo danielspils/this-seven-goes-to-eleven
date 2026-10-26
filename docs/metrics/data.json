@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26T14:09:37.552Z",
+ "generated": "2026-10-26T20:29:04.119Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -7,7 +7,7 @@
  },
  "downloads": {
   "mac": 139,
-  "pc": 120,
+  "pc": 121,
   "upd": 13,
   "series": [
    {
@@ -427,7 +427,7 @@
    {
     "date": "2026-10-26",
     "mac": 139,
-    "pc": 120,
+    "pc": 121,
     "upd": 13
    }
   ]
@@ -461,7 +461,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe",
    "tag": "v1.5.5",
-   "count": 79,
+   "count": 80,
    "published": "2026-09-10T17:41:19Z"
   },
   {
