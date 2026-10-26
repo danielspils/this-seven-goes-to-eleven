@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-25T18:24:24.938Z",
+ "generated": "2026-10-26T14:09:37.552Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -8,7 +8,7 @@
  "downloads": {
   "mac": 139,
   "pc": 120,
-  "upd": 10,
+  "upd": 13,
   "series": [
    {
     "date": "2026-08-18",
@@ -423,6 +423,12 @@
     "mac": 139,
     "pc": 120,
     "upd": 10
+   },
+   {
+    "date": "2026-10-26",
+    "mac": 139,
+    "pc": 120,
+    "upd": 13
    }
   ]
  },
@@ -431,7 +437,7 @@
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.5",
-   "count": 7,
+   "count": 10,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -443,7 +449,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5-universal-mac.zip",
    "tag": "v1.5.5",
-   "count": 1,
+   "count": 3,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -473,7 +479,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg.blockmap",
    "tag": "v1.5.5",
-   "count": 0,
+   "count": 1,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -827,7 +833,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.2.0-universal-mac.zip",
    "tag": "v1.2.0",
-   "count": 1,
+   "count": 2,
    "published": "2026-08-19T19:51:03Z"
   },
   {
@@ -959,18 +965,18 @@
  ],
  "active": {
   "reachable": true,
-  "total": 27,
+  "total": 28,
   "byMonth": {
    "2026-09": 16,
-   "2026-10": 11
+   "2026-10": 12
   },
   "byCountry": {
-   "US": 27
+   "US": 28
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 29,
+   "total": 30,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -991,15 +997,16 @@
     "20261012": 3,
     "20261015": 2,
     "20261018": 1,
-    "20261020": 1
+    "20261020": 1,
+    "20261025": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
-    "1.5.5": 21
+    "1.5.5": 22
    },
    "byPlatform": {
-    "mac": 8,
+    "mac": 9,
     "win": 21
    }
   }
