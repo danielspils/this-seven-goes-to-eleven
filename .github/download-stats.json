@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-27T20:05:36.295Z",
+  "date": "2026-10-28T13:57:40.841Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -409,7 +409,7 @@
     "555491803": {
       "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg",
       "tag": "v1.5.5",
-      "count": 105
+      "count": 109
     },
     "555491804": {
       "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg.blockmap",
@@ -429,7 +429,7 @@
     "555491825": {
       "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe",
       "tag": "v1.5.5",
-      "count": 81
+      "count": 84
     },
     "555491833": {
       "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe.blockmap",
@@ -444,7 +444,7 @@
   },
   "press": {
     "SG": 8,
-    "US": 111,
+    "US": 113,
     "IT": 3,
     "BR": 3,
     "CN": 2,
@@ -453,14 +453,16 @@
     "ID": 1,
     "JP": 1,
     "RU": 1,
-    "SE": 54,
+    "SE": 56,
     "DE": 5,
     "HK": 1,
     "KR": 1,
     "CA": 16,
+    "CL": 1,
     "GB": 20,
     "NL": 8,
     "PL": 12,
-    "T1": 44
+    "T1": 47,
+    "ZA": 1
   }
 }
