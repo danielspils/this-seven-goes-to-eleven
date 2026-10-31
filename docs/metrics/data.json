@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-30T19:55:53.374Z",
+ "generated": "2026-10-31T13:35:38.992Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -450,6 +450,12 @@
    },
    {
     "date": "2026-10-30",
+    "mac": 146,
+    "pc": 128,
+    "upd": 13
+   },
+   {
+    "date": "2026-10-31",
     "mac": 146,
     "pc": 128,
     "upd": 13
