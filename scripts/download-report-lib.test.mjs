@@ -426,3 +426,70 @@ test('renderBody itself carries no links', () => {
   const body = renderBody({ since: null, delta, lifetime, latest: '1.1.0' });
   assert.ok(!/https?:\/\//.test(body), 'renderBody is the report, nothing else');
 });
+
+// ── THE GITHUB ROWS AND THE RELAY NEVER MEET ────────────────────────────────
+
+// JP removed a note from this exact position (dc4c115, 4506624) because it put
+// PRESS COUNTRIES on a GitHub count — "Mac 2 (Chile)" — which reads as
+// attribution and mixes the two populations the report exists to separate.
+//
+// This email keeps a note there, DECLARED as an exception, because it is a
+// different statement: `offLatest` splits the very same GitHub count by the
+// release tag those same assets carry. One number in parts, not two sources on
+// one line.
+//
+// So the rule here cannot be JP's "no parentheses" — that would forbid the
+// legitimate note. It is narrower and it is the one that matters: nothing on a
+// GitHub row may come from the relay.
+test('the download rows never carry anything from the relay', () => {
+  // Downloads AND presses in the same report, with countries in the press data
+  // that would be visible if anything leaked.
+  const { delta, lifetime } = tally([
+    { name: `${V11}.dmg`, tag: 'v1.1.0', count: 2, before: 0 },
+    { name: `${V11}-x64-win.exe`, tag: 'v1.1.0', count: 3, before: 0 },
+  ]);
+  const body = renderBody({
+    since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0',
+    press: {
+      week: { CL: { mac: 2, pc: 0, total: 2 }, SE: { mac: 1, pc: 3, total: 4 } },
+      lifetime: { CL: 9, SE: 12, T1: 1 },
+      weekNote: null, lifetimeStale: false,
+    },
+  });
+  const github = body.slice(0, body.indexOf('STARTED FROM THE WEBSITE'));
+
+  // Bare counts on an ordinary day — everything landed on latest, so the
+  // off-latest note prints nothing and the rows look exactly like JP's.
+  assert.match(github, /\n {2}Mac {3}2\n/);
+  assert.match(github, /\n {2}PC {4}3\n/);
+  // No country, in any form, anywhere a GitHub number lives.
+  for (const name of ['Chile', 'Sweden', 'Tor network', 'United States']) {
+    assert.ok(!github.includes(name), `"${name}" must not appear beside a GitHub count:\n${github}`);
+  }
+  assert.ok(!/\b(CL|SE|T1)\b/.test(github), 'nor a country code');
+  // And nothing at all in parentheses while there is no version anomaly, so a
+  // leak cannot hide inside a note that was legitimately present.
+  assert.ok(!/\(/.test(github), `no parenthetical on an all-latest day:\n${github}`);
+});
+
+// THE EXCEPTION ITSELF, pinned. If this stops printing, the email has lost its
+// only anomaly detector — and the failure is silent, because the note is
+// absent on every ordinary day anyway.
+test('the off-latest note is a version, from GitHub, and only that', () => {
+  const { delta, lifetime } = tally([
+    { name: `${V11}.dmg`, tag: 'v1.1.0', count: 2, before: 0 },
+    { name: `${V10}.dmg`, tag: 'v1.0.0', count: 1, before: 0 },
+  ]);
+  const body = renderBody({
+    since: null, delta, lifetime, latest: '1.1.0',
+    press: { week: { CL: { mac: 5, pc: 0, total: 5 } }, lifetime: { CL: 5 }, weekNote: null, lifetimeStale: false },
+  });
+  const github = body.slice(0, body.indexOf('STARTED FROM THE WEBSITE'));
+  assert.match(github, /^ {2}Mac {3}3 {3}\(1 on 1\.0\.0\)$/m, 'the note names a VERSION');
+  assert.ok(!/Chile/.test(github), 'and the press country sitting right there does not join it');
+
+  // The lifetime rows stay bare in both emails — they are a running total, so
+  // "which release" has no window to be surprising in.
+  const life = github.slice(github.indexOf('ALL DOWNLOADS, LIFETIME'));
+  assert.ok(!/\(/.test(life), `lifetime rows are bare counts:\n${life}`);
+});

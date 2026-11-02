@@ -257,9 +257,37 @@ export function subject({ delta }) {
 // NEVER call the relay number "downloads". It counts presses, not completions.
 // SECTION ORDER IS SHARED WITH jx-3p.com/metrics's email, same words in the
 // same order, so one person reading both every morning reads one format twice
-// rather than two formats. The one declared difference is JP's library-borrow
-// blocks, which have no counterpart here; a difference that is written down is
-// not drift.
+// rather than two formats. A difference that is written down is not drift, and
+// there are three:
+//
+//   - JP's library-borrow blocks, which have no counterpart here.
+//   - Each email's own footer links — its own site, never the other's.
+//   - THE OFF-LATEST NOTE on this email's ALL DOWNLOADS rows (below).
+//
+// THE OFF-LATEST NOTE, and why it is not the thing JP removed.
+//
+// JP had a note in the same position and dropped it (dc4c115, 4506624). Its
+// note printed PRESS COUNTRIES beside a GitHub count — "Mac 2 (Chile)" — which
+// pairs two populations the whole report exists to keep apart, and reads as
+// attribution: it says those two downloads came from Chile, which the data
+// cannot support. Dropping it was right.
+//
+// This note is a different kind of statement. `offLatest` partitions THE VERY
+// SAME GitHub count by the release tag those same assets belong to — it is one
+// number broken into its parts, not two sources on one line. Nothing from the
+// relay can reach it: `byVersion` is built in `tally()` from `r.tag` on the
+// GitHub asset rows, and `press` is not read anywhere above the relay sections.
+//
+// It also earns the space. It is the only anomaly detector in this email: a
+// download of an OLD version has no innocent explanation, and the morning after
+// a release, downloads still landing on the previous one mean the button is not
+// resolving or the release did not publish. On every ordinary day it prints
+// nothing at all.
+//
+// The rule it must keep obeying is narrower than "no parentheses" — JP's test
+// can assert that because JP's rows are bare. Here it is: NOTHING ON A GITHUB
+// ROW MAY COME FROM THE RELAY. Guarded by "the download rows never carry
+// anything from the relay" in the test file.
 //
 //   1  ALL DOWNLOADS SINCE <date>
 //   2  ALL DOWNLOADS, LIFETIME
