@@ -10,7 +10,7 @@ import assert from 'node:assert';
 
 import {
   classify, tally, hasActivity, renderBody, subject,
-  ctaBullet, htmlBody, METRICS_URL, GOATCOUNTER_URL,
+  ctaBullet, htmlBody, METRICS_URL, GOATCOUNTER_URL, countryName,
 } from './download-report-lib.mjs';
 
 // The real filenames, from danielspils/crumar-seven-editor. Not invented:
@@ -492,4 +492,26 @@ test('the off-latest note is a version, from GitHub, and only that', () => {
   // "which release" has no window to be surprising in.
   const life = github.slice(github.indexOf('ALL DOWNLOADS, LIFETIME'));
   assert.ok(!/\(/.test(life), `lifetime rows are bare counts:\n${life}`);
+});
+
+test('a country nobody hand-listed still gets a name, not two letters', () => {
+  // BD reached a real email as "BD 1". Intl knows every ISO region code, so an
+  // unlisted one resolves instead of printing raw. Delete the Intl fallback in
+  // countryName and this line fails.
+  assert.equal(countryName('BD'), 'Bangladesh');
+  assert.equal(countryName('PK'), 'Pakistan');
+});
+
+test('the hand-written names win over Intl, and over JP Patches', () => {
+  // These are the chosen vocabulary, shared with JP so one visitor reads the
+  // same way in both projects. Intl would say "United Kingdom" and
+  // "Hong Kong SAR China". Reorder countryName to ask Intl first and both fail.
+  assert.equal(countryName('GB'), 'Great Britain');
+  assert.equal(countryName('HK'), 'Hong Kong');
+});
+
+test('the two non-countries are never dressed up as countries', () => {
+  // Cloudflare reports T1 for Tor exits and XX for unknown. Neither is a place.
+  assert.equal(countryName('T1'), 'Tor network');
+  assert.equal(countryName('XX'), 'Unknown');
 });

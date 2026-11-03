@@ -61,8 +61,26 @@ export const COUNTRY_NAMES = {
   T1: 'Tor network', XX: 'Unknown',
 };
 
+// Intl knows every ISO region code, so a country nobody hand-listed still gets
+// a name instead of two letters (BD printed as "BD" in a real email until this
+// landed). It is a FALLBACK, not the source: COUNTRY_NAMES wins, because that
+// map is the chosen vocabulary -- Great Britain over Intl's "United Kingdom",
+// Hong Kong over its "Hong Kong SAR China" -- and it is shared with JP Patches
+// so the same visitor is named the same way across both projects.
+const REGION_NAMES = (() => {
+  try { return new Intl.DisplayNames(['en'], { type: 'region' }); }
+  catch { return null; }
+})();
+
 export function countryName(code) {
-  return COUNTRY_NAMES[code] || String(code || '?');
+  if (COUNTRY_NAMES[code]) return COUNTRY_NAMES[code];
+  if (REGION_NAMES) {
+    try {
+      const name = REGION_NAMES.of(code);
+      if (name && name !== code) return name;
+    } catch { /* not a region code -- fall through */ }
+  }
+  return String(code || '?');
 }
 
 export function classify(name) {

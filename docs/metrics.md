@@ -117,7 +117,25 @@ through this site.</p>
 (function () {
   const RELAY = 'https://ping.thissevengoestoeleven.com';
   const el = (id) => document.getElementById(id);
-  const NAMES = {US:'United States',GB:'Great Britain',DE:'Germany',JP:'Japan',CA:'Canada',AU:'Australia',FR:'France',NL:'Netherlands',SE:'Sweden',IT:'Italy',ES:'Spain',BR:'Brazil',MX:'Mexico',PL:'Poland',NO:'Norway',DK:'Denmark',FI:'Finland',BE:'Belgium',CH:'Switzerland',AT:'Austria',IE:'Ireland',NZ:'New Zealand',RU:'Russia',UA:'Ukraine',CZ:'Czechia',PT:'Portugal',GR:'Greece',TR:'Turkey',IN:'India',CN:'China',KR:'South Korea',TW:'Taiwan',AR:'Argentina',CL:'Chile',CO:'Colombia',ZA:'South Africa',IL:'Israel',SG:'Singapore',HK:'Hong Kong',HU:'Hungary',RO:'Romania',TH:'Thailand',ID:'Indonesia',PH:'Philippines',VN:'Vietnam',MY:'Malaysia',EE:'Estonia',LT:'Lithuania',LV:'Latvia',SK:'Slovakia',SI:'Slovenia',HR:'Croatia',RS:'Serbia',BG:'Bulgaria',IS:'Iceland',LU:'Luxembourg',XX:'Unknown'};
+  const NAMES = {US:'United States',GB:'Great Britain',DE:'Germany',JP:'Japan',CA:'Canada',AU:'Australia',FR:'France',NL:'Netherlands',SE:'Sweden',IT:'Italy',ES:'Spain',BR:'Brazil',MX:'Mexico',PL:'Poland',NO:'Norway',DK:'Denmark',FI:'Finland',BE:'Belgium',CH:'Switzerland',AT:'Austria',IE:'Ireland',NZ:'New Zealand',RU:'Russia',UA:'Ukraine',CZ:'Czechia',PT:'Portugal',GR:'Greece',TR:'Turkey',IN:'India',CN:'China',KR:'South Korea',TW:'Taiwan',AR:'Argentina',CL:'Chile',CO:'Colombia',ZA:'South Africa',IL:'Israel',SG:'Singapore',HK:'Hong Kong',HU:'Hungary',RO:'Romania',TH:'Thailand',ID:'Indonesia',PH:'Philippines',VN:'Vietnam',MY:'Malaysia',EE:'Estonia',LT:'Lithuania',LV:'Latvia',SK:'Slovakia',SI:'Slovenia',HR:'Croatia',RS:'Serbia',BG:'Bulgaria',IS:'Iceland',LU:'Luxembourg',T1:'Tor network',XX:'Unknown'};
+
+  // NAMES is the chosen vocabulary and wins; Intl is the fallback, so a code
+  // nobody hand-listed gets a name instead of printing as two letters. Same
+  // order as scripts/download-report-lib.mjs and as JP Patches -- asked the
+  // other way round Intl says "United Kingdom" and "Hong Kong SAR China" and
+  // the page stops agreeing with the email. T1 is Cloudflare's Tor-exit
+  // marker: shaped like a country code, not a country.
+  const REGIONS = (() => {
+    try { return new Intl.DisplayNames(['en'], { type: 'region' }); }
+    catch { return null; }
+  })();
+  const countryName = (code) => {
+    if (NAMES[code]) return NAMES[code];
+    if (REGIONS) {
+      try { const n = REGIONS.of(code); if (n && n !== code) return n; } catch (e) { /* not a region code */ }
+    }
+    return String(code || '?');
+  };
 
   // The site's own Mac/PC pair, lifted from the download buttons rather than
   // chosen again here.
@@ -152,7 +170,7 @@ through this site.</p>
   };
   const bar = (id, cc, colour) => new Chart(el(id), {
     type: 'bar',
-    data: { labels: cc.map((c) => NAMES[c[0]] || c[0]), datasets: [{ data: cc.map((c) => c[1]), backgroundColor: colour, borderColor: colour, borderWidth: 1, borderRadius: 4, barThickness: 20 }] },
+    data: { labels: cc.map((c) => countryName(c[0])), datasets: [{ data: cc.map((c) => c[1]), backgroundColor: colour, borderColor: colour, borderWidth: 1, borderRadius: 4, barThickness: 20 }] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
       scales: { x: { beginAtZero: true, grid: { color: GRID, z: 1 }, ticks: { color: INK, precision: 0 } }, y: { grid: { display: false }, ticks: { color: INK } } } },
   });
@@ -198,7 +216,7 @@ through this site.</p>
     el('m-countries').innerHTML = cc.length
       ? '<table class="m-table"><thead><tr><th>Country</th><th class="num">Check-ins</th>'
         + '</tr></thead><tbody>'
-        + cc.map(([c, n]) => `<tr><td>${NAMES[c] || c}</td><td class="num">${n}</td></tr>`).join('')
+        + cc.map(([c, n]) => `<tr><td>${countryName(c)}</td><td class="num">${n}</td></tr>`).join('')
         + '</tbody></table>'
       : '';
   }
