@@ -32,15 +32,17 @@ on:
     # 15:12 UTC ≈ 08:12 Pacific, so if the midnight run was dropped the report
     # still lands in the morning.
     #
-    # SAFE TO DOUBLE-RUN, and this was proven rather than assumed. The job is
-    # idempotent by delta: whichever run fires first sends and commits the
-    # advanced snapshot, and a second run the same day diffs against THAT and
-    # goes quiet. Measured by rolling the snapshot back and running twice —
-    # run 1 `send=true` with 7 new downloads, run 2 `send=false`,
-    # "No new downloads since the last report." A duplicate email is not
-    # possible while saveSnapshot() stays on both exit paths of
-    # scripts/download-report.mjs; if that ever changes, this second cron has
-    # to go with it.
+    # ONE EMAIL A DAY. This run is handed --retry, which stands it down
+    # entirely when a report already went out today: no email, and no snapshot
+    # write, so downloads that arrived since the morning are still unreported
+    # and appear in tomorrow's email rather than a second one today. Before
+    # this, two batches in one day meant two emails with different numbers.
+    #
+    # The safety net is unchanged. --retry keys off `lastSent` in the snapshot,
+    # which is stamped ONLY when an email actually goes. A dropped morning run
+    # leaves it on yesterday, so this run reports normally.
+    #
+    # workflow_dispatch passes no flag, so a manual run always reports.
     - cron: '12 15 * * *'
   workflow_dispatch: {}
 
@@ -71,7 +73,10 @@ jobs:
         id: calc
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/download-report.mjs
+        # --retry ONLY on the afternoon schedule. It stands the run down if a
+        # report already went out today, so the inbox gets one email a day.
+        # Empty on workflow_dispatch, so a manual run always reports.
+        run: node scripts/download-report.mjs ${{ github.event.schedule == '12 15 * * *' && '--retry' || '' }}
 
       - name: Email the report
         if: steps.calc.outputs.send == 'true'

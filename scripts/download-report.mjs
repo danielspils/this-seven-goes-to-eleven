@@ -14,14 +14,36 @@
 //
 // Preview without sending:  node scripts/download-report.mjs --dry-run
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
-import { tally, hasActivity, renderBody, htmlBody, subject, version, ctaBullet } from './download-report-lib.mjs';
+import { tally, hasActivity, renderBody, htmlBody, subject, version, ctaBullet, shouldStandDown } from './download-report-lib.mjs';
 
 const APP_REPO = 'danielspils/crumar-seven-editor'; // downloads live there
 const SNAPSHOT = '.github/download-stats.json';
 const RELAY = 'https://ping.thissevengoestoeleven.com';
 const dryRun = process.argv.includes('--dry-run');
+// THE AFTERNOON RUN IS A SAFETY NET, NOT A SECOND EMAIL. With --retry the run
+// does nothing at all if a report already went out today: no send, and no
+// snapshot write, so whatever arrived since this morning is still unreported
+// and lands in tomorrow's email instead of a second one today. If the morning
+// run was dropped — which is why the second cron exists — nothing was sent,
+// and this run behaves exactly like a normal one.
+const retry = process.argv.includes('--retry');
 
 const utcKey = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
+
+// READ THE SNAPSHOT AND DECIDE WHETHER TO STAND DOWN BEFORE TOUCHING THE
+// NETWORK. A run that is not going to report should not call the GitHub API
+// or the relay at all, and keeping the gate here means it can be proved
+// without either of them being reachable.
+const raw = existsSync(SNAPSHOT) ? JSON.parse(readFileSync(SNAPSHOT, 'utf8')) : {};
+
+// NOTHING IS WRITTEN ON THIS PATH. Advancing the snapshot here would fold
+// today's later downloads into a delta nobody ever reads, and they would never
+// appear in a "since" block again.
+if (shouldStandDown({ retry, lastSent: raw.lastSent })) {
+  console.log(`A report already went out today (${raw.lastSent}). Retry run standing down.`);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, 'send=false\n');
+  process.exit(0);
+}
 
 // THE RELAY'S HALF, and every way it can fail to answer is a different
 // sentence in the email rather than a blank table.
@@ -83,9 +105,9 @@ for (const r of releases) {
 // no metadata) is still read, so the first run after this change diffs against
 // real numbers instead of starting from zero and reporting every download ever
 // made as new.
-const raw = existsSync(SNAPSHOT) ? JSON.parse(readFileSync(SNAPSHOT, 'utf8')) : {};
 const previous = raw.assets || raw;
 const since = raw.date || null;
+
 const press = await relayPress(raw.press || null);
 
 const rows = Object.entries(current).map(([id, a]) => ({
@@ -108,10 +130,14 @@ function versionKey(tag) {
 }
 
 const out = process.env.GITHUB_OUTPUT;
-const saveSnapshot = () => {
+const saveSnapshot = (sent = false) => {
   if (dryRun) return;
   writeFileSync(SNAPSHOT, `${JSON.stringify({
     date: new Date().toISOString(),
+    // The date an email actually went out, which is NOT the date the counts
+    // were taken — the no-activity path writes a snapshot and sends nothing.
+    // --retry reads this and only this.
+    lastSent: sent ? new Date().toISOString() : (raw.lastSent || null),
     assets: current,
     // The press table is kept so a morning when the relay is unreachable has
     // something to fall back to. Only a LIVE reading is stored — writing the
@@ -156,4 +182,4 @@ if (out) {
   emit('body', body);
   emit('html', htmlBody(body));
 }
-saveSnapshot();
+saveSnapshot(true);

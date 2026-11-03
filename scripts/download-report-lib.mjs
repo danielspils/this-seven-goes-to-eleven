@@ -83,6 +83,21 @@ export function countryName(code) {
   return String(code || '?');
 }
 
+// ONE EMAIL A DAY. The afternoon cron exists because GitHub has dropped the
+// morning run before, and a missed reading cannot be recovered. It is a safety
+// net, not a second report: handed --retry it stands down when an email
+// already went out today, so a second batch of downloads waits for tomorrow's
+// email instead of arriving as a second one with different numbers.
+//
+// Keyed on lastSent, which is stamped ONLY when an email actually goes — not
+// on the no-activity path, which writes a snapshot and sends nothing. A
+// dropped morning run therefore leaves lastSent on yesterday and this returns
+// false, which is the whole point of the second cron.
+export function shouldStandDown({ retry, lastSent, now = new Date() }) {
+  if (!retry || !lastSent) return false;
+  return String(lastSent).slice(0, 10) === now.toISOString().slice(0, 10);
+}
+
 export function classify(name) {
   const n = String(name || '').toLowerCase();
   if (ASSET_RE.mac.test(n)) return 'mac';

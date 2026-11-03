@@ -10,7 +10,7 @@ import assert from 'node:assert';
 
 import {
   classify, tally, hasActivity, renderBody, subject,
-  ctaBullet, htmlBody, METRICS_URL, GOATCOUNTER_URL, countryName,
+  ctaBullet, htmlBody, METRICS_URL, GOATCOUNTER_URL, countryName, shouldStandDown,
 } from './download-report-lib.mjs';
 
 // The real filenames, from danielspils/crumar-seven-editor. Not invented:
@@ -514,4 +514,24 @@ test('the two non-countries are never dressed up as countries', () => {
   // Cloudflare reports T1 for Tor exits and XX for unknown. Neither is a place.
   assert.equal(countryName('T1'), 'Tor network');
   assert.equal(countryName('XX'), 'Unknown');
+});
+
+test('the retry run stands down once a report has gone out today', () => {
+  const now = new Date('2026-11-03T15:12:00Z');
+  assert.equal(shouldStandDown({ retry: true, lastSent: '2026-11-03T07:12:04Z', now }), true);
+});
+
+test('a dropped morning run still gets its email', () => {
+  // The only reason the second cron exists. lastSent on yesterday means
+  // nothing was sent today, so the retry reports normally.
+  const now = new Date('2026-11-03T15:12:00Z');
+  assert.equal(shouldStandDown({ retry: true, lastSent: '2026-11-02T07:12:04Z', now }), false);
+  assert.equal(shouldStandDown({ retry: true, lastSent: null, now }), false);
+  assert.equal(shouldStandDown({ retry: true, lastSent: undefined, now }), false);
+});
+
+test('the morning run and a manual run never stand down', () => {
+  const now = new Date('2026-11-03T15:12:00Z');
+  assert.equal(shouldStandDown({ retry: false, lastSent: '2026-11-03T07:12:04Z', now }), false);
+  assert.equal(shouldStandDown({ lastSent: '2026-11-03T07:12:04Z', now }), false);
 });
