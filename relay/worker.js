@@ -163,6 +163,76 @@ async function handleTotals(env) {
   return json({ ok: true, active: acc });
 }
 
+// WHAT COUNTS AS A PRESS. Only a device that could actually install the thing.
+//
+// MOBILE IS EXCLUDED, and this is not a guess about bots. Both downloads are
+// desktop installers — a .dmg and an .exe — so a phone pressing either one can
+// never become an install. JP Patches' agent fingerprints showed every mobile
+// user-agent pressing BOTH buttons exactly once (Android 4.4.2, Android 9 on
+// two handsets, Android 10), which no person does: nobody takes a Mac disk
+// image and a Windows installer on the same phone. The only agents with an
+// uneven split were the desktop ones.
+//
+// The REDIRECT IS NEVER GATED. Anyone who asks still gets the file; this
+// decides what goes in the counter, nothing else.
+const DL_MOBILE_RE = /android|iphone|ipad|ipod|windows phone|iemobile|opera mini|\bmobi\b/i;
+// Agents that announce themselves. Kept alongside the mobile rule because it
+// catches a different population, and shared with JP Patches.
+const DL_BOT_RE = /bot|crawl|spider|slurp|curl|wget|python-requests|headless|preview|monitor|scan|fetch/i;
+
+const UA_TTL_SECONDS = 90 * 24 * 3600;
+
+// A coarse, bounded fingerprint: lowercased, non-alphanumerics collapsed, 60
+// chars. Readable enough to name an agent, bounded enough that a hostile UA
+// cannot blow up the keyspace. No IP, no raw header, nothing per-visitor.
+// Same shape as JP Patches so one reader can serve both.
+// KV: ua:<YYYYMMDD>:<counted|filtered>:<platform>:<slug>
+function uaSlug(ua) {
+  const s = String(ua || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 60);
+  return s.replace(/^_+|_+$/g, '') || 'empty';
+}
+async function recordAgent(env, platform, ua, counted) {
+  const day = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const key = `ua:${day}:${counted ? 'counted' : 'filtered'}:${platform}:${uaSlug(ua)}`;
+  const next = (Number(await env.PINGS.get(key)) || 0) + 1;
+  await env.PINGS.put(key, String(next), { expirationTtl: UA_TTL_SECONDS });
+}
+
+export function countsAsPress(ua) {
+  const s = String(ua || '');
+  if (!s) return false;                 // no UA at all is not a person
+  if (DL_BOT_RE.test(s)) return false;
+  if (DL_MOBILE_RE.test(s)) return false;
+  return true;
+}
+
+
+// GET /download/agents[?since=YYYYMMDD] — the UA fingerprints behind the press
+// counts, so an automated presser can be named and then filtered. Shape:
+// { counted: { slug: { mac, pc } }, filtered: { slug: { mac, pc } } }.
+// Aggregate counts only, same public-by-design reasoning as /download/stats.
+async function handleDownloadAgents(url, env) {
+  const since = (url.searchParams.get('since') || '').replace(/[^0-9]/g, '');
+  const out = { counted: {}, filtered: {} };
+  let cursor;
+  do {
+    const page = await env.PINGS.list({ prefix: 'ua:', cursor });
+    for (const k of page.keys) {
+      const parts = k.name.split(':');        // ua:<day>:<bucket>:<platform>:<slug>
+      if (parts.length !== 5) continue;
+      const [, day, bucket, platform, slug] = parts;
+      if (since && day < since) continue;
+      if (!out[bucket]) continue;
+      const n = Number(await env.PINGS.get(k.name)) || 0;
+      if (!n) continue;
+      out[bucket][slug] = out[bucket][slug] || { mac: 0, pc: 0 };
+      out[bucket][slug][platform] = (out[bucket][slug][platform] || 0) + n;
+    }
+    cursor = page.list_complete ? null : page.cursor;
+  } while (cursor);
+  return json({ ok: true, since: since || null, ...out });
+}
+
 // ── /download/mac and /download/pc ──────────────────────────────────────
 //
 // The site's buttons resolve the actual installer in JavaScript, which works
@@ -309,13 +379,20 @@ async function countDownload(env, platform, country) {
   await bump(`dlm:${month}:${platform}:${country}`, null);   // permanent
 }
 
-async function handleDownload(request, env, ctx, platform, count = true) {
+export async function handleDownload(request, env, ctx, platform, count = true) {
   const country = (request.cf && request.cf.country) || 'XX';
   const url = await resolveDownload(env, platform);
+  const ua = request.headers.get('user-agent') || '';
+  const human = countsAsPress(ua);
+  // Fingerprint EVERY press, counted or not, so what is being excluded stays
+  // visible and the rule can be checked against real traffic rather than
+  // trusted. Diagnostic only: it never gates the redirect, and a KV failure is
+  // swallowed so it can never cost somebody their download.
+  if (ctx) ctx.waitUntil(recordAgent(env, platform, ua, human).catch(() => {}));
   // Counted even when the lookup failed: somebody still asked for a download,
   // and a count that quietly omits the broken days would hide exactly the
   // period worth knowing about.
-  if (count && ctx) ctx.waitUntil(countDownload(env, platform, country));
+  if (count && human && ctx) ctx.waitUntil(countDownload(env, platform, country));
   return new Response(null, {
     status: 302,
     headers: {
@@ -484,6 +561,11 @@ export default {
     }
     if (readMethod && url.pathname === '/version') {
       const res = await handleVersion(env);
+      for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
+      return res;
+    }
+    if (request.method === 'GET' && url.pathname === '/download/agents') {
+      const res = await handleDownloadAgents(url, env);
       for (const [k, v] of Object.entries(READ_CORS)) res.headers.set(k, v);
       return res;
     }
