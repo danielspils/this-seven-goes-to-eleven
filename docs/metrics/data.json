@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-08T14:15:17.531Z",
+ "generated": "2026-11-08T19:40:44.841Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -551,7 +551,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg",
    "tag": "v1.5.5",
-   "count": 145,
+   "count": 146,
    "published": "2026-09-10T17:41:19Z"
   },
   {
