@@ -27,6 +27,16 @@ const DESKTOP = [
   'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
 ];
 
+// Not a browser at all. Pressing both buttons on BOTH sites, 2/2 here and 3/2
+// on JP, announcing nothing DL_BOT_RE could match. Found 9 Nov 2026 in the
+// fingerprints this file's rule was added to collect.
+const NOT_BROWSER_SHAPED = [
+  'MSH PDFMIN/1',
+  'riverbot/1.0 (https://river.ai/bot)',
+  'CCBot/2.0 (https://commoncrawl.org/faq)',
+  'SomeAgent/3.1',
+];
+
 const ANNOUNCED_BOTS = [
   'Googlebot/2.1 (+http://www.google.com/bot.html)',
   'curl/8.4.0',
@@ -36,6 +46,14 @@ const ANNOUNCED_BOTS = [
 
 test('a phone is never a press — neither installer runs there', () => {
   for (const ua of MOBILE) {
+    assert.equal(countsAsPress(ua), false, ua);
+  }
+});
+
+test('anything without a Mozilla/ token is a program, named or not', () => {
+  // Every real browser still sends it. Default-deny catches the agents that
+  // announce nothing — which is what DL_BOT_RE could never do.
+  for (const ua of NOT_BROWSER_SHAPED) {
     assert.equal(countsAsPress(ua), false, ua);
   }
 });

@@ -191,9 +191,12 @@ function uaSlug(ua) {
   const s = String(ua || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 60);
   return s.replace(/^_+|_+$/g, '') || 'empty';
 }
-async function recordAgent(env, platform, ua, counted) {
+async function recordAgent(env, platform, ua, counted, country = 'XX') {
   const day = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  const key = `ua:${day}:${counted ? 'counted' : 'filtered'}:${platform}:${uaSlug(ua)}`;
+  // COUNTRY IS IN THE KEY so an agent can be tied to the row it inflates.
+  // Without it we could see that Tor presses were exactly Mac=PC and see which
+  // agents were pressing, but never that they were the same traffic.
+  const key = `ua:${day}:${counted ? 'counted' : 'filtered'}:${platform}:${country}:${uaSlug(ua)}`;
   const next = (Number(await env.PINGS.get(key)) || 0) + 1;
   await env.PINGS.put(key, String(next), { expirationTtl: UA_TTL_SECONDS });
 }
@@ -201,6 +204,12 @@ async function recordAgent(env, platform, ua, counted) {
 export function countsAsPress(ua) {
   const s = String(ua || '');
   if (!s) return false;                 // no UA at all is not a person
+  // EVERY REAL BROWSER SENDS A Mozilla/ TOKEN — Chrome, Safari, Firefox and
+  // Edge all still do, for reasons going back to 1994. Anything that does not
+  // is a program, whether or not it says so. This is default-deny, and it is
+  // what caught `MSH PDFMIN/1`, which was pressing both buttons on BOTH sites
+  // and announced nothing DL_BOT_RE could match.
+  if (!/^Mozilla\//.test(s)) return false;
   if (DL_BOT_RE.test(s)) return false;
   if (DL_MOBILE_RE.test(s)) return false;
   return true;
@@ -218,15 +227,24 @@ async function handleDownloadAgents(url, env) {
   do {
     const page = await env.PINGS.list({ prefix: 'ua:', cursor });
     for (const k of page.keys) {
-      const parts = k.name.split(':');        // ua:<day>:<bucket>:<platform>:<slug>
-      if (parts.length !== 5) continue;
-      const [, day, bucket, platform, slug] = parts;
+      // Two shapes on purpose: keys written before 2026-11-09 carry no
+      // country. Both are read rather than the old ones being dropped —
+      // 90 days of evidence is not worth discarding for a tidier parser.
+      const parts = k.name.split(':');
+      let day, bucket, platform, country, slug;
+      if (parts.length === 6) {               // ua:<day>:<bucket>:<platform>:<country>:<slug>
+        [, day, bucket, platform, country, slug] = parts;
+      } else if (parts.length === 5) {        // ua:<day>:<bucket>:<platform>:<slug>
+        [, day, bucket, platform, slug] = parts;
+        country = '??';
+      } else continue;
       if (since && day < since) continue;
       if (!out[bucket]) continue;
       const n = Number(await env.PINGS.get(k.name)) || 0;
       if (!n) continue;
-      out[bucket][slug] = out[bucket][slug] || { mac: 0, pc: 0 };
+      out[bucket][slug] = out[bucket][slug] || { mac: 0, pc: 0, countries: {} };
       out[bucket][slug][platform] = (out[bucket][slug][platform] || 0) + n;
+      out[bucket][slug].countries[country] = (out[bucket][slug].countries[country] || 0) + n;
     }
     cursor = page.list_complete ? null : page.cursor;
   } while (cursor);
@@ -388,7 +406,7 @@ export async function handleDownload(request, env, ctx, platform, count = true) 
   // visible and the rule can be checked against real traffic rather than
   // trusted. Diagnostic only: it never gates the redirect, and a KV failure is
   // swallowed so it can never cost somebody their download.
-  if (ctx) ctx.waitUntil(recordAgent(env, platform, ua, human).catch(() => {}));
+  if (ctx) ctx.waitUntil(recordAgent(env, platform, ua, human, country).catch(() => {}));
   // Counted even when the lookup failed: somebody still asked for a download,
   // and a count that quietly omits the broken days would hide exactly the
   // period worth knowing about.
