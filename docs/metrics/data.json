@@ -1,13 +1,13 @@
 {
- "generated": "2026-11-08T19:40:44.841Z",
+ "generated": "2026-11-09T17:24:17.655Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 180,
-  "pc": 156,
+  "mac": 185,
+  "pc": 161,
   "upd": 13,
   "series": [
    {
@@ -507,6 +507,12 @@
     "mac": 180,
     "pc": 156,
     "upd": 13
+   },
+   {
+    "date": "2026-11-09",
+    "mac": 185,
+    "pc": 161,
+    "upd": 13
    }
   ]
  },
@@ -515,13 +521,13 @@
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.5",
-   "count": 10,
+   "count": 11,
    "published": "2026-09-10T17:41:19Z"
   },
   {
    "name": "latest.yml",
    "tag": "v1.5.5",
-   "count": 45,
+   "count": 46,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -539,7 +545,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5-x64-win.exe",
    "tag": "v1.5.5",
-   "count": 115,
+   "count": 120,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -551,7 +557,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5.dmg",
    "tag": "v1.5.5",
-   "count": 146,
+   "count": 150,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -1043,20 +1049,20 @@
  ],
  "active": {
   "reachable": true,
-  "total": 30,
+  "total": 31,
   "byMonth": {
    "2026-09": 16,
    "2026-10": 13,
-   "2026-11": 1
+   "2026-11": 2
   },
   "byCountry": {
-   "US": 29,
+   "US": 30,
    "PL": 1
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 32,
+   "total": 33,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -1080,15 +1086,16 @@
     "20261020": 1,
     "20261025": 1,
     "20261028": 1,
-    "20261101": 1
+    "20261101": 1,
+    "20261109": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
-    "1.5.5": 24
+    "1.5.5": 25
    },
    "byPlatform": {
-    "mac": 9,
+    "mac": 10,
     "win": 23
    }
   }
