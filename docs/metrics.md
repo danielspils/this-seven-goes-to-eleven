@@ -24,7 +24,7 @@ description: Usage and download figures for This Seven Goes to Eleven.
 <div id="m-countries"></div>
 
 <h2>All downloads</h2>
-<p class="m-pop">Every copy that left GitHub, from any route — this site, the releases page, a direct link. Installers only; the updater's own feed files are excluded.</p>
+<p class="m-pop">Every copy that left GitHub, from any route — this site, the releases page, a direct link. Installers only; the updater's own feed files are excluded. This counts requests for the file, not people: GitHub's counter carries no user-agent, so automated ones are in here and cannot be filtered out.</p>
 <p class="m-big"><span id="m-dl">—</span> <span class="m-big-unit" id="m-dl-split"></span></p>
 <div class="m-ctl" id="m-range">
   <button data-r="all" class="on">All time</button>
@@ -41,7 +41,10 @@ description: Usage and download figures for This Seven Goes to Eleven.
 <div class="m-chart" id="m-press-wrap"><canvas id="m-press-chart" role="img" aria-label="Download button presses by country, ranked."></canvas></div>
 
 <h2>Which version people are on</h2>
-<p class="m-pop">Installers downloaded per release. Newest first.</p>
+<p class="m-pop">Copies that checked in over the last 30 days, newest first.
+Installs running 1.5.3 or later that opened the app and haven&rsquo;t opted out
+&mdash; older versions don&rsquo;t report, so this is what is running, not
+everyone.</p>
 <div id="m-versions"><p class="muted">—</p></div>
 
 <h2>Site visits</h2>
@@ -150,6 +153,9 @@ through this site.</p>
   const utcKey = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
 
   let D = null, activeLive = false, presses = null;
+  // Which versions are RUNNING, from the ping. Null means not read, which
+  // renders as a sentence rather than an empty table.
+  let runningVersions = null;
   let curve = null, pressChart = null, preset = 'all';
   // One entry per window button. null means "not read", which renders as an
   // em dash and a sentence saying so — never as 0.
@@ -292,35 +298,45 @@ through this site.</p>
 
   // ── 4. WHICH VERSION PEOPLE ARE ON ──────────────────────────────────
   //
-  // REPLACES the old "Every asset" table, which sorted every release asset by
-  // download count — so latest.yml and latest-mac.yml, the updater's own feed
-  // files, sat at the top with 144 fetches between them. Machine traffic
-  // presented as the most popular downloads. Installers only here, grouped by
-  // release rather than by file, because "which version are people on" is the
-  // question that table looked like it was answering and never was.
+  // FROM THE PING, NOT FROM DOWNLOADS. This heading asks what people are
+  // RUNNING, and downloads cannot answer it: a download says a file was
+  // fetched, by anyone, possibly by a machine, and says nothing about whether
+  // it was ever installed or opened. The ping comes from a copy of the app a
+  // person opened. It is the only source here that counts people.
+  //
+  // It REPLACED an "Every asset" table that sorted every release file by
+  // download count, so latest.yml and latest-mac.yml — the updater's own feed
+  // files — sat at the top with 144 fetches between them. Machine traffic
+  // presented as the most popular downloads. Then it was downloads grouped by
+  // release, which was better and still the wrong question.
+  //
+  // THE FLOOR IS REAL AND IS STATED ON THE PAGE: the ping shipped in 1.5.3, so
+  // anyone on an older build is invisible here. That is why this table can
+  // never be read as "everyone", and why it grows as people update.
   function renderVersions() {
-    const rows = {};
-    for (const a of D.assets || []) {
-      const isMac = /\.dmg$/.test(a.name);
-      const isWin = /\.exe$/.test(a.name);
-      if (!isMac && !isWin) continue;               // installers only
-      const tag = (a.tag || '').replace(/^v/, '');
-      rows[tag] = rows[tag] || { mac: 0, win: 0 };
-      rows[tag][isMac ? 'mac' : 'win'] += a.count || 0;
+    if (!runningVersions) {
+      el('m-versions').innerHTML =
+        '<p class="muted">The relay could not be reached just now, so this is '
+        + 'missing rather than empty.</p>';
+      return;
     }
     const cmp = (a, b) => {
       const A = a.split('.').map(Number), B = b.split('.').map(Number);
       for (let i = 0; i < 3; i++) if ((A[i] || 0) !== (B[i] || 0)) return (B[i] || 0) - (A[i] || 0);
       return 0;
     };
-    const list = Object.keys(rows).sort(cmp);
+    const list = Object.keys(runningVersions).sort(cmp);
+    const total = list.reduce((n, v) => n + runningVersions[v], 0);
     el('m-versions').innerHTML = list.length
-      ? '<table class="m-table"><thead><tr><th>Version</th><th class="num">Mac</th>'
-        + '<th class="num">Windows</th><th class="num">Total</th></tr></thead><tbody>'
-        + list.map((v) => `<tr><td>${v}</td><td class="num">${rows[v].mac}</td>`
-          + `<td class="num">${rows[v].win}</td><td class="num">${rows[v].mac + rows[v].win}</td></tr>`).join('')
+      ? '<table class="m-table"><thead><tr><th>Version</th><th class="num">Check-ins</th>'
+        + '<th class="num">Share</th></tr></thead><tbody>'
+        + list.map((v) => {
+          const n = runningVersions[v];
+          const pct = total ? Math.round((n / total) * 100) : 0;
+          return `<tr><td>${v}</td><td class="num">${n}</td><td class="num">${pct}%</td></tr>`;
+        }).join('')
         + '</tbody></table>'
-      : '<p class="muted">No releases yet.</p>';
+      : '<p class="muted">No check-ins in the last 30 days.</p>';
   }
 
   function paint() {
@@ -365,6 +381,13 @@ through this site.</p>
       for (const [k, p] of [['1', w1], ['7', w7], ['30', w30]]) {
         if (p && p.ok) runData[k] = { total: p.total, byCountry: p.byCountry };
       }
+      // THE VERSION TABLE COMES FROM THE 30-DAY WINDOW, not from /totals. The
+      // permanent rollup is keyed pgm:<month>:<platform>:<country> and has no
+      // version dimension at all, so "all time" cannot answer this question.
+      // Thirty days is the right window anyway: what is running NOW is the
+      // question, and an install that stopped checking in two months ago is
+      // not running.
+      if (w30 && w30.ok) runningVersions = w30.byVersion || {};
       activeLive = !!(t && t.ok && w1 && w1.ok);
     });
   }
