@@ -53,7 +53,7 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # THE DOWNLOAD HISTORY IS REBUILT FROM `git log` of the daily
           # snapshot, and the default checkout is depth 1 — one commit, so the
