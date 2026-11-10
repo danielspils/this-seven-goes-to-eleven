@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-10T15:31:58.687Z",
+ "generated": "2026-11-10T21:17:20.869Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -527,7 +527,7 @@
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.5",
-   "count": 13,
+   "count": 14,
    "published": "2026-09-10T17:41:19Z"
   },
   {
@@ -539,7 +539,7 @@
   {
    "name": "This-Seven-Goes-to-Eleven-1.5.5-universal-mac.zip",
    "tag": "v1.5.5",
-   "count": 3,
+   "count": 4,
    "published": "2026-09-10T17:41:19Z"
   },
   {
