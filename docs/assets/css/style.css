@@ -452,6 +452,14 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 }
 .dl-version[hidden] { display: none; }
 
+/* Phone/tablet only, revealed by download.js. Same muted voice as the lines
+   around it: information, not a warning. */
+.mobile-note {
+  color: var(--muted); font-size: .9rem; line-height: 1.5;
+  margin: 0 0 1.1rem; max-width: 32rem;
+}
+.mobile-note[hidden] { display: none; }
+
 .win-note {
   color: var(--muted); font-size: .9rem; line-height: 1.5;
   margin: 0 0 1.1rem; max-width: 32rem;

@@ -69,6 +69,8 @@ Crumar Seven. Ecco: *This Seven Goes to Eleven*!
 
 <p class="dl-version" id="dl-version" hidden></p>
 
+<p class="mobile-note" id="dl-mobile" hidden>This is a Mac and PC desktop app. Open this page on your computer to download.</p>
+
 Windows may warn you the first few times — click **More info**, then **Run
 anyway**. It's signed; the warning fades as more people download.
 {: .win-note}

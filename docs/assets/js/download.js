@@ -60,6 +60,18 @@
     })
     .catch(() => { /* no version shown, and the buttons work regardless */ });
 
+  // ON A PHONE OR TABLET, SAY SO (2026-11-12). Both downloads are desktop
+  // installers. Shown, never blocking: the buttons stay live, and the relay
+  // sends a phone to the releases page rather than a file it cannot open.
+  // Same mobile pattern as the relay's DL_MOBILE_RE, plus the iPad, which
+  // calls itself a Mac and only gives itself away by having a touchscreen.
+  const mobileNote = document.getElementById('dl-mobile');
+  const ua = navigator.userAgent || '';
+  const isPhoneOrTablet =
+    /android|iphone|ipad|ipod|windows phone|iemobile|opera mini|\bmobi\b/i.test(ua) ||
+    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (mobileNote && isPhoneOrTablet) mobileNote.hidden = false;
+
   // THE CLICK EVENT THAT USED TO LIVE HERE IS GONE (2026-09-09).
   //
   // It fired window.goatcounter.count() on click and then the browser navigated
