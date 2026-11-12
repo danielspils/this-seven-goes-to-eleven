@@ -173,8 +173,14 @@ async function handleTotals(env) {
 // image and a Windows installer on the same phone. The only agents with an
 // uneven split were the desktop ones.
 //
-// The REDIRECT IS NEVER GATED. Anyone who asks still gets the file; this
-// decides what goes in the counter, nothing else.
+// WHAT A FILTERED REQUEST GETS (changed 2026-11-12). It used to get the file,
+// on the rule "the redirect is never gated". That kept our own press count
+// clean and handed every bot to GitHub, whose per-asset counter has no filter:
+// the scraper rotating phone agents and pressing both buttons is why "All
+// downloads" moved Mac=PC in lockstep on both sites. Now a filtered request
+// is sent to the releases page instead. Nobody is refused: a person the rule
+// misjudges sees the installers listed and is one click away. A program that
+// does not click never touches an asset counter.
 const DL_MOBILE_RE = /android|iphone|ipad|ipod|windows phone|iemobile|opera mini|\bmobi\b/i;
 // Agents that announce themselves. Kept alongside the mobile rule because it
 // catches a different population, and shared with JP Patches.
@@ -399,9 +405,11 @@ async function countDownload(env, platform, country) {
 
 export async function handleDownload(request, env, ctx, platform, count = true) {
   const country = (request.cf && request.cf.country) || 'XX';
-  const url = await resolveDownload(env, platform);
   const ua = request.headers.get('user-agent') || '';
   const human = countsAsPress(ua);
+  // Only a counted press is resolved to the installer. See "WHAT A FILTERED
+  // REQUEST GETS" above countsAsPress.
+  const url = human ? await resolveDownload(env, platform) : DL_FALLBACK;
   // Fingerprint EVERY press, counted or not, so what is being excluded stays
   // visible and the rule can be checked against real traffic rather than
   // trusted. Diagnostic only: it never gates the redirect, and a KV failure is

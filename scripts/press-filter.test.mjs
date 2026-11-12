@@ -117,19 +117,33 @@ const req = (ua) => ({
 
 const dlKeys = (env) => [...env._store.keys()].filter((k) => k.startsWith('dl:') || k.startsWith('dlm:'));
 
-test('a phone press redirects but is not counted', async () => {
+test('a phone press goes to the releases page, not the installer, and is not counted', async () => {
   const env = fakeEnv(); const ctx = fakeCtx();
   const res = await handleDownload(req('Mozilla/5.0 (Linux; Android 10; SM-A715F)'), env, ctx, 'mac');
   await ctx.settle();
-  assert.equal(res.status, 302, 'the download still works');
+  assert.equal(res.status, 302, 'nobody is refused');
+  assert.match(res.headers.get('location'), /\/releases\/latest$/, 'lands on the releases page');
+  assert.notEqual(res.headers.get('location'), 'https://example.test/app.dmg', 'never the asset itself');
   assert.deepEqual(dlKeys(env), [], 'nothing was counted');
 });
+
+// Filtered requests must never reach an asset URL: GitHub counts every asset
+// fetch with no filter, which is how bots inflated "All downloads".
+for (const ua of ['MSH PDFMIN/1', '', 'Mozilla/5.0 (compatible; Barkrowler/0.9; +https://babbar.tech/crawler)']) {
+  test(`a filtered agent never gets the installer: ${JSON.stringify(ua)}`, async () => {
+    const env = fakeEnv(); const ctx = fakeCtx();
+    const res = await handleDownload(req(ua), env, ctx, 'mac');
+    await ctx.settle();
+    assert.match(res.headers.get('location'), /\/releases\/latest$/);
+  });
+}
 
 test('a desktop press is counted', async () => {
   const env = fakeEnv(); const ctx = fakeCtx();
   const res = await handleDownload(req('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605'), env, ctx, 'mac');
   await ctx.settle();
   assert.equal(res.status, 302);
+  assert.equal(res.headers.get('location'), 'https://example.test/app.dmg', 'a person gets the installer');
   assert.deepEqual(dlKeys(env).sort(), ['dl:' + new Date().toISOString().slice(0,10).replace(/-/g,'') + ':mac:SE',
                                         'dlm:' + new Date().toISOString().slice(0,7) + ':mac:SE'].sort());
 });
