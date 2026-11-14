@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T14:05:04.077Z",
+ "generated": "2026-11-14T19:55:44.423Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -546,8 +546,56 @@
    }
   ]
  },
- "releases": 11,
+ "releases": 12,
  "assets": [
+  {
+   "name": "latest-mac.yml",
+   "tag": "v1.5.6",
+   "count": 1,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "latest.yml",
+   "tag": "v1.5.6",
+   "count": 0,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6-universal-mac.zip",
+   "tag": "v1.5.6",
+   "count": 1,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6-universal-mac.zip.blockmap",
+   "tag": "v1.5.6",
+   "count": 1,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6-x64-win.exe",
+   "tag": "v1.5.6",
+   "count": 0,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6-x64-win.exe.blockmap",
+   "tag": "v1.5.6",
+   "count": 0,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6.dmg",
+   "tag": "v1.5.6",
+   "count": 0,
+   "published": "2026-11-14T18:39:10Z"
+  },
+  {
+   "name": "This-Seven-Goes-to-Eleven-1.5.6.dmg.blockmap",
+   "tag": "v1.5.6",
+   "count": 0,
+   "published": "2026-11-14T18:39:10Z"
+  },
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.5",
@@ -1079,21 +1127,21 @@
  ],
  "active": {
   "reachable": true,
-  "total": 35,
+  "total": 36,
   "byMonth": {
    "2026-09": 16,
    "2026-10": 13,
-   "2026-11": 6
+   "2026-11": 7
   },
   "byCountry": {
-   "US": 33,
+   "US": 34,
    "PL": 1,
    "DE": 1
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 37,
+   "total": 38,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -1121,15 +1169,16 @@
     "20261109": 1,
     "20261110": 2,
     "20261112": 1,
-    "20261113": 1
+    "20261113": 1,
+    "20261114": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
-    "1.5.5": 29
+    "1.5.5": 30
    },
    "byPlatform": {
-    "mac": 13,
+    "mac": 14,
     "win": 24
    }
   }
