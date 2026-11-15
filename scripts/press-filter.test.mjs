@@ -156,3 +156,12 @@ test('every press is fingerprinted, counted or not', async () => {
   assert.equal(ua.length, 1, 'the excluded press is still visible');
   assert.match(ua[0], /:filtered:mac:/);
 });
+
+test('a desktop browser on Tor is treated as filtered: releases page, not counted', async () => {
+  const env = fakeEnv(); const ctx = fakeCtx();
+  const torReq = { ...req('Mozilla/5.0 (Windows NT 10.0; rv:128.0) Gecko/20100101 Firefox/128.0'), cf: { country: 'T1' } };
+  const res = await handleDownload(torReq, env, ctx, 'mac');
+  await ctx.settle();
+  assert.match(res.headers.get('location'), /\/releases\/latest$/);
+  assert.deepEqual(dlKeys(env), [], 'nothing was counted');
+});

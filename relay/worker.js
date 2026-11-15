@@ -406,7 +406,13 @@ async function countDownload(env, platform, country) {
 export async function handleDownload(request, env, ctx, platform, count = true) {
   const country = (request.cf && request.cf.country) || 'XX';
   const ua = request.headers.get('user-agent') || '';
-  const human = countsAsPress(ua);
+  // TOR IS TREATED AS FILTERED (2026-11-15). Tor Browser looks
+  // exactly like desktop Firefox, so the agent rule passes it, and Tor presses
+  // have run Mac=PC in lockstep on both sites for weeks; on JP a counted Tor
+  // 2/2 matched the next day's 2/2 downloads exactly. Cloudflare marks Tor as
+  // country "T1". A real Tor user lands on the releases page, one click from
+  // the installer, and "Tor network" was never a location anyway.
+  const human = countsAsPress(ua) && country !== 'T1';
   // Only a counted press is resolved to the installer. See "WHAT A FILTERED
   // REQUEST GETS" above countsAsPress.
   const url = human ? await resolveDownload(env, platform) : DL_FALLBACK;
