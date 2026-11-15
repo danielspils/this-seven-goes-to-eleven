@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-14T14:04:53.718Z",
-  "lastSent": "2026-11-14T14:04:53.718Z",
+  "date": "2026-11-15T14:41:34.373Z",
+  "lastSent": "2026-11-15T14:41:34.373Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -441,6 +441,46 @@
       "name": "latest.yml",
       "tag": "v1.5.5",
       "count": 48
+    },
+    "748413958": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6.dmg.blockmap",
+      "tag": "v1.5.6",
+      "count": 0
+    },
+    "748413959": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6-universal-mac.zip.blockmap",
+      "tag": "v1.5.6",
+      "count": 1
+    },
+    "748413963": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6.dmg",
+      "tag": "v1.5.6",
+      "count": 0
+    },
+    "748413964": {
+      "name": "latest-mac.yml",
+      "tag": "v1.5.6",
+      "count": 1
+    },
+    "748413966": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6-universal-mac.zip",
+      "tag": "v1.5.6",
+      "count": 1
+    },
+    "748413983": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6-x64-win.exe",
+      "tag": "v1.5.6",
+      "count": 0
+    },
+    "748413984": {
+      "name": "This-Seven-Goes-to-Eleven-1.5.6-x64-win.exe.blockmap",
+      "tag": "v1.5.6",
+      "count": 0
+    },
+    "748413987": {
+      "name": "latest.yml",
+      "tag": "v1.5.6",
+      "count": 0
     }
   },
   "press": {
