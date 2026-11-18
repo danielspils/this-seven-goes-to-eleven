@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-17T16:50:08.643Z",
-  "lastSent": "2026-11-17T16:50:08.643Z",
+  "date": "2026-11-18T16:23:20.359Z",
+  "lastSent": "2026-11-18T16:23:20.359Z",
   "assets": {
     "518245243": {
       "name": "This-Seven-Goes-to-Eleven-1.0.0.dmg.blockmap",
@@ -455,7 +455,7 @@
     "748413963": {
       "name": "This-Seven-Goes-to-Eleven-1.5.6.dmg",
       "tag": "v1.5.6",
-      "count": 4
+      "count": 5
     },
     "748413964": {
       "name": "latest-mac.yml",
@@ -485,12 +485,12 @@
   },
   "press": {
     "SG": 8,
-    "US": 126,
+    "US": 127,
     "IT": 3,
     "BR": 4,
     "CN": 2,
     "FI": 2,
-    "FR": 7,
+    "FR": 9,
     "ID": 1,
     "JP": 1,
     "RU": 1,
