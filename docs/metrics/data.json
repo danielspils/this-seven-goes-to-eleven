@@ -1,13 +1,13 @@
 {
- "generated": "2026-11-19T22:39:47.987Z",
+ "generated": "2026-11-20T16:04:00.629Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
   "active": "Installs that opened the app that day. One ping per install per day, no identifier. Not users, not people, not sales."
  },
  "downloads": {
-  "mac": 204,
-  "pc": 177,
+  "mac": 206,
+  "pc": 179,
   "upd": 15,
   "series": [
    {
@@ -573,6 +573,12 @@
     "mac": 204,
     "pc": 177,
     "upd": 15
+   },
+   {
+    "date": "2026-11-20",
+    "mac": 206,
+    "pc": 179,
+    "upd": 15
    }
   ]
  },
@@ -587,7 +593,7 @@
   {
    "name": "latest.yml",
    "tag": "v1.5.6",
-   "count": 3,
+   "count": 4,
    "published": "2026-11-14T18:39:10Z"
   },
   {
@@ -1157,21 +1163,21 @@
  ],
  "active": {
   "reachable": true,
-  "total": 39,
+  "total": 40,
   "byMonth": {
    "2026-09": 16,
    "2026-10": 13,
-   "2026-11": 10
+   "2026-11": 11
   },
   "byCountry": {
-   "US": 37,
+   "US": 38,
    "PL": 1,
    "DE": 1
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 41,
+   "total": 42,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -1203,17 +1209,18 @@
     "20261114": 1,
     "20261117": 1,
     "20261118": 1,
-    "20261119": 1
+    "20261119": 1,
+    "20261120": 1
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
     "1.5.5": 31,
-    "1.5.6": 2
+    "1.5.6": 3
    },
    "byPlatform": {
     "mac": 16,
-    "win": 25
+    "win": 26
    }
   }
  }
