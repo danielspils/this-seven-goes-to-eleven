@@ -65,6 +65,14 @@ async function bumpMonthly(env, platform, country) {
   await env.PINGS.put(key, String(next));   // no expirationTtl → permanent
 }
 
+async function bumpInstall(env, platform, country) {
+  const day = `in:${today()}:${platform}:${country}`;
+  const month = `inm:${new Date().toISOString().slice(0, 7)}:${platform}:${country}`;
+  await env.PINGS.put(day, String((Number(await env.PINGS.get(day)) || 0) + 1),
+    { expirationTtl: PING_TTL_SECONDS });
+  await env.PINGS.put(month, String((Number(await env.PINGS.get(month)) || 0) + 1));
+}
+
 // Mirror into GoatCounter so active installs sit beside the download events
 // the site already records, and the version rides along as `ref` — expanding
 // active-mac there shows which versions are actually running. Best-effort:
@@ -88,7 +96,7 @@ async function mirrorToGoatCounter(env, platform, country, version) {
   } catch { /* best-effort by design */ }
 }
 
-async function handlePing(request, env, ctx) {
+export async function handlePing(request, env, ctx) {
   let body;
   try { body = await request.json(); } catch { return json({ ok: false, error: 'invalid JSON' }, 400); }
 
@@ -108,13 +116,20 @@ async function handlePing(request, env, ctx) {
   const next = (Number(await env.PINGS.get(key)) || 0) + 1;
   await env.PINGS.put(key, String(next), { expirationTtl: PING_TTL_SECONDS });
   await bumpMonthly(env, platform, country);
+  // NEW INSTALLS (2026-11-21). The app sends first: true on the first ping it
+  // ever sends — before any successful ping is recorded on that machine. A bot
+  // can download an installer; it does not install and open the app, so this
+  // is the one count downloads cannot inflate. Only the literal boolean true
+  // counts. Keys: in:<day>:<platform>:<country> (90 days) and
+  // inm:<YYYY-MM>:<platform>:<country> (permanent).
+  if (body.first === true) await bumpInstall(env, platform, country);
   if (ctx) ctx.waitUntil(mirrorToGoatCounter(env, platform, country, version));
   return json({ ok: true });
 }
 
 // GET /ping/stats?since=YYYYMMDD — the 90-day window, with the per-version
 // detail the monthly rollups deliberately drop.
-async function handlePingStats(request, env) {
+export async function handlePingStats(request, env) {
   const url = new URL(request.url);
   const since = /^[0-9]{8}$/.test(url.searchParams.get('since') || '')
     ? url.searchParams.get('since') : '00000000';
@@ -134,6 +149,26 @@ async function handlePingStats(request, env) {
       out.byCountry[country] = (out.byCountry[country] || 0) + n;
       out.byVersion[version] = (out.byVersion[version] || 0) + n;
       out.byPlatform[platform] = (out.byPlatform[platform] || 0) + n;
+    }
+    cursor = page.list_complete ? null : page.cursor;
+  } while (cursor);
+  // New installs: same window, same shape, so a report can read both at once.
+  out.installs = { total: 0, byDay: {}, byCountry: {}, byPlatform: {} };
+  cursor = undefined;
+  do {
+    const page = await env.PINGS.list({ prefix: 'in:', cursor });
+    for (const k of page.keys) {
+      const parts = k.name.split(':');        // in:<day>:<platform>:<country>
+      if (parts.length !== 4) continue;
+      const [, day, platform, country] = parts;
+      if (day < since) continue;
+      const n = Number(await env.PINGS.get(k.name)) || 0;
+      if (!n) continue;
+      const i = out.installs;
+      i.total += n;
+      i.byDay[day] = (i.byDay[day] || 0) + n;
+      i.byCountry[country] = (i.byCountry[country] || 0) + n;
+      i.byPlatform[platform] = (i.byPlatform[platform] || 0) + n;
     }
     cursor = page.list_complete ? null : page.cursor;
   } while (cursor);
@@ -205,6 +240,17 @@ async function recordAgent(env, platform, ua, counted, country = 'XX') {
   const key = `ua:${day}:${counted ? 'counted' : 'filtered'}:${platform}:${country}:${uaSlug(ua)}`;
   const next = (Number(await env.PINGS.get(key)) || 0) + 1;
   await env.PINGS.put(key, String(next), { expirationTtl: UA_TTL_SECONDS });
+}
+
+// A REAL CLICK (2026-11-21). Every current browser marks a navigation the
+// person started (a click, or a typed or pasted link) with
+// Sec-Fetch-Mode: navigate. Scripts that fake a desktop Chrome agent do not
+// send it: on 21 Nov the only counted presses were GB 4 and SE 4, exactly
+// matching that day's 4/4 downloads. Without it the request is treated as
+// filtered and lands on the releases page. Browsers too old to send it
+// (Safari before 16.4) get the same page, one click from the installer.
+export function isRealNavigation(request) {
+  return request.headers.get('sec-fetch-mode') === 'navigate';
 }
 
 export function countsAsPress(ua) {
@@ -412,7 +458,7 @@ export async function handleDownload(request, env, ctx, platform, count = true) 
   // 2/2 matched the next day's 2/2 downloads exactly. Cloudflare marks Tor as
   // country "T1". A real Tor user lands on the releases page, one click from
   // the installer, and "Tor network" was never a location anyway.
-  const human = countsAsPress(ua) && country !== 'T1';
+  const human = countsAsPress(ua) && country !== 'T1' && isRealNavigation(request);
   // Only a counted press is resolved to the installer. See "WHAT A FILTERED
   // REQUEST GETS" above countsAsPress.
   const url = human ? await resolveDownload(env, platform) : DL_FALLBACK;

@@ -110,8 +110,10 @@ const fakeCtx = () => {
   return { waitUntil: (p) => waits.push(p), settle: () => Promise.all(waits) };
 };
 
-const req = (ua) => ({
-  headers: { get: (h) => (h.toLowerCase() === 'user-agent' ? ua : null) },
+// A real click: browsers mark it Sec-Fetch-Mode: navigate. Pass null to
+// model a script that fakes the user agent but not the navigation.
+const req = (ua, mode = 'navigate') => ({
+  headers: { get: (h) => ({ 'user-agent': ua, 'sec-fetch-mode': mode })[h.toLowerCase()] ?? null },
   cf: { country: 'SE' },
 });
 
@@ -164,4 +166,39 @@ test('a desktop browser on Tor is treated as filtered: releases page, not counte
   await ctx.settle();
   assert.match(res.headers.get('location'), /\/releases\/latest$/);
   assert.deepEqual(dlKeys(env), [], 'nothing was counted');
+});
+
+test('a desktop agent without a real click gets the releases page and is not counted', async () => {
+  const env = fakeEnv(); const ctx = fakeCtx();
+  const res = await handleDownload(req('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36', null), env, ctx, 'mac');
+  await ctx.settle();
+  assert.match(res.headers.get('location'), /\/releases\/latest$/);
+  assert.deepEqual(dlKeys(env), [], 'nothing was counted');
+});
+
+// ── New installs: first: true on the app's first-ever ping ────────────
+import { handlePing, handlePingStats } from '../relay/worker.js';
+
+const pingReq = (body) => ({
+  json: async () => body,
+  headers: { get: () => null },
+  cf: { country: 'SE' },
+  url: 'https://relay.test/ping/stats',
+});
+const inKeys = (env) => [...env._store.keys()].filter((k) => k.startsWith('in:') || k.startsWith('inm:'));
+
+test('a first ping counts one new install, daily and monthly', async () => {
+  const env = fakeEnv();
+  const res = await handlePing(pingReq({ platform: 'mac', version: '1.6.0', first: true }), env, fakeCtx());
+  assert.equal(res.status, 200);
+  assert.equal(inKeys(env).length, 2);
+  for (const k of inKeys(env)) assert.equal(env._store.get(k), '1');
+});
+
+test('an ordinary ping, or a first that is not literally true, counts no install', async () => {
+  for (const first of [undefined, false, 'true', 1]) {
+    const env = fakeEnv();
+    await handlePing(pingReq({ platform: 'win', version: '1.6.0', first }), env, fakeCtx());
+    assert.deepEqual(inKeys(env), [], `first=${JSON.stringify(first)}`);
+  }
 });
