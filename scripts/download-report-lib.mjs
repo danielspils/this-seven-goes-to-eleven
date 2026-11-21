@@ -334,9 +334,24 @@ export function subject({ delta }) {
 //   { week, weekNote, lifetime, lifetimeStale }
 // where `week` / `lifetime` are byCountry maps or null. A null block prints
 // what it could not read instead of a table — see the notices below.
-export function renderBody({ since, delta, lifetime, latest, press = null }) {
+export function renderBody({ since, delta, lifetime, latest, press = null, installs = null }) {
   const sections = [];
   const sinceLabel = since ? ` SINCE ${formatDate(since).toUpperCase()}` : '';
+
+  // NEW INSTALLS LEAD (2026-11-21). Counted from the app's first-launch ping,
+  // so a bot that downloads an installer cannot reach it: this is the number
+  // that means a person. Printed only once there is one, because until the
+  // release that sends the flag a permanent "0" would read as nobody
+  // installing. Window: the last 7 days, from the relay's /ping/stats.
+  if (installs && installs.total > 0) {
+    const p = installs.byPlatform || {};
+    sections.push([
+      header('NEW INSTALLS — LAST 7 DAYS', installs.total),
+      '',
+      row('Mac', p.mac || 0),
+      row('PC', p.win || 0),
+    ]);
+  }
 
   sections.push([
     header(`ALL DOWNLOADS${sinceLabel}`, delta.mac.total + delta.pc.total),

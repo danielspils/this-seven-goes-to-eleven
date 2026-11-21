@@ -535,3 +535,19 @@ test('the morning run and a manual run never stand down', () => {
   assert.equal(shouldStandDown({ retry: false, lastSent: '2026-11-03T07:12:04Z', now }), false);
   assert.equal(shouldStandDown({ lastSent: '2026-11-03T07:12:04Z', now }), false);
 });
+
+test('new installs lead the report once there are any, Mac/PC split', () => {
+  const { delta, lifetime } = NORMAL();
+  const installs = { total: 3, byPlatform: { mac: 2, win: 1 } };
+  const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0', installs });
+  assert.match(body.split('\n')[0], /^NEW INSTALLS — LAST 7 DAYS +3$/);
+  assert.match(body, /^ {2}Mac {3}2$/m);
+});
+
+test('no installs section until the first one is counted', () => {
+  const { delta, lifetime } = NORMAL();
+  for (const installs of [null, { total: 0, byPlatform: {} }]) {
+    const body = renderBody({ since: '2026-08-17T07:12:00Z', delta, lifetime, latest: '1.1.0', installs });
+    assert.doesNotMatch(body, /NEW INSTALLS/);
+  }
+});

@@ -110,6 +110,16 @@ const since = raw.date || null;
 
 const press = await relayPress(raw.press || null);
 
+// New installs, from first-launch pings. Absent or unreadable → null, and the
+// section simply does not print; it never blocks the report.
+const installs = await (async () => {
+  try {
+    const r = await fetch(`${RELAY}/ping/stats?since=${utcKey(new Date(Date.now() - 6 * 86_400_000))}`);
+    const j = r.ok ? await r.json() : null;
+    return j && j.installs ? j.installs : null;
+  } catch { return null; }
+})();
+
 const rows = Object.entries(current).map(([id, a]) => ({
   ...a, before: previous[id]?.count ?? 0,
 }));
@@ -165,7 +175,7 @@ if (!hasActivity({ delta })) {
 // The links ride on the TEXT half here; htmlBody adds its own anchored
 // copy, so renderBody stays purely the report and the tests that pin its
 // shape are not reading a footer they do not care about.
-const body = `${renderBody({ since, delta, lifetime, latest, press })}\n${ctaBullet()}\n`;
+const body = `${renderBody({ since, delta, lifetime, latest, press, installs })}\n${ctaBullet()}\n`;
 console.log(body);
 if (ignored.total > 0) {
   // JOB LOG ONLY — this line is printed after the body and is never part of
