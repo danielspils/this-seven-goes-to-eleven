@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-24T02:12:34.921Z",
+ "generated": "2026-11-24T18:49:50.049Z",
  "meaning": {
   "downloads": "Completed downloads counted by GitHub. No geography.",
   "updates": "The macOS updater fetching the zip — not a person installing.",
@@ -611,13 +611,13 @@
   {
    "name": "latest-mac.yml",
    "tag": "v1.5.6",
-   "count": 10,
+   "count": 12,
    "published": "2026-11-14T18:39:10Z"
   },
   {
    "name": "latest.yml",
    "tag": "v1.5.6",
-   "count": 5,
+   "count": 6,
    "published": "2026-11-14T18:39:10Z"
   },
   {
@@ -1187,21 +1187,21 @@
  ],
  "active": {
   "reachable": true,
-  "total": 45,
+  "total": 48,
   "byMonth": {
    "2026-09": 16,
    "2026-10": 13,
-   "2026-11": 16
+   "2026-11": 19
   },
   "byCountry": {
-   "US": 41,
+   "US": 43,
    "PL": 1,
-   "DE": 3
+   "DE": 4
   },
   "window": {
    "reachable": true,
    "days": 90,
-   "total": 47,
+   "total": 50,
    "byDay": {
     "20260908": 3,
     "20260909": 1,
@@ -1236,17 +1236,18 @@
     "20261119": 1,
     "20261120": 1,
     "20261122": 2,
-    "20261123": 3
+    "20261123": 3,
+    "20261124": 3
    },
    "byVersion": {
     "1.5.3": 2,
     "1.5.4": 6,
     "1.5.5": 31,
-    "1.5.6": 8
+    "1.5.6": 11
    },
    "byPlatform": {
-    "mac": 20,
-    "win": 27
+    "mac": 22,
+    "win": 28
    }
   }
  }
